@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Interfaces;
+﻿using DataAccessLayer.Connection;
+using DataAccessLayer.Interfaces;
 using Entities.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,14 +10,14 @@ using System.Web;
 
 namespace DataAccessLayer.Repositories
 {
-    public class BookRepository// : IRepository<Book>
+    public class BookRepository : IRepository<Book>
     {
-        //private MobileContext db;
+        private PublicationContext connectDB;
 
-        //public PhoneRepository(MobileContext context)
-        //{
-        //    this.db = context;
-        //}
+        public BookRepository(PublicationContext context)
+        {
+            this.connectDB = context;
+        }
 
         public static List<Book> GetAll()
         {
