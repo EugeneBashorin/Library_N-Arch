@@ -1,0 +1,12 @@
+﻿@using LibraryProject.Models;
+@model IndexModel
+@{
+    ViewBag.Title = "Library";
+}
+@ViewBag.Result
+
+@Html.Partial("BookViewModel", Model.BooksFilterModel)
+
+@Html.Partial("MagazineViewModel", Model.MagazineFilterModel)
+
+@Html.Partial("NewspaperViewModel", Model.NewspaperFilterModel)
