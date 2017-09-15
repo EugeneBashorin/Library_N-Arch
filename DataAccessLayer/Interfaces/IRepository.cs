@@ -9,10 +9,10 @@ namespace DataAccessLayer.Interfaces
     interface IRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
-        T Get(int id);
+        T GetItemById(int id);
         IEnumerable<T> Find(Func<T, Boolean> predicate);
         void Create(T item);
-        void Update(T item);
+        void Update(int id,T item);
         void Delete(int id);
     }
 }

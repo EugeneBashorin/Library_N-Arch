@@ -68,8 +68,7 @@ namespace LibraryProject.Controllers
         }
 
         public IndexModel CheckPublisher( IndexModel model, string bookPublisher = "All", string magazinePublisher = "All", string newspaperPublisher = "All")
-        {
-            
+        {           
             if (!String.IsNullOrEmpty(bookPublisher) && !bookPublisher.Equals("All"))
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -198,8 +197,13 @@ namespace LibraryProject.Controllers
 
         public ActionResult GetBooksList()
         {
-         //   List<Book> bookList = BLL.GetAllBooks();
-          //  bookList.GetTxtList();
+            BusinessLogicLayer.BusinessLogicLayer.GetTxtList();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult GetBooksXmlList()
+        {
+            BusinessLogicLayer.BusinessLogicLayer.GetXmlList();
             return RedirectToAction("Index");
         }
 
@@ -214,13 +218,6 @@ namespace LibraryProject.Controllers
         {
             List<Magazine> MagazinesList = GetAllMagazines();
             MagazinesList.GetTxtList();
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult GetBooksXmlList()
-        {
-          //  List<Book> bookList = BLL.GetAllBooks();
-          //  bookList.GetXmlList();
             return RedirectToAction("Index");
         }
 
@@ -281,130 +278,38 @@ namespace LibraryProject.Controllers
         [HttpPost]
         public ActionResult CreateBook(Book book)
         {
-            string createBookExpression = $"INSERT INTO Books([Name], [Author], [Publisher],[Price]) VALUES('{book.Name}','{book.Author}','{book.Publisher}','{book.Price}')";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(createBookExpression, connection);
-                try
-                {
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-                }
-            }
+            BusinessLogicLayer.BusinessLogicLayer.Create(book);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public ActionResult ShowBook(int id)
         {
-            Book book = new Book();
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                if (connection != null)
-                {
-                    string searchBookExpression = $"SELECT * FROM Books WHERE Id = '{id}'";
-                    SqlCommand command = new SqlCommand(searchBookExpression, connection);
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            book.Id = (int)reader.GetValue(0);
-                            book.Name = (string)reader.GetValue(1);
-                            book.Author = (string)reader.GetValue(2);
-                            book.Publisher = (string)reader.GetValue(3);
-                            book.Price = (int)reader.GetValue(4);
-                        }
-                    }
-                }
-            }
+            Book book = BusinessLogicLayer.BusinessLogicLayer.GetItemById(id);
             return View(book);
         }
 
         //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
         [HttpGet]
-       // public ActionResult EditBook(int id)
-      //  {
-           // Book book = BLL.GetItemById(id);
-            //new Book();
-            //using (SqlConnection connection = new SqlConnection(connectionString))
-            //{
-            //    connection.Open();
-            //    if (connection != null)
-            //    {
-            //        string searchBookExpression = $"SELECT * FROM Books WHERE Id = '{id}'";
-            //        SqlCommand command = new SqlCommand(searchBookExpression, connection);
-            //        SqlDataReader reader = command.ExecuteReader();
-            //        if (reader.HasRows)
-            //        {
-            //            while (reader.Read())
-            //            {
-            //                book.Id = (int)reader.GetValue(0);
-            //                book.Name = (string)reader.GetValue(1);
-            //                book.Author = (string)reader.GetValue(2);
-            //                book.Publisher = (string)reader.GetValue(3);
-            //                book.Price = (int)reader.GetValue(4);
-            //            }
-            //        }
-            //    }
-            //}
-            //return View(book);
-       // }
+        public ActionResult EditBook(int id)
+        {
+            Book book = BusinessLogicLayer.BusinessLogicLayer.GetItemById(id);           
+            return View(book);
+        }
 
         [HttpPost]
         public ActionResult EditBook(int Id, Book newBook)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                if (connection != null)
-                {
-                    string editBookExpression = $"UPDATE Books SET Name = '{newBook.Name}', Author = '{newBook.Author}', Publisher = '{newBook.Publisher}', Price = '{newBook.Price}' WHERE Id = '{Id}'";
-                    SqlCommand command = new SqlCommand(editBookExpression, connection);
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-            }
+            BusinessLogicLayer.BusinessLogicLayer.Update(Id,newBook);
             return RedirectToAction("Index");
         }
 
 
         //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
         [HttpGet]
-        public ActionResult DeleteBook(int? id)
+        public ActionResult DeleteBook(int id)
         {
-            Book book = new Book();
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                if (connection != null)
-                {
-                    string searchBookExpression = $"SELECT * FROM Books WHERE Id = '{id}'";
-                    SqlCommand command = new SqlCommand(searchBookExpression, connection);
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            book.Id = (int)reader.GetValue(0);
-                            book.Name = (string)reader.GetValue(1);
-                            book.Author = (string)reader.GetValue(2);
-                            book.Publisher = (string)reader.GetValue(3);
-                            book.Price = (int)reader.GetValue(4);
-                        }
-                    }
-                }
-            }
+            Book book = BusinessLogicLayer.BusinessLogicLayer.GetItemById(id);
             return PartialView(book);
         }
 
@@ -412,22 +317,7 @@ namespace LibraryProject.Controllers
         [HttpPost, ActionName("DeleteBook")]
         public ActionResult DeleteConfirmedBook(int id)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                if (connection != null)
-                {
-                    string deleteBookExpression = $"DELETE FROM Books WHERE Id = '{id}'";
-                    SqlCommand command = new SqlCommand(deleteBookExpression, connection);
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-            }
+            BusinessLogicLayer.BusinessLogicLayer.Delete(id);
             return RedirectToAction("Index");
         }
 
@@ -772,4 +662,137 @@ namespace LibraryProject.Controllers
 //        }
 //    }
 //    return booksList;
+//}
+
+//[HttpGet]
+//public ActionResult ShowBook(int id)
+//{
+//Book book = new Book();
+//using (SqlConnection connection = new SqlConnection(connectionString))
+//{
+//    connection.Open();
+//    if (connection != null)
+//    {
+//        string searchBookExpression = $"SELECT * FROM Books WHERE Id = '{id}'";
+//        SqlCommand command = new SqlCommand(searchBookExpression, connection);
+//        SqlDataReader reader = command.ExecuteReader();
+//        if (reader.HasRows)
+//        {
+//            while (reader.Read())
+//            {
+//                book.Id = (int)reader.GetValue(0);
+//                book.Name = (string)reader.GetValue(1);
+//                book.Author = (string)reader.GetValue(2);
+//                book.Publisher = (string)reader.GetValue(3);
+//                book.Price = (int)reader.GetValue(4);
+//            }
+//        }
+//    }
+//}
+// return View(book);
+//}
+//[HttpPost]
+//public ActionResult EditBook(int Id, Book newBook)
+//{
+//    BusinessLogicLayer.BusinessLogicLayer.Update(Id, newBook);
+//using (SqlConnection connection = new SqlConnection(connectionString))
+//{
+//    connection.Open();
+//    if (connection != null)
+//    {
+//        string editBookExpression = $"UPDATE Books SET Name = '{newBook.Name}', Author = '{newBook.Author}', Publisher = '{newBook.Publisher}', Price = '{newBook.Price}' WHERE Id = '{Id}'";
+//        SqlCommand command = new SqlCommand(editBookExpression, connection);
+//        try
+//        {
+//            command.ExecuteNonQuery();
+//        }
+//        catch (Exception)
+//        {
+//        }
+//    }
+//}
+//   return RedirectToAction("Index");
+//}
+//[HttpPost]
+//public ActionResult CreateBook(Book book)
+//{
+//string createBookExpression = $"INSERT INTO Books([Name], [Author], [Publisher],[Price]) VALUES('{book.Name}','{book.Author}','{book.Publisher}','{book.Price}')";
+//using (SqlConnection connection = new SqlConnection(connectionString))
+//{
+//    connection.Open();
+//    SqlCommand command = new SqlCommand(createBookExpression, connection);
+//    try
+//    {
+//        command.ExecuteNonQuery();
+//    }
+//    catch (Exception)
+//    {
+//    }
+//}
+//    return RedirectToAction("Index");
+//}
+
+//[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+//[HttpGet]
+//public ActionResult DeleteBook(int? id)
+//{
+//    Book book = new Book();
+//    using (SqlConnection connection = new SqlConnection(connectionString))
+//    {
+//        connection.Open();
+//        if (connection != null)
+//        {
+//            string searchBookExpression = $"SELECT * FROM Books WHERE Id = '{id}'";
+//            SqlCommand command = new SqlCommand(searchBookExpression, connection);
+//            SqlDataReader reader = command.ExecuteReader();
+//            if (reader.HasRows)
+//            {
+//                while (reader.Read())
+//                {
+//                    book.Id = (int)reader.GetValue(0);
+//                    book.Name = (string)reader.GetValue(1);
+//                    book.Author = (string)reader.GetValue(2);
+//                    book.Publisher = (string)reader.GetValue(3);
+//                    book.Price = (int)reader.GetValue(4);
+//                }
+//            }
+//        }
+//    }
+//    return PartialView(book);
+//}
+
+////[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+//[HttpPost, ActionName("DeleteBook")]
+//public ActionResult DeleteConfirmedBook(int id)
+//{
+//    using (SqlConnection connection = new SqlConnection(connectionString))
+//    {
+//        connection.Open();
+//        if (connection != null)
+//        {
+//            string deleteBookExpression = $"DELETE FROM Books WHERE Id = '{id}'";
+//            SqlCommand command = new SqlCommand(deleteBookExpression, connection);
+//            try
+//            {
+//                command.ExecuteNonQuery();
+//            }
+//            catch (Exception)
+//            {
+//            }
+//        }
+//    }
+//    return RedirectToAction("Index");
+//}
+//public ActionResult GetBooksList()
+//{
+    //  List<Book> bookList = BLL.GetAllBooks();
+    //  bookList.GetTxtList();
+    //return RedirectToAction("Index");
+//}
+
+//public ActionResult GetBooksXmlList()
+//{
+    //  List<Book> bookList = BLL.GetAllBooks();
+    //  bookList.GetXmlList();
+    //return RedirectToAction("Index");
 //}

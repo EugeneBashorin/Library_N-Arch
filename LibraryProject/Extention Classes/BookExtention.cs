@@ -13,34 +13,6 @@ namespace LibraryProject.Extention_Classes
 {
     public static class BookExtention
     {
-        public static void GetTxtList(this List<Book> list)
-        {
-            StringBuilder result = new StringBuilder(130);
-
-            if (list.Count > 0)
-            {
-                foreach (Book item in list)
-                {
-                    result.AppendLine($"Name: {item.Name} Author: {item.Author} Publisher: {item.Publisher} Price: {item.Price.ToString()}");
-                }
-            }
-
-            using (StreamWriter sw = new StreamWriter(ConfigurationData.booksWriteTxtPath, false, System.Text.Encoding.Default))
-            {
-                sw.WriteLine(result);
-            }
-        }
-
-        public static void GetXmlList(this List<Book> xmlBooksList)
-        {
-            XmlSerializer xs = new XmlSerializer(typeof(List<Book>));
-
-            using (FileStream fs = new FileStream(ConfigurationData.booksWriteXmlPath, FileMode.Create))
-            {
-                xs.Serialize(fs, xmlBooksList);
-            }
-        }
-
         public static void SetBookListToDb(this List<Book> bookList, string connectionString)
         {
             StringBuilder insertSqlExpression = new StringBuilder(300);
