@@ -7,5 +7,10 @@ namespace BusinessLogicLayer.DataTransferObject
 {
     public class MagazineDTO
     {
+        public string Name { get; set; }
+        public string Category { get; set; }
+        public string Publisher { get; set; }
+        public int Price { get; set; }
+        public int Id { get; set; }
     }
 }

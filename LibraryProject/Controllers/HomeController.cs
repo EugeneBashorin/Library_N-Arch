@@ -70,11 +70,7 @@ namespace LibraryProject.Controllers
         }
 
         private IndexModel Initialize(IndexModel model)
-        {
-            List<BookDTO> bookDtos = bookService.GetBooks();
-            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, BookViewModel>());
-            var books = Mapper.Map<List<BookDTO>, List<BookViewModel>>(bookDtos);
-            
+        {           
             model.BooksFilterModel = new BooksFilterModel();
             model.BooksFilterModel.BooksPublisher = new SelectList(new List<string>() { "All", "O.Reilly", "Syncfusion", "Williams", "Wrox", "ITVDN" });
             model.BooksFilterModel.Books = new List<Book>();

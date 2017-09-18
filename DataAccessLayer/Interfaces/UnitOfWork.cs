@@ -1,4 +1,4 @@
-﻿using DataAccessLayer.Connection;
+﻿
 using DataAccessLayer.Context;
 using DataAccessLayer.Repositories;
 using Entities.Entities;
@@ -13,7 +13,7 @@ namespace DataAccessLayer.Interfaces
     {
         private PublicationContext connectDB;
         private BookRepository bookRepository;
-        //private MagazineRepository magazineRepository;
+        private MagazineRepository magazineRepository;
         //private NewspaperRepository newspaperRepository;
 
         public UnitOfWork(string connectionString)
@@ -33,17 +33,17 @@ namespace DataAccessLayer.Interfaces
             }
         }
 
-        //public IRepository<Magazine> Magazines
-        //{
-        //    get
-        //    {
-        //        if (magazineRepository == null)
-        //        {
-        //            magazineRepository = new MagazineRepository();
-        //        }
-        //        return magazineRepository;
-        //    }
-        //}
+        public IRepository<Magazine> Magazines
+        {
+            get
+            {
+                if (magazineRepository == null)
+                {
+                    magazineRepository = new MagazineRepository(connectDB);
+                }
+                return magazineRepository;
+            }
+        }
 
         //public IRepository<Newspaper> Newspapers
         //{
