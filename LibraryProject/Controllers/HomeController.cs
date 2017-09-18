@@ -9,21 +9,31 @@ using System.Web.Mvc;
 using Entities.Entities;
 using BusinessLogicLayer;
 using BusinessLogicLayer.Interfaces;
+using BusinessLogicLayer.DataTransferObject;
+using AutoMapper;
 
 namespace LibraryProject.Controllers
 {
     // [Authorize]
     public class HomeController : Controller
     {
-        //***************
+        
         IBookService bookService;
-        public HomeController(IBookService serv)
+        public HomeController(IBookService bookservice)
         {
-            bookService = serv;
+            bookService = bookservice;
         }
-        //**************
 
         private string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+        //[HttpGet]
+        //public ActionResult Index()
+        //{
+        //    List<BookDTO> bookDtos = bookService.GetBooks();
+        //    Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, BookViewModel>());
+        //    var books = Mapper.Map<List<BookDTO>, List<BookViewModel>>(bookDtos);
+        //    return View(books);
+        //}
 
         [HttpGet]
         public ActionResult Index(string bookPublisher = "All", string magazinePublisher = "All", string newspaperPublisher = "All")
@@ -61,6 +71,10 @@ namespace LibraryProject.Controllers
 
         private IndexModel Initialize(IndexModel model)
         {
+            List<BookDTO> bookDtos = bookService.GetBooks();
+            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, BookViewModel>());
+            var books = Mapper.Map<List<BookDTO>, List<BookViewModel>>(bookDtos);
+            
             model.BooksFilterModel = new BooksFilterModel();
             model.BooksFilterModel.BooksPublisher = new SelectList(new List<string>() { "All", "O.Reilly", "Syncfusion", "Williams", "Wrox", "ITVDN" });
             model.BooksFilterModel.Books = new List<Book>();
@@ -76,8 +90,8 @@ namespace LibraryProject.Controllers
             return model;
         }
 
-        public IndexModel CheckPublisher( IndexModel model, string bookPublisher = "All", string magazinePublisher = "All", string newspaperPublisher = "All")
-        {           
+        public IndexModel CheckPublisher(IndexModel model, string bookPublisher = "All", string magazinePublisher = "All", string newspaperPublisher = "All")
+        {
             if (!String.IsNullOrEmpty(bookPublisher) && !bookPublisher.Equals("All"))
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -100,14 +114,17 @@ namespace LibraryProject.Controllers
             }
             else
             {
-                model.BooksFilterModel.Books = BusinessLogicLayer.BusinessLogicLayer.GetAll();//GetAllBooks();
+            List<BookDTO> bookDtos = bookService.GetBooks();
+            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, Book>());
+            var books = Mapper.Map<List<BookDTO>, List<Book>>(bookDtos);
+            model.BooksFilterModel.Books = books; //bookService.GetBooks();//GetAllBooks();
             }
 
             if (!String.IsNullOrEmpty(magazinePublisher) && !magazinePublisher.Equals("All"))
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();                 
+                    connection.Open();
                     if (connection != null)
                     {
                         string magazineSelectExpression = $"SELECT * FROM Magazines WHERE Publisher = '{magazinePublisher}'";
@@ -131,7 +148,7 @@ namespace LibraryProject.Controllers
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();                 
+                    connection.Open();
                     if (connection != null)
                     {
                         string newspaperSelectExpression = $"SELECT * FROM Newspapers WHERE Publisher = '{newspaperPublisher}'";
@@ -206,43 +223,43 @@ namespace LibraryProject.Controllers
 
         public ActionResult GetBooksList()
         {
-            BusinessLogicLayer.BusinessLogicLayer.GetTxtList();
+           // BusinessLogicLayer.BusinessLogicLayer.GetTxtList();
             return RedirectToAction("Index");
         }
 
         public ActionResult GetBooksXmlList()
         {
-            BusinessLogicLayer.BusinessLogicLayer.GetXmlList();
+            //BusinessLogicLayer.BusinessLogicLayer.GetXmlList();
             return RedirectToAction("Index");
         }
 
-        public ActionResult GetNewsPapersList()
-        {
-            List<Newspaper> newspaperList = GetAllNewspapers();
-            newspaperList.GetTxtList();
-            return RedirectToAction("Index");
-        }
+        //public ActionResult GetNewsPapersList()
+        //{
+        //    List<Newspaper> newspaperList = GetAllNewspapers();
+        //    newspaperList.GetTxtList();
+        //    return RedirectToAction("Index");
+        //}
 
-        public ActionResult GetMagazinesList()
-        {
-            List<Magazine> MagazinesList = GetAllMagazines();
-            MagazinesList.GetTxtList();
-            return RedirectToAction("Index");
-        }
+        //public ActionResult GetMagazinesList()
+        //{
+        //    List<Magazine> MagazinesList = GetAllMagazines();
+        //    MagazinesList.GetTxtList();
+        //    return RedirectToAction("Index");
+        //}
 
-        public ActionResult GetNewspapersXmlList()
-        {
-            List<Newspaper> newspaperList = GetAllNewspapers();
-            newspaperList.GetXmlList();
-            return RedirectToAction("Index");
-        }
+        //public ActionResult GetNewspapersXmlList()
+        //{
+        //    List<Newspaper> newspaperList = GetAllNewspapers();
+        //    newspaperList.GetXmlList();
+        //    return RedirectToAction("Index");
+        //}
 
-        public ActionResult GetMagazinesXmlList()
-        {
-            List<Magazine> magazineList = GetAllMagazines();
-            magazineList.GetXmlList();
-            return RedirectToAction("Index");
-        }
+        //public ActionResult GetMagazinesXmlList()
+        //{
+        //    List<Magazine> magazineList = GetAllMagazines();
+        //    magazineList.GetXmlList();
+        //    return RedirectToAction("Index");
+        //}
 
         [HttpGet]/*****************************************?????How can save Db To exist Db?????**************************************************/
         [Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
@@ -255,29 +272,29 @@ namespace LibraryProject.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]/*****************************************?????How can save Db To exist Db?????**************************************************/
-        [Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
-        public ActionResult GetDatabaseMagazineList()
-        {
-            IndexModel indexModel = (IndexModel)Session["LibraryState"];
-            List<Magazine> magazineList = indexModel.MagazineFilterModel.Magazines;
-            magazineList.SetMagazineListToDb(connectionString);
+        //[HttpGet]/*****************************************?????How can save Db To exist Db?????**************************************************/
+        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        //public ActionResult GetDatabaseMagazineList()
+        //{
+        //    IndexModel indexModel = (IndexModel)Session["LibraryState"];
+        //    List<Magazine> magazineList = indexModel.MagazineFilterModel.Magazines;
+        //    magazineList.SetMagazineListToDb(connectionString);
 
-            return RedirectToAction("Index");
-        }
+        //    return RedirectToAction("Index");
+        //}
 
-        [HttpGet]/*****************************************?????How can save Db To exist Db?????**************************************************/
-        [Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
-        public ActionResult GetDatabaseNewspaperList()
-        {
-            IndexModel indexModel = (IndexModel)Session["LibraryState"];
-            List<Newspaper> newspaperList = indexModel.NewspaperFilterModel.Newspapers;
-            newspaperList.SetNewspaperListToDb(connectionString);
+        //[HttpGet]/*****************************************?????How can save Db To exist Db?????**************************************************/
+        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        //public ActionResult GetDatabaseNewspaperList()
+        //{
+        //    IndexModel indexModel = (IndexModel)Session["LibraryState"];
+        //    List<Newspaper> newspaperList = indexModel.NewspaperFilterModel.Newspapers;
+        //    newspaperList.SetNewspaperListToDb(connectionString);
 
-            return RedirectToAction("Index");
-        }
+        //    return RedirectToAction("Index");
+        //}
 
-        [Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
         [HttpGet]
         public ActionResult CreateBook()
         {
@@ -285,16 +302,20 @@ namespace LibraryProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateBook(Book book)
+        public ActionResult CreateBook(/*BookViewModel*/Book book)
         {
-            BusinessLogicLayer.BusinessLogicLayer.Create(book);
+            Mapper.Initialize(cfg => cfg.CreateMap</*BookViewModel*/Book, BookDTO>());
+            var bookDto = Mapper.Map</*BookViewModel*/Book, BookDTO>(book);
+            bookService.AddItem(bookDto);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public ActionResult ShowBook(int id)
         {
-            Book book = BusinessLogicLayer.BusinessLogicLayer.GetItemById(id);
+            BookDTO bookDto = bookService.GetBook(id);
+            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, /*BookViewModel*/Book>());
+            var book = Mapper.Map<BookDTO, /*BookViewModel*/Book>(bookDto);
             return View(book);
         }
 
@@ -302,14 +323,20 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult EditBook(int id)
         {
-            Book book = BusinessLogicLayer.BusinessLogicLayer.GetItemById(id);           
+            //Book book = BusinessLogicLayer.BusinessLogicLayer.GetItemById(id);           
+            BookDTO bookDto = bookService.GetBook(id);
+            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, /*BookViewModel*/Book>());
+            var book = Mapper.Map<BookDTO, /*BookViewModel*/Book>(bookDto);
             return View(book);
         }
 
         [HttpPost]
-        public ActionResult EditBook(int Id, Book newBook)
+        public ActionResult EditBook(int Id, /*BookViewModel*/Book newBook)
         {
-            BusinessLogicLayer.BusinessLogicLayer.Update(Id,newBook);
+            Mapper.Initialize(cfg => cfg.CreateMap</*BookViewModel*/Book, BookDTO>());
+            var bookDto = Mapper.Map</*BookViewModel*/Book, BookDTO>(newBook);
+            bookService.Update(Id, bookDto);
+            //BusinessLogicLayer.BusinessLogicLayer.Update(Id,newBook);
             return RedirectToAction("Index");
         }
 
@@ -318,7 +345,9 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult DeleteBook(int id)
         {
-            Book book = BusinessLogicLayer.BusinessLogicLayer.GetItemById(id);
+            BookDTO bookDto = bookService.GetBook(id);
+            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO,/*BookViewModel*/Book>());
+            var book = Mapper.Map<BookDTO, /*BookViewModel*/Book>(bookDto);
             return PartialView(book);
         }
 
@@ -326,7 +355,8 @@ namespace LibraryProject.Controllers
         [HttpPost, ActionName("DeleteBook")]
         public ActionResult DeleteConfirmedBook(int id)
         {
-            BusinessLogicLayer.BusinessLogicLayer.Delete(id);
+            bookService.Delete(id);
+            //BusinessLogicLayer.BusinessLogicLayer.Delete(id);
             return RedirectToAction("Index");
         }
 

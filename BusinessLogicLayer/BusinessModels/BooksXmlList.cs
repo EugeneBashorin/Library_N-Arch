@@ -9,14 +9,15 @@ namespace BusinessLogicLayer.BusinessModels
 {
     public class BooksXmlList
     {
-        public static void GetXmlList(/*this List<Book> xmlList*/)
-        {
-            List<Book> xmlList = BookRepository.GetAll();
-            XmlSerializer xs = new XmlSerializer(typeof(List<Book>));
-            using (FileStream fs = new FileStream(DomianConfiguration.booksWriteXmlPath, FileMode.Create))
-            {
-                xs.Serialize(fs, xmlList);
-            }
-        }
+        //public static void GetXmlList(/*this List<Book> xmlList*/)
+        //{
+        //    BookRepository bookRepository = new BookRepository();
+        //    List<Book> xmlList = bookRepository.GetAll();
+        //    XmlSerializer xs = new XmlSerializer(typeof(List<Book>));
+        //    using (FileStream fs = new FileStream(DomianConfiguration.booksWriteXmlPath, FileMode.Create))
+        //    {
+        //        xs.Serialize(fs, xmlList);
+        //    }
+        //}
     }
 }

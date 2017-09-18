@@ -1,74 +1,76 @@
-﻿using DataAccessLayer.Repositories;
+﻿using DataAccessLayer.Context;
+using DataAccessLayer.Repositories;
 using Entities.Configurations;
 using Entities.Entities;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Web;
 using System.Xml.Serialization;
 
 namespace BusinessLogicLayer
 {
     public class BusinessLogicLayer
     {
+        //PublicationContext publicationContext;
+        //BookRepository bookRepository = new BookRepository(publicationContext);
         public BusinessLogicLayer()
         { }
 
-        public static void Create(Book book)
+        public void Create(Book book)//++
         {
-           BookRepository.Create(book);
+          //  bookRepository.Create(book);
         }
 
-        public static List<Book> GetAll()
+        public List<Book> GetAll()
         {
-            return BookRepository.GetAll();
+            return null;// bookRepository.GetAll();
         }
 
-        public static Book GetItemById(int id)
+        public Book GetItemById(int id)//++
         {
-            return BookRepository.GetItemById(id);
+            return null;// bookRepository.GetItemById(id);
         }
 
-        public static void Update(int id, Book book)
+        public void Update(int id, Book book)
         {
-            BookRepository.Update(id, book);
+            //bookRepository.Update(id, book);
         }
 
-        public static void Delete(int id)
+        public void Delete(int id)//++
         {
-            BookRepository.Delete(id);
+           // bookRepository.Delete(id);
         }
 
-        public static void GetTxtList(/*this List<Book> list*/)
-        {
-            List<Book> list = BookRepository.GetAll();
-            StringBuilder result = new StringBuilder(130);
+        //public static void GetTxtList(/*this List<Book> list*/)
+        //{
+        //    BookRepository bookRepository = new BookRepository();
+        //    List<Book> list = bookRepository.GetAll();
+        //    StringBuilder result = new StringBuilder(130);
 
-            if (list.Count > 0)
-            {
-                foreach (Book item in list)
-                {
-                    result.AppendLine($"Name: {item.Name} Author: {item.Author} Publisher: {item.Publisher} Price: {item.Price.ToString()}");
-                }
-            }
+        //    if (list.Count > 0)
+        //    {
+        //        foreach (Book item in list)
+        //        {
+        //            result.AppendLine($"Name: {item.Name} Author: {item.Author} Publisher: {item.Publisher} Price: {item.Price.ToString()}");
+        //        }
+        //    }
 
-            using (StreamWriter sw = new StreamWriter(DomianConfiguration.booksWriteTxtPath, false, System.Text.Encoding.Default))
-            {
-                sw.WriteLine(result);
-            }
-        }
+        //    using (StreamWriter sw = new StreamWriter(DomianConfiguration.booksWriteTxtPath, false, System.Text.Encoding.Default))
+        //    {
+        //        sw.WriteLine(result);
+        //    }
+        //}
 
-        public static void GetXmlList(/*this List<Book> xmlList*/)
-        {
-            List<Book> xmlList = BookRepository.GetAll();
-            XmlSerializer xs = new XmlSerializer(typeof(List<Book>));
-            using (FileStream fs = new FileStream(DomianConfiguration.booksWriteXmlPath, FileMode.Create))
-            {
-                xs.Serialize(fs, xmlList);
-            }
-        }
+        //public static void GetXmlList(/*this List<Book> xmlList*/)
+        //{
+        //    BookRepository bookRepository = new BookRepository();
+        //    List<Book> xmlList = bookRepository.GetAll();
+        //    XmlSerializer xs = new XmlSerializer(typeof(List<Book>));
+        //    using (FileStream fs = new FileStream(DomianConfiguration.booksWriteXmlPath, FileMode.Create))
+        //    {
+        //        xs.Serialize(fs, xmlList);
+        //    }
+        //}
 
     }
 }

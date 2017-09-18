@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Connection;
+using DataAccessLayer.Context;
 using DataAccessLayer.Repositories;
 using Entities.Entities;
 using System;
@@ -31,29 +32,50 @@ namespace DataAccessLayer.Interfaces
                 return bookRepository;
             }
         }
-         
-        public void executeQuery(string queryString)//Save()
-        {
 
-        }
-        private bool disposed = false;
+        //public IRepository<Magazine> Magazines
+        //{
+        //    get
+        //    {
+        //        if (magazineRepository == null)
+        //        {
+        //            magazineRepository = new MagazineRepository();
+        //        }
+        //        return magazineRepository;
+        //    }
+        //}
 
-        public virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    connectDB.Dispose();
-                }
-                this.disposed = true;
-            }
-        }
+        //public IRepository<Newspaper> Newspapers
+        //{
+        //    get
+        //    {
+        //        if (newspaperRepository == null)
+        //        {
+        //            newspaperRepository = new NewspaperRepository();
+        //        }
+        //        return newspaperRepository;
+        //    }
+        //}
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+
+        //private bool disposed = false;
+
+        //public virtual void Dispose(bool disposing)
+        //{
+        //    if (!this.disposed)
+        //    {
+        //        if (disposing)
+        //        {
+        //            connectDB.Dispose();
+        //        }
+        //        this.disposed = true;
+        //    }
+        //}
+
+        //public void Dispose()
+        //{
+        //    Dispose(true);
+        //    GC.SuppressFinalize(this);
+        //}
     }
 }

@@ -32,6 +32,7 @@ namespace LibraryProject.App_Start
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
             });
+            
             //Add OWIN
             //app.UseCookieAuthentication(new CookieAuthenticationOptions
             //{

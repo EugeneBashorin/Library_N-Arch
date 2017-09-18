@@ -7,100 +7,8 @@ using System.Web;
 
 namespace DataAccessLayer.Connection
 {
-    public class PublicationContext : IDisposable
+    public static class Connection
     {
-        public Book Books { get; set; }
-        public Magazine Magazines { get; set; }
-        public Newspaper Newspapers { get; set; }
-
-        private string connectionString;
-
-        public string ConnectionString
-        {
-            get { return connectionString; }
-            set { value = connectionString; }
-        }
-
-        public PublicationContext()
-        { }
-        //Start connection
-        public PublicationContext(string connectionString)
-        {
-            ConnectionString = connectionString;
-            SqlConnection connection = new SqlConnection(connectionString);
-            SqlCommand command = new SqlCommand();
-            command.Connection.Open();
-        }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~PublicationContext() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
-    }
-
-
-    public class Connection
-    {
-        private Connection() { }
-        private static Connection _ConsString = null;
-        private String _String = null;
-
-        public static string ConString
-        {
-            get
-            {
-                if (_ConsString == null)
-                {
-                    _ConsString = new Connection { _String = Connection.Connect() };
-                    return _ConsString._String;
-                }
-                else
-                    return _ConsString._String;
-            }
-        }
-        public static string Connect()
-        {
-            //Build an SQL connection string
-            SqlConnectionStringBuilder sqlString = new SqlConnectionStringBuilder()
-            {
-                DataSource = "SIPL35\\SQL2016".ToString(), // Server name
-                InitialCatalog = "Join8ShopDB",  //Database
-                UserID = "Sa",         //Username
-                Password = "Sa123!@#",  //Password
-            };
-            return sqlString.ConnectionString;
-        }
-
         private static void ExecuteSqlCommand(string queryString, string connectionString)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -135,9 +43,7 @@ namespace DataAccessLayer.Connection
     }
 
     
-    }
-
-}
+ }
 
 //public class Coonection<T> where T : class //: DbContext
 //{

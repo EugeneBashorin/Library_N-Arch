@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -90,6 +91,8 @@
     <Compile Include="BusinessModels\BooksXmlList.cs" />
     <Compile Include="BusinessModels\BooksTxtList.cs" />
     <Compile Include="DataTransferObject\BookDTO.cs" />
+    <Compile Include="DataTransferObject\MagazineDTO.cs" />
+    <Compile Include="DataTransferObject\NewspaperDTO.cs" />
     <Compile Include="Infrastructure\ServiceModule.cs" />
     <Compile Include="Infrastructure\ValidationException.cs" />
     <Compile Include="Interfaces\IBookService.cs" />

@@ -1,27 +1,25 @@
-﻿using DataAccessLayer.Connection;
+﻿using DataAccessLayer.Context;
 using DataAccessLayer.Interfaces;
 using Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace DataAccessLayer.Repositories
 {
     public class BookRepository : IRepository<Book>
     {
-        private PublicationContext connectDB;
+        string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private PublicationContext DbConnection;
 
         public BookRepository(PublicationContext context)
         {
-            this.connectDB = context;
+           DbConnection = context;
         }
 
-        public static List<Book> GetAll()
+        public List<Book> GetAll()
         {
-            string _connectionString = @"Data Source=DESKTOP-4IAPGK2;AttachDbFilename=C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\LibraryDB.mdf;Database=LibraryDB; Integrated Security=True";
             List<Book> booksList;
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -45,10 +43,8 @@ namespace DataAccessLayer.Repositories
             return booksList;
         }
 
-        public static Book GetItemById(int id)
-        {
-            string _connectionString = @"Data Source=DESKTOP-4IAPGK2;AttachDbFilename=C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\LibraryDB.mdf;Database=LibraryDB; Integrated Security=True";
-
+        public Book GetItemById(int id)
+        {         
             Book book = new Book();
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -74,10 +70,9 @@ namespace DataAccessLayer.Repositories
             return book;
         }
 
-        public static void Create(Book book)
+        public void Create(Book book)
         {
-            string _connectionString = @"Data Source=DESKTOP-4IAPGK2;AttachDbFilename=C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\LibraryDB.mdf;Database=LibraryDB; Integrated Security=True";
-            string createBookExpression = $"INSERT INTO Books([Name], [Author], [Publisher],[Price]) VALUES('{book.Name}','{book.Author}','{book.Publisher}','{book.Price}')";
+           string createBookExpression = $"INSERT INTO Books([Name], [Author], [Publisher],[Price]) VALUES('{book.Name}','{book.Author}','{book.Publisher}','{book.Price}')";
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
@@ -92,11 +87,9 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public static void Update(int Id, Book book) 
+        public void Update(int Id, Book book) 
         {
-            string _connectionString = @"Data Source=DESKTOP-4IAPGK2;AttachDbFilename=C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\LibraryDB.mdf;Database=LibraryDB; Integrated Security=True";
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+           using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 if (connection != null)
@@ -114,10 +107,8 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public static void Delete(int id)
+        public void Delete(int id)
         {
-            string _connectionString = @"Data Source=DESKTOP-4IAPGK2;AttachDbFilename=C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\LibraryDB.mdf;Database=LibraryDB; Integrated Security=True";
-
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
@@ -136,9 +127,9 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public IEnumerable<Book> Find(Func<Book, Boolean> predicate)
+        public List<Book> Find(Func<Book, Boolean> predicate)
         {
-            return null; //db.Phones.Where(predicate).ToList();
+            return null;
         }
     }
 }

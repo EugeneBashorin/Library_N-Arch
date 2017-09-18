@@ -16,7 +16,7 @@ namespace BusinessLogicLayer.Infrastructure
         }
         public override void Load()
         {
-            Bind<IUnitOfWork>().To</*EFUnitOfWork*/UnitOfWork>().WithConstructorArgument(connectionString);
+            Bind<IUnitOfWork>().To<UnitOfWork>().WithConstructorArgument(connectionString);
         }
     }
 }
