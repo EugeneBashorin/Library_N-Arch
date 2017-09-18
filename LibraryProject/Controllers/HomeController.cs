@@ -8,12 +8,21 @@ using System.Data.SqlClient;
 using System.Web.Mvc;
 using Entities.Entities;
 using BusinessLogicLayer;
+using BusinessLogicLayer.Interfaces;
 
 namespace LibraryProject.Controllers
 {
     // [Authorize]
     public class HomeController : Controller
     {
+        //***************
+        IBookService bookService;
+        public HomeController(IBookService serv)
+        {
+            bookService = serv;
+        }
+        //**************
+
         private string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         [HttpGet]
