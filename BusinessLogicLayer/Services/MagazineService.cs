@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using BusinessLogicLayer.DataTransferObject;
 using BusinessLogicLayer.Interfaces;
+using BusinessLogicLayer.Infrastructure;
 using DataAccessLayer.Interfaces;
 using Entities.Entities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -45,7 +45,7 @@ namespace BusinessLogicLayer.Services
             var magazine = Database.Magazines.GetItemById(id.Value);
             if (magazine == null)
                 throw new ValidationException("The Magazine not found", "");
-            // применяем автомаппер для проекции Phone на PhoneDTO
+ 
             Mapper.Initialize(cfg => cfg.CreateMap<Magazine, MagazineDTO>());
             return Mapper.Map<Magazine, MagazineDTO>(magazine);
         }

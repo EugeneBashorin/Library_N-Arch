@@ -50,7 +50,7 @@ namespace BusinessLogicLayer.Services
             return Mapper.Map<Book, BookDTO>(book);
         }
 
-        public /*BookDTO*/ void Update(int id, BookDTO bookDto)
+        public void Update(int id, BookDTO bookDto)
         {
             Book book = new Book();
             Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, Book>());

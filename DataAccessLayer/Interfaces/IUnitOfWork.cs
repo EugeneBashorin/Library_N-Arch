@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Interfaces
 {
-   public interface IUnitOfWork// : IDisposable
+   public interface IUnitOfWork
     {
         IRepository<Book> Books { get; }
         IRepository<Magazine> Magazines { get; }
-        //IRepository<Newspaper> Newspapers { get; }
+        IRepository<Newspaper> Newspapers { get; }
     }
 }
