@@ -15,5 +15,7 @@ namespace BusinessLogicLayer.Interfaces
         void Delete(int id);
         void GetTxtList();
         void GetXmlList();
+        List<MagazineDTO> CheckMagazinePublisher(string publisherName);
+        List<string> GetMagazinesPublishers();
     }
 }

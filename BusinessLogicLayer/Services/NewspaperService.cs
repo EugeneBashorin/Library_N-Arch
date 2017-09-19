@@ -5,6 +5,7 @@ using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 using Entities.Configurations;
 using Entities.Entities;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -94,6 +95,29 @@ namespace BusinessLogicLayer.Services
             {
                 xs.Serialize(fs, xmlList);
             }
+        }
+
+        public List<NewspaperDTO> CheckNewspaperPublisher(string publisherName)
+        {
+            List<Newspaper> newspaperList;
+            if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals("All"))
+            {
+                newspaperList = Database.Newspapers.FilterByPublisher(publisherName);
+            }
+            else
+            {
+                newspaperList = Database.Newspapers.GetAll();
+            }
+            Mapper.Initialize(cfg => cfg.CreateMap<Newspaper, NewspaperDTO>());
+            var newspaperListDtos = Mapper.Map<List<Newspaper>, List<NewspaperDTO>>(newspaperList);
+            return newspaperListDtos;
+        }
+
+        public List<string> GetNewspapersPublishers()
+        {
+            List<string> newspapersPublishers = Database.Newspapers.GetAllPublishers();
+            newspapersPublishers.Add("All");
+            return newspapersPublishers;
         }
 
     }

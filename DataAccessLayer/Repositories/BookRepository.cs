@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace DataAccessLayer.Repositories
 {
@@ -125,6 +126,54 @@ namespace DataAccessLayer.Repositories
                     }
                 }
             }
-        }      
+        }
+
+        public List<Book> FilterByPublisher(string publisherName)
+        {
+            List<Book> booksList;
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                booksList = new List<Book>();
+                if (connection != null)
+                {
+                    string selectAllExpression = $"SELECT * FROM Books WHERE Publisher = '{publisherName}'";
+                    SqlCommand command = new SqlCommand(selectAllExpression, connection);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            booksList.Add(new Book { Id = (int)reader.GetValue(0), Name = (string)reader.GetValue(1), Author = (string)reader.GetValue(2), Publisher = (string)reader.GetValue(3), Price = (int)reader.GetValue(4) });
+                        }
+                    }
+                }
+            }
+            return booksList;
+        }
+
+        public List<string> GetAllPublishers()
+        {
+            List<string> publishersList;
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                publishersList = new List<string>();
+                if (connection != null)
+                {
+                    string selectAllExpression = $"SELECT DISTINCT Publisher FROM Books";
+                    SqlCommand command = new SqlCommand(selectAllExpression, connection);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            publishersList.Add(reader.GetString(0));
+                        }
+                    }
+                }
+            }
+            return publishersList;
+        }
     }
 }

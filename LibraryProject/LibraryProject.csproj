@@ -258,9 +258,6 @@
     <Compile Include="Models\NewspaperFilterModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Extention Classes\BookExtention.cs" />
-    <Compile Include="Extention Classes\MagazineExtention.cs" />
-    <Compile Include="Extention Classes\NewspaperExtention.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

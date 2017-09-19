@@ -2,7 +2,7 @@
 
 namespace DataAccessLayer.Context
 {
-    public class PublicationContext //: IDisposable
+    public class PublicationContext 
     {
         public Book Books { get; set; }
         public Magazine Magazines { get; set; }

@@ -126,5 +126,53 @@ namespace DataAccessLayer.Repositories
                 }
             }
         }
+
+        public List<Newspaper> FilterByPublisher(string publisherName)
+        {
+            List<Newspaper> newspaperList;
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                newspaperList = new List<Newspaper>();
+                if (connection != null)
+                {
+                    string selectAllExpression = $"SELECT * FROM Newspapers WHERE Publisher = '{publisherName}'";
+                    SqlCommand command = new SqlCommand(selectAllExpression, connection);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            newspaperList.Add(new Newspaper { Id = (int)reader.GetValue(0), Name = (string)reader.GetValue(1), Category = (string)reader.GetValue(2), Publisher = (string)reader.GetValue(3), Price = (int)reader.GetValue(4) });
+                        }
+                    }
+                }
+            }
+            return newspaperList;
+        }
+
+        public List<string> GetAllPublishers()
+        {
+            List<string> publishersList;
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                publishersList = new List<string>();
+                if (connection != null)
+                {
+                    string selectAllExpression = $"SELECT DISTINCT Publisher FROM Newspapers";
+                    SqlCommand command = new SqlCommand(selectAllExpression, connection);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            publishersList.Add(reader.GetString(0));
+                        }
+                    }
+                }
+            }
+            return publishersList;
+        }
     }
 }

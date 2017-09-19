@@ -5,6 +5,7 @@ using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 using Entities.Configurations;
 using Entities.Entities;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -93,6 +94,29 @@ namespace BusinessLogicLayer.Services
             {
                 xs.Serialize(fs, xmlList);
             }
+        }
+
+       public List<BookDTO> CheckBookPublisher(string publisherName)
+        {
+            List<Book> bookList;
+            if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals("All"))
+            {
+               bookList = Database.Books.FilterByPublisher(publisherName);              
+            }
+            else
+            {
+                bookList = Database.Books.GetAll();
+            }
+            Mapper.Initialize(cfg => cfg.CreateMap<Book, BookDTO>());
+            var bookListDtos = Mapper.Map<List<Book>, List<BookDTO>>(bookList);           
+            return bookListDtos;
+        }
+
+        public List<string> GetBooksPublishers()
+        {
+            List<string> booksPublishers = Database.Books.GetAllPublishers();
+            booksPublishers.Add("All");
+            return booksPublishers;
         }
     }
 }

@@ -9,5 +9,7 @@ namespace DataAccessLayer.Interfaces
         void Create(T item);
         void Update(int id,T item);
         void Delete(int id);
+        List<T> FilterByPublisher(string publisherName);
+        List<string> GetAllPublishers();
     }
 }

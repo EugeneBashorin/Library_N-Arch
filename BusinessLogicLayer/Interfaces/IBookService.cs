@@ -12,6 +12,7 @@ namespace BusinessLogicLayer.Interfaces
         void Delete(int id);
         void GetTxtList();
         void GetXmlList();
-        List<BookDTO> CheckBookPublisher(List<BookDTO> bookDtoList, string publisherName);
+        List<BookDTO> CheckBookPublisher(string publisherName);
+        List<string> GetBooksPublishers();
     }
 }
