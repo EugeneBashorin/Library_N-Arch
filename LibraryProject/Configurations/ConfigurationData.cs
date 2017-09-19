@@ -29,5 +29,7 @@ namespace LibraryProject.Configurations
 
         public static string newspapersWriteTxtPath = AppDomain.CurrentDomain.BaseDirectory + @"App_Data/newspapers.txt";
         public static string newspapersWriteXmlPath = AppDomain.CurrentDomain.BaseDirectory + @"App_Data/newspapers.xml";
+
+        public const string _ALL_PUBLISHER = "All";
     }
 }

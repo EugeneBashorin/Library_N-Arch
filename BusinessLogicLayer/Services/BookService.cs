@@ -3,11 +3,12 @@ using BusinessLogicLayer.DataTransferObject;
 using BusinessLogicLayer.Infrastructure;
 using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Interfaces;
+using Entities.Configurations;
 using Entities.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.IO;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace BusinessLogicLayer.Services
 {
@@ -45,7 +46,7 @@ namespace BusinessLogicLayer.Services
             var book = Database.Books.GetItemById(id.Value);
             if (book == null)
                 throw new ValidationException("The Book not found", "");
-            // применяем автомаппер для проекции Phone на PhoneDTO
+ 
             Mapper.Initialize(cfg => cfg.CreateMap<Book, BookDTO>());
             return Mapper.Map<Book, BookDTO>(book);
         }
@@ -64,6 +65,34 @@ namespace BusinessLogicLayer.Services
         public void Delete(int id)
         {
             Database.Books.Delete(id);
+        }
+
+        public void GetTxtList()
+        {
+            List<Book> list = Database.Books.GetAll();
+            StringBuilder result = new StringBuilder(130);
+            if (list.Count > 0)
+            {
+                foreach (Book item in list)
+                {
+                    result.AppendLine($"Name: {item.Name} Author: {item.Author} Publisher: {item.Publisher} Price: {item.Price.ToString()}");
+                }
+            }
+
+            using (StreamWriter sw = new StreamWriter(DomianConfiguration.booksWriteTxtPath, false, System.Text.Encoding.Default))
+            {
+                sw.WriteLine(result);
+            }
+        }
+
+        public void GetXmlList()
+        {
+            List<Book> xmlList = Database.Books.GetAll();
+            XmlSerializer xs = new XmlSerializer(typeof(List<Book>));
+            using (FileStream fs = new FileStream(DomianConfiguration.booksWriteXmlPath, FileMode.Create))
+            {
+                xs.Serialize(fs, xmlList);
+            }
         }
     }
 }

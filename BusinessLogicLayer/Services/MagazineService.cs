@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using BusinessLogicLayer.DataTransferObject;
-using BusinessLogicLayer.Interfaces;
 using BusinessLogicLayer.Infrastructure;
+using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Interfaces;
+using Entities.Configurations;
 using Entities.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.IO;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace BusinessLogicLayer.Services
 {
@@ -65,5 +66,33 @@ namespace BusinessLogicLayer.Services
         {
             Database.Magazines.Delete(id);
         }
+
+        public void GetTxtList()
+        {
+            List<Magazine> list = Database.Magazines.GetAll();
+            StringBuilder result = new StringBuilder(130);
+            if (list.Count > 0)
+            {
+                foreach (Magazine item in list)
+                {
+                    result.AppendLine($"Name: {item.Name} Category: {item.Category} Publisher: {item.Publisher} Price: {item.Price.ToString()}");
+                }
+            }
+            using (StreamWriter sw = new StreamWriter(DomianConfiguration.magazinesWriteTxtPath, false, System.Text.Encoding.Default))
+            {
+                sw.WriteLine(result);
+            }
+        }
+
+        public void GetXmlList()
+        {
+            List<Magazine> xmlList = Database.Magazines.GetAll();
+            XmlSerializer xs = new XmlSerializer(typeof(List<Magazine>));
+            using (FileStream fs = new FileStream(DomianConfiguration.magazinesWriteXmlPath, FileMode.Create))
+            {
+                xs.Serialize(fs, xmlList);
+            }
+        }
+
     }
 }

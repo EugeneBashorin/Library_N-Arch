@@ -28,6 +28,9 @@ namespace LibraryProject.Util
         private void AddBindings()
         {
             kernel.Bind<IBookService>().To<BookService>();
+            kernel.Bind<IMagazineService>().To<MagazineService>();
+            kernel.Bind<INewspaperService>().To<NewspaperService>();
+
         }
     }
 }

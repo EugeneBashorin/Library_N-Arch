@@ -8,75 +8,75 @@ using System.Data.SqlClient;
 
 namespace DataAccessLayer.Repositories
 {
-    public class BookRepository : IRepository<Book>
+    public class NewspaperRepository : IRepository<Newspaper>
     {
         string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         private PublicationContext DbConnection;
 
-        public BookRepository(PublicationContext context)
+        public NewspaperRepository(PublicationContext context)
         {
-           DbConnection = context;
+            DbConnection = context;
         }
 
-        public List<Book> GetAll()
+        public List<Newspaper> GetAll()
         {
-            List<Book> booksList;
+            List<Newspaper> newspapersList;
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                booksList = new List<Book>();
+                newspapersList = new List<Newspaper>();
                 if (connection != null)
                 {
-                    string booksSelectAllExpression = "SELECT * FROM Books";
-                    SqlCommand command = new SqlCommand(booksSelectAllExpression, connection);
+                    string newspapersSelectAllExpression = "SELECT * FROM Newspapers";
+                    SqlCommand command = new SqlCommand(newspapersSelectAllExpression, connection);
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows)
                     {
                         while (reader.Read())
                         {
-                            booksList.Add(new Book { Id = (int)reader.GetValue(0), Name = (string)reader.GetValue(1), Author = (string)reader.GetValue(2), Publisher = (string)reader.GetValue(3), Price = (int)reader.GetValue(4) });
+                            newspapersList.Add(new Newspaper { Id = (int)reader.GetValue(0), Name = (string)reader.GetValue(1), Category = (string)reader.GetValue(2), Publisher = (string)reader.GetValue(3), Price = (int)reader.GetValue(4) });
                         }
                     }
                 }
-               
+
             }
-            return booksList;
+            return newspapersList;
         }
 
-        public Book GetItemById(int id)
-        {         
-            Book book = new Book();
+        public Newspaper GetItemById(int id)
+        {
+            Newspaper newspaper = new Newspaper();
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 if (connection != null)
                 {
-                    string searchBookByIdExpression = $"SELECT * FROM Books WHERE Id = '{id}'";
-                    SqlCommand command = new SqlCommand(searchBookByIdExpression, connection);
+                    string searchNewspaperByIdExpression = $"SELECT * FROM Newspapers WHERE Id = '{id}'";
+                    SqlCommand command = new SqlCommand(searchNewspaperByIdExpression, connection);
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows)
                     {
                         while (reader.Read())
                         {
-                            book.Id = (int)reader.GetValue(0);
-                            book.Name = (string)reader.GetValue(1);
-                            book.Author = (string)reader.GetValue(2);
-                            book.Publisher = (string)reader.GetValue(3);
-                            book.Price = (int)reader.GetValue(4);
+                            newspaper.Id = (int)reader.GetValue(0);
+                            newspaper.Name = (string)reader.GetValue(1);
+                            newspaper.Category = (string)reader.GetValue(2);
+                            newspaper.Publisher = (string)reader.GetValue(3);
+                            newspaper.Price = (int)reader.GetValue(4);
                         }
                     }
                 }
             }
-            return book;
+            return newspaper;
         }
 
-        public void Create(Book book)
+        public void Create(Newspaper newspaper)
         {
-           string createBookExpression = $"INSERT INTO Books([Name], [Author], [Publisher],[Price]) VALUES('{book.Name}','{book.Author}','{book.Publisher}','{book.Price}')";
+            string createNewspaperExpression = $"INSERT INTO Newspapers ([Name], [Category], [Publisher],[Price]) VALUES('{newspaper.Name}','{newspaper.Category}','{newspaper.Publisher}','{newspaper.Price}')";
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                SqlCommand command = new SqlCommand(createBookExpression, connection);
+                SqlCommand command = new SqlCommand(createNewspaperExpression, connection);
                 try
                 {
                     command.ExecuteNonQuery();
@@ -87,15 +87,15 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public void Update(int Id, Book book) 
+        public void Update(int Id, Newspaper newspaper)
         {
-           using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 if (connection != null)
                 {
-                    string editBookExpression = $"UPDATE Books SET Name = '{book.Name}', Author = '{book.Author}', Publisher = '{book.Publisher}', Price = '{book.Price}' WHERE Id = '{Id}'";
-                    SqlCommand command = new SqlCommand(editBookExpression, connection);
+                    string editNewspaperExpression = $"UPDATE Newspapers SET Name = '{newspaper.Name}', Category = '{newspaper.Category}', Publisher = '{newspaper.Publisher}', Price = '{newspaper.Price}' WHERE Id = '{Id}'";
+                    SqlCommand command = new SqlCommand(editNewspaperExpression, connection);
                     try
                     {
                         command.ExecuteNonQuery();
@@ -114,8 +114,8 @@ namespace DataAccessLayer.Repositories
                 connection.Open();
                 if (connection != null)
                 {
-                    string deleteBookExpression = $"DELETE FROM Books WHERE Id = '{id}'";
-                    SqlCommand command = new SqlCommand(deleteBookExpression, connection);
+                    string deleteNewspaperExpression = $"DELETE FROM Newspapers WHERE Id = '{id}'";
+                    SqlCommand command = new SqlCommand(deleteNewspaperExpression, connection);
                     try
                     {
                         command.ExecuteNonQuery();
@@ -125,6 +125,6 @@ namespace DataAccessLayer.Repositories
                     }
                 }
             }
-        }      
+        }
     }
 }

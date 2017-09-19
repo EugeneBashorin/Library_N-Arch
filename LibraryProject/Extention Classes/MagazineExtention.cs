@@ -13,34 +13,6 @@ namespace LibraryProject.Extention_Classes
 {
     public static class MagazineExtention
     {
-        public static void GetTxtList(this List<Magazine> list)
-        {
-            StringBuilder result = new StringBuilder(130);
-
-            if (list.Count > 0)
-            {
-                foreach (Magazine item in list)
-                {
-                    result.AppendLine($"Name: {item.Name} Author: {item.Category} Publisher: {item.Publisher} Price: {item.Price.ToString()}");
-                }
-            }
-
-            using (StreamWriter sw = new StreamWriter(ConfigurationData.magazinesWriteTxtPath, false, System.Text.Encoding.Default))
-            {
-                sw.WriteLine(result);
-            }
-        }
-
-        public static void GetXmlList(this List<Magazine> xmlMagazinesList)
-        {
-            XmlSerializer xs = new XmlSerializer(typeof(List<Magazine>));
-
-            using (FileStream fs = new FileStream(ConfigurationData.magazinesWriteXmlPath, FileMode.Create))
-            {
-                xs.Serialize(fs, xmlMagazinesList);
-            }
-        }
-
         public static void SetMagazineListToDb(this List<Magazine> magazineList, string connectionString)
         {
             StringBuilder insertSqlExpression = new StringBuilder(300);

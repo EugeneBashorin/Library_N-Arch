@@ -3,11 +3,12 @@ using BusinessLogicLayer.DataTransferObject;
 using BusinessLogicLayer.Infrastructure;
 using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Interfaces;
+using Entities.Configurations;
 using Entities.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.IO;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace BusinessLogicLayer.Services
 {
@@ -68,6 +69,32 @@ namespace BusinessLogicLayer.Services
             Database.Newspapers.Delete(id);
         }
 
+        public void GetTxtList()
+        {
+            List<Newspaper> list = Database.Newspapers.GetAll();
+            StringBuilder result = new StringBuilder(130);
+            if (list.Count > 0)
+            {
+                foreach (Newspaper item in list)
+                {
+                    result.AppendLine($"Name: {item.Name} Category: {item.Category} Publisher: {item.Publisher} Price: {item.Price.ToString()}");
+                }
+            }
+            using (StreamWriter sw = new StreamWriter(DomianConfiguration.newspapersWriteTxtPath, false, System.Text.Encoding.Default))
+            {
+                sw.WriteLine(result);
+            }
+        }
+
+        public void GetXmlList()
+        {
+            List<Newspaper> xmlList = Database.Newspapers.GetAll();
+            XmlSerializer xs = new XmlSerializer(typeof(List<Newspaper>));
+            using (FileStream fs = new FileStream(DomianConfiguration.newspapersWriteXmlPath, FileMode.Create))
+            {
+                xs.Serialize(fs, xmlList);
+            }
+        }
 
     }
 }

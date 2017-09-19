@@ -13,5 +13,7 @@ namespace BusinessLogicLayer.Interfaces
         void AddItem(MagazineDTO magazineDto);
         void Update(int id, MagazineDTO magazineDTO);
         void Delete(int id);
+        void GetTxtList();
+        void GetXmlList();
     }
 }

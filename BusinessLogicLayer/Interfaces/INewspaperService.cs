@@ -14,5 +14,7 @@ namespace BusinessLogicLayer.Interfaces
         void AddItem(NewspaperDTO newspaperDto);
         void Update(int id, NewspaperDTO newspaperDto);
         void Delete(int id);
+        void GetTxtList();
+        void GetXmlList();
     }
 }

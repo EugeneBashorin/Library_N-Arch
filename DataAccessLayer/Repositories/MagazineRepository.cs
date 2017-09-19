@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace DataAccessLayer.Repositories
 {
@@ -74,7 +72,7 @@ namespace DataAccessLayer.Repositories
 
         public void Create(Magazine magazine)
         {
-            string createMagazineExpression = $"INSERT INTO Magazine([Name], [Category], [Publisher],[Price]) VALUES('{magazine.Name}','{magazine.Category}','{magazine.Publisher}','{magazine.Price}')";
+            string createMagazineExpression = $"INSERT INTO Magazines([Name], [Category], [Publisher],[Price]) VALUES('{magazine.Name}','{magazine.Category}','{magazine.Publisher}','{magazine.Price}')";
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
@@ -127,11 +125,6 @@ namespace DataAccessLayer.Repositories
                     }
                 }
             }
-        }
-
-        public List<Magazine> Find(Func<Magazine, Boolean> predicate)
-        {
-            return null;
         }
     }
 }

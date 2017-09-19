@@ -87,8 +87,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessModels\BooksXmlList.cs" />
-    <Compile Include="BusinessModels\BooksTxtList.cs" />
     <Compile Include="DataTransferObject\BookDTO.cs" />
     <Compile Include="DataTransferObject\MagazineDTO.cs" />
     <Compile Include="DataTransferObject\NewspaperDTO.cs" />
