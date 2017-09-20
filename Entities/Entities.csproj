@@ -79,7 +79,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configurations\DomianConfiguration.cs" />
     <Compile Include="Entities\Book.cs" />
     <Compile Include="Entities\Magazine.cs" />
     <Compile Include="Entities\Newspaper.cs" />

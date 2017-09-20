@@ -237,7 +237,6 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
-    <Compile Include="Configurations\ConfigurationData.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Migrations\201709111106595_DataMigration.cs" />
     <Compile Include="Migrations\201709111106595_DataMigration.Designer.cs">
@@ -310,6 +309,10 @@
     <ProjectReference Include="..\BusinessLogicLayer\BusinessLogicLayer.csproj">
       <Project>{271d2ad5-57af-4383-b8f8-5924481db2d0}</Project>
       <Name>BusinessLogicLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ConfigurationData\ConfigurationData.csproj">
+      <Project>{0822c836-933a-4b24-8a7f-964b39c72601}</Project>
+      <Name>ConfigurationData</Name>
     </ProjectReference>
     <ProjectReference Include="..\Entities\Entities.csproj">
       <Project>{a3d4f3c3-b33a-4d71-bf7d-ce68dc5ab9e1}</Project>

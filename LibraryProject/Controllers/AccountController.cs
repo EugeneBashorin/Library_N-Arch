@@ -1,4 +1,4 @@
-﻿using LibraryProject.Configurations;
+﻿using ConfigurationData.Configurations;
 using LibraryProject.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -38,7 +38,7 @@ namespace LibraryProject.Controllers
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await UserManager.AddToRoleAsync(user.Id, ConfigurationData._USER_ROLE);
+                    await UserManager.AddToRoleAsync(user.Id, IdentityConfiguration._USER_ROLE);
                     return RedirectToAction("Login", "Account");
                 }
                 else
@@ -62,7 +62,7 @@ namespace LibraryProject.Controllers
 
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.logoutLinkElement = ConfigurationData._ATTRIBUTES_STATE_OFF;
+            ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
             ViewBag.returnUrl = returnUrl;
             return View();
         }

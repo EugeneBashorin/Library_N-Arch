@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Entities.Configurations
+namespace ConfigurationData.Configurations
 {
-    public static class DomianConfiguration
+    public static class WritePathConfiguration
     {
         public static string booksWriteTxtPath = AppDomain.CurrentDomain.BaseDirectory + @"App_Data/books.txt";
         public static string booksWriteXmlPath = AppDomain.CurrentDomain.BaseDirectory + @"App_Data/books.xml";

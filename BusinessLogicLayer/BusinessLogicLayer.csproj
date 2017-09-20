@@ -94,6 +94,10 @@
     <Compile Include="Services\HomeService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConfigurationData\ConfigurationData.csproj">
+      <Project>{0822c836-933a-4b24-8a7f-964b39c72601}</Project>
+      <Name>ConfigurationData</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
       <Project>{5d957463-d349-4abc-8f1f-3c6c770940cf}</Project>
       <Name>DataAccessLayer</Name>

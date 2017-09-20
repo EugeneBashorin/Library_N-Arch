@@ -1,7 +1,7 @@
 ﻿using BusinessLogicLayer.Interfaces;
 using BusinessLogicLayer.Services;
+using ConfigurationData.Configurations;
 using Entities.Entities;
-using LibraryProject.Configurations;
 using LibraryProject.Models;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -19,7 +19,7 @@ namespace LibraryProject.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index(string bookPublisher = ConfigurationData._ALL_PUBLISHER, string magazinePublisher = ConfigurationData._ALL_PUBLISHER, string newspaperPublisher = ConfigurationData._ALL_PUBLISHER)
+        public ActionResult Index(string bookPublisher = FilterConfiguration._ALL_PUBLISHER, string magazinePublisher = FilterConfiguration._ALL_PUBLISHER, string newspaperPublisher = FilterConfiguration._ALL_PUBLISHER)
         {
             CheckRole();
             IndexModel indexModel = new IndexModel();
@@ -31,26 +31,26 @@ namespace LibraryProject.Controllers
 
         private void CheckRole()
         {
-            if (User.IsInRole(ConfigurationData._USER_ROLE))
+            if (User.IsInRole(IdentityConfiguration._USER_ROLE))
             {
-                ViewBag.hideElement = ConfigurationData._ATTRIBUTES_STATE_OFF;
+                ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
             }
 
-            if (User.IsInRole(ConfigurationData._ADMIN_ROLE) & User.IsInRole(ConfigurationData._USER_ROLE))
+            if (User.IsInRole(IdentityConfiguration._ADMIN_ROLE) & User.IsInRole(IdentityConfiguration._USER_ROLE))
             {
-                ViewBag.hideElement = ConfigurationData._ATTRIBUTES_STATE_ON;
+                ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
             }
 
             if (User.Identity.IsAuthenticated)
             {
-                ViewBag.accountElementState = ConfigurationData._ATTRIBUTES_STATE_OFF;
-                ViewBag.logoutLinkElement = ConfigurationData._ATTRIBUTES_STATE_ON;
+                ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
+                ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
             }
 
             if (!User.Identity.IsAuthenticated)
             {
-                ViewBag.accountElementState = ConfigurationData._ATTRIBUTES_STATE_ON;
-                ViewBag.logoutLinkElement = ConfigurationData._ATTRIBUTES_STATE_OFF;
+                ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
+                ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
             }
         }
 
@@ -61,21 +61,21 @@ namespace LibraryProject.Controllers
             List<string> newspaperPublisherList = homeService.GetNewspapersPublishers();
 
             model.BooksFilterModel = new BooksFilterModel();
-            model.BooksFilterModel.BooksPublisher = new SelectList(bookPublisherList, ConfigurationData._ALL_PUBLISHER);
+            model.BooksFilterModel.BooksPublisher = new SelectList(bookPublisherList, FilterConfiguration._ALL_PUBLISHER);
             model.BooksFilterModel.Books = new List<Book>();
 
             model.MagazineFilterModel = new MagazineFilterModel();
-            model.MagazineFilterModel.MagazinesPublisher = new SelectList(magazinePublisherList, ConfigurationData._ALL_PUBLISHER);           
+            model.MagazineFilterModel.MagazinesPublisher = new SelectList(magazinePublisherList, FilterConfiguration._ALL_PUBLISHER);           
             model.MagazineFilterModel.Magazines = new List<Magazine>();
 
             model.NewspaperFilterModel = new NewspaperFilterModel();
-            model.NewspaperFilterModel.NewspapersPublisher = new SelectList(newspaperPublisherList, ConfigurationData._ALL_PUBLISHER);
+            model.NewspaperFilterModel.NewspapersPublisher = new SelectList(newspaperPublisherList, FilterConfiguration._ALL_PUBLISHER);
             model.NewspaperFilterModel.Newspapers = new List<Newspaper>();
 
             return model;
         }
 
-        public IndexModel CheckPublisher(IndexModel model, string bookPublisher = ConfigurationData._ALL_PUBLISHER, string magazinePublisher = ConfigurationData._ALL_PUBLISHER, string newspaperPublisher = ConfigurationData._ALL_PUBLISHER)
+        public IndexModel CheckPublisher(IndexModel model, string bookPublisher = FilterConfiguration._ALL_PUBLISHER, string magazinePublisher = FilterConfiguration._ALL_PUBLISHER, string newspaperPublisher = FilterConfiguration._ALL_PUBLISHER)
         {
             List<Book> bookList = homeService.CheckBookPublisher(bookPublisher);
             List<Magazine> magazineList = homeService.CheckMagazinePublisher(magazinePublisher);

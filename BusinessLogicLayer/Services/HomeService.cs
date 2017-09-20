@@ -1,14 +1,12 @@
 ﻿using BusinessLogicLayer.Infrastructure;
 using BusinessLogicLayer.Interfaces;
+using ConfigurationData.Configurations;
 using DataAccessLayer.Interfaces;
-using Entities.Configurations;
 using Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Web;
 using System.Xml.Serialization;
 
 namespace BusinessLogicLayer.Services
@@ -21,6 +19,7 @@ namespace BusinessLogicLayer.Services
         {
             Database = database;
         }
+
         //*****************************************IBookService**************************************
         public List<Book> GetBooks()
         {
@@ -64,7 +63,7 @@ namespace BusinessLogicLayer.Services
                 }
             }
 
-            using (StreamWriter sw = new StreamWriter(DomianConfiguration.booksWriteTxtPath, false, System.Text.Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(WritePathConfiguration.booksWriteTxtPath, false, System.Text.Encoding.Default))
             {
                 sw.WriteLine(result);
             }
@@ -74,7 +73,7 @@ namespace BusinessLogicLayer.Services
         {
             List<Book> xmlList = Database.Books.GetAll();
             XmlSerializer xs = new XmlSerializer(typeof(List<Book>));
-            using (FileStream fs = new FileStream(DomianConfiguration.booksWriteXmlPath, FileMode.Create))
+            using (FileStream fs = new FileStream(WritePathConfiguration.booksWriteXmlPath, FileMode.Create))
             {
                 xs.Serialize(fs, xmlList);
             }
@@ -83,7 +82,7 @@ namespace BusinessLogicLayer.Services
         public List<Book> CheckBookPublisher(string publisherName)
         {
             List<Book> bookList;
-            if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals("All"))
+            if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals(FilterConfiguration._ALL_PUBLISHER))
             {
                 bookList = Database.Books.FilterByPublisher(publisherName);
             }
@@ -97,7 +96,7 @@ namespace BusinessLogicLayer.Services
         public List<string> GetBooksPublishers()
         {
             List<string> booksPublishers = Database.Books.GetAllPublishers();
-            booksPublishers.Add("All");
+            booksPublishers.Add(FilterConfiguration._ALL_PUBLISHER);
             return booksPublishers;
         }
 
@@ -142,7 +141,7 @@ namespace BusinessLogicLayer.Services
                     result.AppendLine($"Name: {item.Name} Category: {item.Category} Publisher: {item.Publisher} Price: {item.Price.ToString()}");
                 }
             }
-            using (StreamWriter sw = new StreamWriter(DomianConfiguration.magazinesWriteTxtPath, false, System.Text.Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(WritePathConfiguration.magazinesWriteTxtPath, false, System.Text.Encoding.Default))
             {
                 sw.WriteLine(result);
             }
@@ -152,7 +151,7 @@ namespace BusinessLogicLayer.Services
         {
             List<Magazine> xmlList = Database.Magazines.GetAll();
             XmlSerializer xs = new XmlSerializer(typeof(List<Magazine>));
-            using (FileStream fs = new FileStream(DomianConfiguration.magazinesWriteXmlPath, FileMode.Create))
+            using (FileStream fs = new FileStream(WritePathConfiguration.magazinesWriteXmlPath, FileMode.Create))
             {
                 xs.Serialize(fs, xmlList);
             }
@@ -160,7 +159,7 @@ namespace BusinessLogicLayer.Services
         public List<Magazine> CheckMagazinePublisher(string publisherName)
         {
             List<Magazine> magazineList;
-            if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals("All"))
+            if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals(FilterConfiguration._ALL_PUBLISHER))
             {
                 magazineList = Database.Magazines.FilterByPublisher(publisherName);
             }
@@ -174,7 +173,7 @@ namespace BusinessLogicLayer.Services
         public List<string> GetMagazinesPublishers()
         {
             List<string> magazinesPublishers = Database.Magazines.GetAllPublishers();
-            magazinesPublishers.Add("All");
+            magazinesPublishers.Add(FilterConfiguration._ALL_PUBLISHER);
             return magazinesPublishers;
         }
         //*****************************************INewspaperService**************************************
@@ -219,7 +218,7 @@ namespace BusinessLogicLayer.Services
                     result.AppendLine($"Name: {item.Name} Category: {item.Category} Publisher: {item.Publisher} Price: {item.Price.ToString()}");
                 }
             }
-            using (StreamWriter sw = new StreamWriter(DomianConfiguration.newspapersWriteTxtPath, false, System.Text.Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(WritePathConfiguration.newspapersWriteTxtPath, false, System.Text.Encoding.Default))
             {
                 sw.WriteLine(result);
             }
@@ -229,7 +228,7 @@ namespace BusinessLogicLayer.Services
         {
             List<Newspaper> xmlList = Database.Newspapers.GetAll();
             XmlSerializer xs = new XmlSerializer(typeof(List<Newspaper>));
-            using (FileStream fs = new FileStream(DomianConfiguration.newspapersWriteXmlPath, FileMode.Create))
+            using (FileStream fs = new FileStream(WritePathConfiguration.newspapersWriteXmlPath, FileMode.Create))
             {
                 xs.Serialize(fs, xmlList);
             }
@@ -238,7 +237,7 @@ namespace BusinessLogicLayer.Services
         public List<Newspaper> CheckNewspaperPublisher(string publisherName)
         {
             List<Newspaper> newspaperList;
-            if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals("All"))
+            if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals(FilterConfiguration._ALL_PUBLISHER))
             {
                 newspaperList = Database.Newspapers.FilterByPublisher(publisherName);
             }
@@ -252,9 +251,8 @@ namespace BusinessLogicLayer.Services
         public List<string> GetNewspapersPublishers()
         {
             List<string> newspapersPublishers = Database.Newspapers.GetAllPublishers();
-            newspapersPublishers.Add("All");
+            newspapersPublishers.Add(FilterConfiguration._ALL_PUBLISHER);
             return newspapersPublishers;
         }
-
     }
 }
