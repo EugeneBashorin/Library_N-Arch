@@ -91,8 +91,9 @@ namespace LibraryProject.Controllers
                     Role = "user"
                 };
                 OperationDetails operationDetails = await UserService.Create(userDto);
-                if (operationDetails.Succedeed)
-                    return View("SuccessRegister");
+                if (operationDetails.Succedeed)                    
+                return RedirectToAction("Index", "Home");
+                //return View("SuccessRegister");
                 else
                     ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
