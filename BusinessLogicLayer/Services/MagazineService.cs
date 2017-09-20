@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using BusinessLogicLayer.DataTransferObject;
-using BusinessLogicLayer.Infrastructure;
+﻿using BusinessLogicLayer.Infrastructure;
 using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 using Entities.Configurations;
@@ -22,53 +20,36 @@ namespace BusinessLogicLayer.Services
             Database = database;
         }
 
-        public List<MagazineDTO> GetMagazines()
+        public List<Magazine> GetMagazines()
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Magazine, MagazineDTO>());
-            return Mapper.Map<List<Magazine>, List<MagazineDTO>>(Database.Magazines.GetAll());
+            return Database.Magazines.GetAll();
         }
 
-        public void AddItem(MagazineDTO magazineDto)
-        {
-            Magazine magazine = new Magazine();
-            Mapper.Initialize(cfg => cfg.CreateMap<MagazineDTO, Magazine>());
-            magazine.Id = magazineDto.Id;
-            magazine.Name = magazineDto.Name;
-            magazine.Category = magazineDto.Category;
-            magazine.Publisher = magazineDto.Publisher;
-            magazine.Price = magazineDto.Price;
+        public void AddMagazine(Magazine magazine)
+        {            
             Database.Magazines.Create(magazine);
         }
 
-        public MagazineDTO GetMagazine(int? id)
+        public Magazine GetMagazine(int? id)
         {
             if (id == null)
                 throw new ValidationException("Magazine Id not found", "");
             var magazine = Database.Magazines.GetItemById(id.Value);
             if (magazine == null)
-                throw new ValidationException("The Magazine not found", "");
- 
-            Mapper.Initialize(cfg => cfg.CreateMap<Magazine, MagazineDTO>());
-            return Mapper.Map<Magazine, MagazineDTO>(magazine);
+                throw new ValidationException("The Magazine not found", "");           
+            return magazine;
         }
 
-        public void Update(int id, MagazineDTO magazineDto)
-        {
-            Magazine magazine = new Magazine();
-            Mapper.Initialize(cfg => cfg.CreateMap<MagazineDTO, Magazine>());
-            magazine.Id = magazineDto.Id;
-            magazine.Name = magazineDto.Name;
-            magazine.Category = magazineDto.Category;
-            magazine.Publisher = magazineDto.Publisher;
-            magazine.Price = magazineDto.Price;
+        public void UpdateMagazine(int id, Magazine magazine)
+        {          
             Database.Magazines.Update(id, magazine);
         }
-        public void Delete(int id)
+        public void DeleteMagazine(int id)
         {
             Database.Magazines.Delete(id);
         }
 
-        public void GetTxtList()
+        public void GetMagazinesTxtList()
         {
             List<Magazine> list = Database.Magazines.GetAll();
             StringBuilder result = new StringBuilder(130);
@@ -85,7 +66,7 @@ namespace BusinessLogicLayer.Services
             }
         }
 
-        public void GetXmlList()
+        public void GetMagazinesXmlList()
         {
             List<Magazine> xmlList = Database.Magazines.GetAll();
             XmlSerializer xs = new XmlSerializer(typeof(List<Magazine>));
@@ -94,7 +75,7 @@ namespace BusinessLogicLayer.Services
                 xs.Serialize(fs, xmlList);
             }
         }
-        public List<MagazineDTO> CheckMagazinePublisher(string publisherName)
+        public List<Magazine> CheckMagazinePublisher(string publisherName)
         {
             List<Magazine> magazineList;
             if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals("All"))
@@ -104,10 +85,8 @@ namespace BusinessLogicLayer.Services
             else
             {
                 magazineList = Database.Magazines.GetAll();
-            }
-            Mapper.Initialize(cfg => cfg.CreateMap<Magazine, MagazineDTO>());
-            var magazineListDtos = Mapper.Map<List<Magazine>, List<MagazineDTO>>(magazineList);
-            return magazineListDtos;
+            }           
+            return magazineList;
         }
 
         public List<string> GetMagazinesPublishers()

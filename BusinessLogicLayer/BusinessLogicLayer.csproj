@@ -87,18 +87,11 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataTransferObject\BookDTO.cs" />
-    <Compile Include="DataTransferObject\MagazineDTO.cs" />
-    <Compile Include="DataTransferObject\NewspaperDTO.cs" />
     <Compile Include="Infrastructure\ServiceModule.cs" />
     <Compile Include="Infrastructure\ValidationException.cs" />
-    <Compile Include="Interfaces\IBookService.cs" />
-    <Compile Include="Interfaces\IMagazineService.cs" />
-    <Compile Include="Interfaces\INewspaperService.cs" />
+    <Compile Include="Interfaces\IHomeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\BookService.cs" />
-    <Compile Include="Services\MagazineService.cs" />
-    <Compile Include="Services\NewspaperService.cs" />
+    <Compile Include="Services\HomeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">

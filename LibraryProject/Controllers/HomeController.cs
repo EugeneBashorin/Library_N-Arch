@@ -1,11 +1,9 @@
-﻿using AutoMapper;
-using BusinessLogicLayer.DataTransferObject;
-using BusinessLogicLayer.Interfaces;
+﻿using BusinessLogicLayer.Interfaces;
+using BusinessLogicLayer.Services;
 using Entities.Entities;
 using LibraryProject.Configurations;
 using LibraryProject.Models;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Web.Mvc;
 
 namespace LibraryProject.Controllers
@@ -13,18 +11,12 @@ namespace LibraryProject.Controllers
     // [Authorize]
     public class HomeController : Controller
     {
-        IBookService bookService;
-        IMagazineService magazineService;
-        INewspaperService newspaperService;
+        IHomeService homeService;
 
-        public HomeController(IBookService bookservice, IMagazineService magazineservice, INewspaperService newspaperservice)
+        public HomeController(IHomeService homeservice)
         {
-            bookService = bookservice;
-            magazineService = magazineservice;
-            newspaperService = newspaperservice;
+            homeService = homeservice;
         }
-
-        //private string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         [HttpGet]
         public ActionResult Index(string bookPublisher = ConfigurationData._ALL_PUBLISHER, string magazinePublisher = ConfigurationData._ALL_PUBLISHER, string newspaperPublisher = ConfigurationData._ALL_PUBLISHER)
@@ -43,6 +35,7 @@ namespace LibraryProject.Controllers
             {
                 ViewBag.hideElement = ConfigurationData._ATTRIBUTES_STATE_OFF;
             }
+
             if (User.IsInRole(ConfigurationData._ADMIN_ROLE) & User.IsInRole(ConfigurationData._USER_ROLE))
             {
                 ViewBag.hideElement = ConfigurationData._ATTRIBUTES_STATE_ON;
@@ -53,6 +46,7 @@ namespace LibraryProject.Controllers
                 ViewBag.accountElementState = ConfigurationData._ATTRIBUTES_STATE_OFF;
                 ViewBag.logoutLinkElement = ConfigurationData._ATTRIBUTES_STATE_ON;
             }
+
             if (!User.Identity.IsAuthenticated)
             {
                 ViewBag.accountElementState = ConfigurationData._ATTRIBUTES_STATE_ON;
@@ -62,9 +56,9 @@ namespace LibraryProject.Controllers
 
         private IndexModel Initialize(IndexModel model)
         {
-            List<string> bookPublisherList = bookService.GetBooksPublishers();
-            List<string> magazinePublisherList = magazineService.GetMagazinesPublishers();
-            List<string> newspaperPublisherList = newspaperService.GetNewspapersPublishers();
+            List<string> bookPublisherList = homeService.GetBooksPublishers();
+            List<string> magazinePublisherList = homeService.GetMagazinesPublishers();
+            List<string> newspaperPublisherList = homeService.GetNewspapersPublishers();
 
             model.BooksFilterModel = new BooksFilterModel();
             model.BooksFilterModel.BooksPublisher = new SelectList(bookPublisherList, ConfigurationData._ALL_PUBLISHER);
@@ -83,90 +77,52 @@ namespace LibraryProject.Controllers
 
         public IndexModel CheckPublisher(IndexModel model, string bookPublisher = ConfigurationData._ALL_PUBLISHER, string magazinePublisher = ConfigurationData._ALL_PUBLISHER, string newspaperPublisher = ConfigurationData._ALL_PUBLISHER)
         {
-            List<BookDTO> bookListDto = bookService.CheckBookPublisher(bookPublisher);
-            List<MagazineDTO> magazineListDto = magazineService.CheckMagazinePublisher(magazinePublisher);
-            List<NewspaperDTO> newspaperListDto = newspaperService.CheckNewspaperPublisher(newspaperPublisher);
+            List<Book> bookList = homeService.CheckBookPublisher(bookPublisher);
+            List<Magazine> magazineList = homeService.CheckMagazinePublisher(magazinePublisher);
+            List<Newspaper> newspaperList = homeService.CheckNewspaperPublisher(newspaperPublisher);
 
-            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, Book>());
-            model.BooksFilterModel.Books = Mapper.Map<List<BookDTO>, List<Book>>(bookListDto);
-
-            Mapper.Initialize(cfg => cfg.CreateMap<MagazineDTO, Magazine>());
-            model.MagazineFilterModel.Magazines = Mapper.Map<List<MagazineDTO>, List<Magazine>>(magazineListDto);
-
-            Mapper.Initialize(cfg => cfg.CreateMap<NewspaperDTO, Newspaper>());
-            model.NewspaperFilterModel.Newspapers = Mapper.Map<List<NewspaperDTO>, List<Newspaper>>(newspaperListDto);
+            model.BooksFilterModel.Books = bookList;
+            model.MagazineFilterModel.Magazines = magazineList;
+            model.NewspaperFilterModel.Newspapers = newspaperList; 
 
             return model;
         }
 
         public ActionResult GetBooksList()
         {
-            bookService.GetTxtList();
+            homeService.GetBooksTxtList();
             return RedirectToAction("Index");
         }
 
         public ActionResult GetBooksXmlList()
         {
-            bookService.GetXmlList();
+            homeService.GetBooksXmlList();
             return RedirectToAction("Index");
         }
 
         public ActionResult GetNewspapersList()
         {
-            newspaperService.GetTxtList();
+            homeService.GetNewspapersTxtList();
             return RedirectToAction("Index");
         }
 
         public ActionResult GetNewspapersXmlList()
         {
-            newspaperService.GetXmlList();
+            homeService.GetNewspapersXmlList();
             return RedirectToAction("Index");
         }
 
         public ActionResult GetMagazinesList()
         {
-            magazineService.GetTxtList();
+            homeService.GetMagazinesTxtList();
             return RedirectToAction("Index");
         }
 
         public ActionResult GetMagazinesXmlList()
         {
-            magazineService.GetXmlList();
+            homeService.GetMagazinesXmlList();
             return RedirectToAction("Index");
         }
-
-        //[HttpGet]/*****************************************?????Save Db To exist Db?????**************************************************/
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
-        //public ActionResult GetDatabaseBookList()
-        //{
-        //    IndexModel indexModel = (IndexModel)Session["LibraryState"];
-        //    List<Book> bookList = indexModel.BooksFilterModel.Books;
-        //    bookList.SetBookListToDb(connectionString);
-
-        //    return RedirectToAction("Index");
-        //}
-
-        //[HttpGet]/*****************************************?????Save Db To exist Db?????**************************************************/
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
-        //public ActionResult GetDatabaseMagazineList()
-        //{
-        //    IndexModel indexModel = (IndexModel)Session["LibraryState"];
-        //    List<Magazine> magazineList = indexModel.MagazineFilterModel.Magazines;
-        //    magazineList.SetMagazineListToDb(connectionString);
-
-        //    return RedirectToAction("Index");
-        //}
-
-        //[HttpGet]/*****************************************?????Save Db To exist Db?????**************************************************/
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
-        //public ActionResult GetDatabaseNewspaperList()
-        //{
-        //    IndexModel indexModel = (IndexModel)Session["LibraryState"];
-        //    List<Newspaper> newspaperList = indexModel.NewspaperFilterModel.Newspapers;
-        //    newspaperList.SetNewspaperListToDb(connectionString);
-
-        //    return RedirectToAction("Index");
-        //}
 
         //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
         [HttpGet]
@@ -178,18 +134,14 @@ namespace LibraryProject.Controllers
         [HttpPost]
         public ActionResult CreateBook(Book book)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Book, BookDTO>());
-            var bookDto = Mapper.Map<Book, BookDTO>(book);
-            bookService.AddItem(bookDto);
+            homeService.AddBook(book);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public ActionResult ShowBook(int id)
         {
-            BookDTO bookDto = bookService.GetBook(id);
-            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, Book>());
-            var book = Mapper.Map<BookDTO, Book>(bookDto);
+            Book book = homeService.GetBook(id);
             return View(book);
         }
 
@@ -197,19 +149,14 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult EditBook(int id)
         {
-            BookDTO bookDto = bookService.GetBook(id);
-            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, Book>());
-            var book = Mapper.Map<BookDTO, Book>(bookDto);
+            Book book = homeService.GetBook(id);
             return View(book);
         }
 
         [HttpPost]
         public ActionResult EditBook(int Id, Book newBook)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Book, BookDTO>());
-            var bookDto = Mapper.Map<Book, BookDTO>(newBook);
-            bookService.Update(Id, bookDto);
-
+            homeService.UpdateBook(Id, newBook);
             return RedirectToAction("Index");
         }
 
@@ -218,9 +165,7 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult DeleteBook(int id)
         {
-            BookDTO bookDto = bookService.GetBook(id);
-            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, Book>());
-            var book = Mapper.Map<BookDTO, Book>(bookDto);
+            Book book = homeService.GetBook(id);
             return PartialView(book);
         }
 
@@ -228,7 +173,7 @@ namespace LibraryProject.Controllers
         [HttpPost, ActionName("DeleteBook")]
         public ActionResult DeleteConfirmedBook(int id)
         {
-            bookService.Delete(id);
+            homeService.DeleteBook(id);
             return RedirectToAction("Index");
         }
 
@@ -242,36 +187,28 @@ namespace LibraryProject.Controllers
         [HttpPost]
         public ActionResult CreateMagazine(Magazine magazine)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Magazine, MagazineDTO>());
-            var magazineDto = Mapper.Map<Magazine, MagazineDTO>(magazine);
-            magazineService.AddItem(magazineDto);
+            homeService.AddMagazine(magazine);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public ActionResult ShowMagazine(int id)
         {
-            MagazineDTO magazineDto = magazineService.GetMagazine(id);
-            Mapper.Initialize(cfg => cfg.CreateMap<MagazineDTO, Magazine>());
-            var magazine = Mapper.Map<MagazineDTO, Magazine>(magazineDto);
+            Magazine magazine = homeService.GetMagazine(id);           
             return View(magazine);
         }
 
         [HttpGet]
         public ActionResult EditMagazine(int id)
         {
-            MagazineDTO magazineDto = magazineService.GetMagazine(id);
-            Mapper.Initialize(cfg => cfg.CreateMap<MagazineDTO, Magazine>());
-            var magazine = Mapper.Map<MagazineDTO, Magazine>(magazineDto);
+            Magazine magazine = homeService.GetMagazine(id);           
             return View(magazine);
         }
 
         [HttpPost]
         public ActionResult EditMagazine(int Id, Magazine newMagazine)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Magazine, MagazineDTO>());
-            var magazineDto = Mapper.Map<Magazine, MagazineDTO>(newMagazine);
-            magazineService.Update(Id, magazineDto);
+            homeService.UpdateMagazine(Id, newMagazine);
 
             return RedirectToAction("Index");
         }
@@ -280,16 +217,14 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult DeleteMagazine(int? id)
         {
-            MagazineDTO magazineDTO = magazineService.GetMagazine(id);
-            Mapper.Initialize(cfg => cfg.CreateMap<MagazineDTO, Magazine>());
-            var magazine = Mapper.Map<MagazineDTO, Magazine>(magazineDTO);
+            Magazine magazine = homeService.GetMagazine(id);          
             return PartialView(magazine);
         }
 
         [HttpPost, ActionName("DeleteMagazine")]
         public ActionResult DeleteConfirmedMagazine(int id)
         {
-            magazineService.Delete(id);
+            homeService.DeleteMagazine(id);
             return RedirectToAction("Index");
         }
 
@@ -303,18 +238,14 @@ namespace LibraryProject.Controllers
         [HttpPost]
         public ActionResult CreateNewspaper(Newspaper newspaper)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Newspaper, NewspaperDTO>());
-            var newspaperDto = Mapper.Map<Newspaper, NewspaperDTO>(newspaper);
-            newspaperService.AddItem(newspaperDto);
+            homeService.AddNewspaper(newspaper);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public ActionResult ShowNewspaper(int id)
         {
-            NewspaperDTO newspaperDto = newspaperService.GetNewspaper(id);
-            Mapper.Initialize(cfg => cfg.CreateMap<NewspaperDTO, Newspaper>());
-            var newspaper = Mapper.Map<NewspaperDTO, Newspaper>(newspaperDto);
+            Newspaper newspaper = homeService.GetNewspaper(id);           
             return View(newspaper);
         }
 
@@ -322,19 +253,14 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult EditNewspaper(int id)
         {
-            NewspaperDTO newspaperDto = newspaperService.GetNewspaper(id);
-            Mapper.Initialize(cfg => cfg.CreateMap<NewspaperDTO, Newspaper>());
-            var newspaper = Mapper.Map<NewspaperDTO, Newspaper>(newspaperDto);
+            Newspaper newspaper = homeService.GetNewspaper(id);           
             return View(newspaper);
         }
 
         [HttpPost]
         public ActionResult EditNewspaper(int Id, Newspaper newNewspaper)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Newspaper, NewspaperDTO>());
-            var newspaperDto = Mapper.Map<Newspaper, NewspaperDTO>(newNewspaper);
-            newspaperService.Update(Id, newspaperDto);
-
+            homeService.UpdateNewspaper(Id, newNewspaper);
             return RedirectToAction("Index");
         }
 
@@ -342,16 +268,14 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult DeleteNewspaper(int? id)
         {
-            NewspaperDTO newspaperDTO = newspaperService.GetNewspaper(id);
-            Mapper.Initialize(cfg => cfg.CreateMap<NewspaperDTO, Newspaper>());
-            var newspaper = Mapper.Map<NewspaperDTO, Newspaper>(newspaperDTO);
+            Newspaper newspaper = homeService.GetNewspaper(id);          
             return PartialView(newspaper);
         }
 
         [HttpPost, ActionName("DeleteNewspaper")]
         public ActionResult DeleteConfirmedNewspaper(int id)
         {
-            newspaperService.Delete(id);
+            homeService.DeleteNewspaper(id);
             return RedirectToAction("Index");
         }
     }

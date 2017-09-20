@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using BusinessLogicLayer.DataTransferObject;
-using BusinessLogicLayer.Infrastructure;
+﻿using BusinessLogicLayer.Infrastructure;
 using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 using Entities.Configurations;
@@ -22,55 +20,37 @@ namespace BusinessLogicLayer.Services
             Database = database;
         }
 
-        public List<NewspaperDTO> GetNewspapers()
+        public List<Newspaper> GetNewspapers()
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Newspaper, NewspaperDTO>());
-            return Mapper.Map<List<Newspaper>, List<NewspaperDTO>>(Database.Newspapers.GetAll());
+            return Database.Newspapers.GetAll();
         }
 
-        public void AddItem(NewspaperDTO newspaperDto)
-        {
-            Newspaper newspaper = new Newspaper();
-            Mapper.Initialize(cfg => cfg.CreateMap<NewspaperDTO, Newspaper>());
-            newspaper.Id = newspaperDto.Id;
-            newspaper.Name = newspaperDto.Name;
-            newspaper.Category = newspaperDto.Category;
-            newspaper.Publisher = newspaperDto.Publisher;
-            newspaper.Price = newspaperDto.Price;
+        public void AddNewspaper(Newspaper newspaper)
+        {           
             Database.Newspapers.Create(newspaper);
         }
 
-        public NewspaperDTO GetNewspaper(int? id)
+        public Newspaper GetNewspaper(int? id)
         {
             if (id == null)
                 throw new ValidationException("Newspaper Id not found", "");
             var newspaper = Database.Newspapers.GetItemById(id.Value);
             if (newspaper == null)
-                throw new ValidationException("The Newspaper not found", "");
-
-            Mapper.Initialize(cfg => cfg.CreateMap<Newspaper, NewspaperDTO>());
-            return Mapper.Map<Newspaper, NewspaperDTO>(newspaper);
+                throw new ValidationException("The Newspaper not found", "");         
+            return newspaper;
         }
-
-        
-        public void Update(int id, NewspaperDTO newspaperDto)
-        {
-            Newspaper newspaper = new Newspaper();
-            Mapper.Initialize(cfg => cfg.CreateMap<NewspaperDTO, Newspaper>());
-            newspaper.Id = newspaperDto.Id;
-            newspaper.Name = newspaperDto.Name;
-            newspaper.Category = newspaperDto.Category;
-            newspaper.Publisher = newspaperDto.Publisher;
-            newspaper.Price = newspaperDto.Price;
+       
+        public void UpdateNewspaper(int id, Newspaper newspaper)
+        {          
             Database.Newspapers.Update(id, newspaper);
         }
 
-        public void Delete(int id)
+        public void DeleteNewspaper(int id)
         {
             Database.Newspapers.Delete(id);
         }
 
-        public void GetTxtList()
+        public void GetNewspapersTxtList()
         {
             List<Newspaper> list = Database.Newspapers.GetAll();
             StringBuilder result = new StringBuilder(130);
@@ -87,7 +67,7 @@ namespace BusinessLogicLayer.Services
             }
         }
 
-        public void GetXmlList()
+        public void GetNewspapersXmlList()
         {
             List<Newspaper> xmlList = Database.Newspapers.GetAll();
             XmlSerializer xs = new XmlSerializer(typeof(List<Newspaper>));
@@ -97,7 +77,7 @@ namespace BusinessLogicLayer.Services
             }
         }
 
-        public List<NewspaperDTO> CheckNewspaperPublisher(string publisherName)
+        public List<Newspaper> CheckNewspaperPublisher(string publisherName)
         {
             List<Newspaper> newspaperList;
             if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals("All"))
@@ -108,9 +88,7 @@ namespace BusinessLogicLayer.Services
             {
                 newspaperList = Database.Newspapers.GetAll();
             }
-            Mapper.Initialize(cfg => cfg.CreateMap<Newspaper, NewspaperDTO>());
-            var newspaperListDtos = Mapper.Map<List<Newspaper>, List<NewspaperDTO>>(newspaperList);
-            return newspaperListDtos;
+            return newspaperList;
         }
 
         public List<string> GetNewspapersPublishers()

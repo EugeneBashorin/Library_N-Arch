@@ -1,18 +1,18 @@
-﻿using BusinessLogicLayer.DataTransferObject;
+﻿using Entities.Entities;
 using System.Collections.Generic;
 
 namespace BusinessLogicLayer.Interfaces
 {
     public interface IBookService
-    {
-        BookDTO GetBook(int? id);
-        List<BookDTO> GetBooks();
-        void AddItem(BookDTO bookBto);
-        void Update(int id, BookDTO bookDTO);
-        void Delete(int id);
-        void GetTxtList();
-        void GetXmlList();
-        List<BookDTO> CheckBookPublisher(string publisherName);
+    {      
+        Book GetBook(int? id);
+        List<Book> GetBooks();
+        void AddBook(Book book);
+        void UpdateBook(int id, Book book);
+        void DeleteBook(int id);
+        void GetBooksTxtList();
+        void GetBooksXmlList();
+        List<Book> CheckBookPublisher(string publisherName);
         List<string> GetBooksPublishers();
     }
 }

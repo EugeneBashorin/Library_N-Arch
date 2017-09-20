@@ -1,22 +1,18 @@
-﻿using BusinessLogicLayer.DataTransferObject;
-using System;
+﻿using Entities.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Interfaces
 {
     public interface INewspaperService
     {
-        NewspaperDTO GetNewspaper(int? id);
-        List<NewspaperDTO> GetNewspapers();
-        void AddItem(NewspaperDTO newspaperDto);
-        void Update(int id, NewspaperDTO newspaperDto);
-        void Delete(int id);
-        void GetTxtList();
-        void GetXmlList();
-        List<NewspaperDTO> CheckNewspaperPublisher(string publisherName);
+        Newspaper GetNewspaper(int? id);
+        List<Newspaper> GetNewspapers();
+        void AddNewspaper(Newspaper newspaper);
+        void UpdateNewspaper(int id, Newspaper newspaper);
+        void DeleteNewspaper(int id);
+        void GetNewspapersTxtList();
+        void GetNewspapersXmlList();
+        List<Newspaper> CheckNewspaperPublisher(string publisherName);
         List<string> GetNewspapersPublishers();
     }
 }

@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using BusinessLogicLayer.DataTransferObject;
-using BusinessLogicLayer.Infrastructure;
+﻿using BusinessLogicLayer.Infrastructure;
 using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 using Entities.Configurations;
@@ -21,54 +19,38 @@ namespace BusinessLogicLayer.Services
         {
             Database = database;
         }
-       
-        public List<BookDTO> GetBooks()
+
+        public List<Book> GetBooks()
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Book, BookDTO>());
-            return Mapper.Map<List<Book>, List<BookDTO>>(Database.Books.GetAll());
+            return Database.Books.GetAll();
         }
 
-        public void AddItem(BookDTO bookDto)
+            public void AddBook(Book book)
         {
-            Book book = new Book();
-            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, Book>());
-            book.Id = bookDto.Id;
-            book.Name = bookDto.Name;
-            book.Author = bookDto.Author;
-            book.Publisher = bookDto.Publisher;
-            book.Price = bookDto.Price;
             Database.Books.Create(book);
         }
 
-        public BookDTO GetBook(int? id)
+            public Book GetBook(int? id)
         {
             if (id == null)
                 throw new ValidationException("Book Id not found", "");
             var book = Database.Books.GetItemById(id.Value);
             if (book == null)
                 throw new ValidationException("The Book not found", "");
- 
-            Mapper.Initialize(cfg => cfg.CreateMap<Book, BookDTO>());
-            return Mapper.Map<Book, BookDTO>(book);
+
+            return book;
         }
 
-        public void Update(int id, BookDTO bookDto)
+            public void UpdateBook(int id, Book book)
         {
-            Book book = new Book();
-            Mapper.Initialize(cfg => cfg.CreateMap<BookDTO, Book>());
-            book.Id = bookDto.Id;
-            book.Name = bookDto.Name;
-            book.Author = bookDto.Author;
-            book.Publisher = bookDto.Publisher;
-            book.Price = bookDto.Price;
-            Database.Books.Update(id, book);           
+            Database.Books.Update(id, book);
         }
-        public void Delete(int id)
+        public void DeleteBook(int id)
         {
             Database.Books.Delete(id);
         }
 
-        public void GetTxtList()
+        public void GetBooksTxtList()
         {
             List<Book> list = Database.Books.GetAll();
             StringBuilder result = new StringBuilder(130);
@@ -86,7 +68,7 @@ namespace BusinessLogicLayer.Services
             }
         }
 
-        public void GetXmlList()
+        public void GetBooksXmlList()
         {
             List<Book> xmlList = Database.Books.GetAll();
             XmlSerializer xs = new XmlSerializer(typeof(List<Book>));
@@ -96,20 +78,18 @@ namespace BusinessLogicLayer.Services
             }
         }
 
-       public List<BookDTO> CheckBookPublisher(string publisherName)
+            public List<Book> CheckBookPublisher(string publisherName)
         {
             List<Book> bookList;
             if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals("All"))
             {
-               bookList = Database.Books.FilterByPublisher(publisherName);              
+                bookList = Database.Books.FilterByPublisher(publisherName);
             }
             else
             {
                 bookList = Database.Books.GetAll();
             }
-            Mapper.Initialize(cfg => cfg.CreateMap<Book, BookDTO>());
-            var bookListDtos = Mapper.Map<List<Book>, List<BookDTO>>(bookList);           
-            return bookListDtos;
+            return bookList;
         }
 
         public List<string> GetBooksPublishers()
