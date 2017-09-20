@@ -1,5 +1,4 @@
 ﻿using Entities.Entities;
-
 namespace DataAccessLayer.Context
 {
     public class PublicationContext 

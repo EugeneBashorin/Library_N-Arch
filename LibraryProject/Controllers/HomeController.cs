@@ -1,5 +1,4 @@
 ﻿using BusinessLogicLayer.Interfaces;
-using BusinessLogicLayer.Services;
 using ConfigurationData.Configurations;
 using Entities.Entities;
 using LibraryProject.Models;
@@ -8,7 +7,7 @@ using System.Web.Mvc;
 
 namespace LibraryProject.Controllers
 {
-    // [Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
         IHomeService homeService;
@@ -21,7 +20,7 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult Index(string bookPublisher = FilterConfiguration._ALL_PUBLISHER, string magazinePublisher = FilterConfiguration._ALL_PUBLISHER, string newspaperPublisher = FilterConfiguration._ALL_PUBLISHER)
         {
-            CheckRole();
+            //CheckRole();
             IndexModel indexModel = new IndexModel();
             Initialize(indexModel);
             indexModel = CheckPublisher(indexModel, bookPublisher, magazinePublisher, newspaperPublisher);
@@ -29,30 +28,30 @@ namespace LibraryProject.Controllers
             return View(indexModel);
         }
 
-        private void CheckRole()
-        {
-            if (User.IsInRole(IdentityConfiguration._USER_ROLE))
-            {
-                ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
-            }
+        //private void CheckRole()
+        //{
+        //    if (User.IsInRole(IdentityConfiguration._USER_ROLE))
+        //    {
+        //        ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
+        //    }
 
-            if (User.IsInRole(IdentityConfiguration._ADMIN_ROLE) & User.IsInRole(IdentityConfiguration._USER_ROLE))
-            {
-                ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
-            }
+        //    if (User.IsInRole(IdentityConfiguration._ADMIN_ROLE) & User.IsInRole(IdentityConfiguration._USER_ROLE))
+        //    {
+        //        ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
+        //    }
 
-            if (User.Identity.IsAuthenticated)
-            {
-                ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
-                ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
-            }
+        //    if (User.Identity.IsAuthenticated)
+        //    {
+        //        ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
+        //        ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
+        //    }
 
-            if (!User.Identity.IsAuthenticated)
-            {
-                ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
-                ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
-            }
-        }
+        //    if (!User.Identity.IsAuthenticated)
+        //    {
+        //        ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
+        //        ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
+        //    }
+        //}
 
         private IndexModel Initialize(IndexModel model)
         {
@@ -124,7 +123,7 @@ namespace LibraryProject.Controllers
             return RedirectToAction("Index");
         }
 
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
         [HttpGet]
         public ActionResult CreateBook()
         {
@@ -145,7 +144,7 @@ namespace LibraryProject.Controllers
             return View(book);
         }
 
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
         [HttpGet]
         public ActionResult EditBook(int id)
         {
@@ -161,7 +160,7 @@ namespace LibraryProject.Controllers
         }
 
 
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
         [HttpGet]
         public ActionResult DeleteBook(int id)
         {
@@ -169,7 +168,7 @@ namespace LibraryProject.Controllers
             return PartialView(book);
         }
 
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
         [HttpPost, ActionName("DeleteBook")]
         public ActionResult DeleteConfirmedBook(int id)
         {
@@ -177,7 +176,7 @@ namespace LibraryProject.Controllers
             return RedirectToAction("Index");
         }
 
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        [Authorize(Roles = "admin" /*ConfigurationData._ADMIN_ROLE*/)]
         [HttpGet]
         public ActionResult CreateMagazine()
         {
@@ -213,7 +212,7 @@ namespace LibraryProject.Controllers
             return RedirectToAction("Index");
         }
 
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
         [HttpGet]
         public ActionResult DeleteMagazine(int? id)
         {
@@ -228,7 +227,7 @@ namespace LibraryProject.Controllers
             return RedirectToAction("Index");
         }
 
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
         [HttpGet]
         public ActionResult CreateNewspaper()
         {
@@ -249,7 +248,7 @@ namespace LibraryProject.Controllers
             return View(newspaper);
         }
 
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
         [HttpGet]
         public ActionResult EditNewspaper(int id)
         {
@@ -264,7 +263,7 @@ namespace LibraryProject.Controllers
             return RedirectToAction("Index");
         }
 
-        //[Authorize(Roles = ConfigurationData._ADMIN_ROLE)]
+        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
         [HttpGet]
         public ActionResult DeleteNewspaper(int? id)
         {

@@ -1,9 +1,14 @@
-﻿using ConfigurationData.Configurations;
+﻿using BusinessLogicLayer.DTO;
+using BusinessLogicLayer.Infrastructure;
+using BusinessLogicLayer.Interfaces;
+using Entities.Entities;
+using ConfigurationData.Configurations;
 using LibraryProject.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -13,43 +18,12 @@ namespace LibraryProject.Controllers
 {
     public class AccountController : Controller
     {
-        private ApplicationUserManager UserManager
+        private IUserService UserService
         {
             get
             {
-                return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return HttpContext.GetOwinContext().GetUserManager<IUserService>();
             }
-        }
-
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Register(RegisterModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                ApplicationUser user = new ApplicationUser();
-                user.UserName = model.Email;
-                user.Email = model.Email;
-
-                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await UserManager.AddToRoleAsync(user.Id, IdentityConfiguration._USER_ROLE);
-                    return RedirectToAction("Login", "Account");
-                }
-                else
-                {
-                    foreach (string error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error);
-                    }
-                }
-            }
-            return View(model);
         }
 
         private IAuthenticationManager AuthenticationManager
@@ -60,67 +34,189 @@ namespace LibraryProject.Controllers
             }
         }
 
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
-            ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
-            ViewBag.returnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginModel model)
         {
+            await SetInitialDataAsync();
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await UserManager.FindAsync(model.Email, model.Password);
-                if (user == null)
+                UserDTO userDto = new UserDTO { Email = model.Email, Password = model.Password };
+                ClaimsIdentity claim = await UserService.Authenticate(userDto);
+                if (claim == null)
                 {
-                    ModelState.AddModelError("", "Wrong login or password.");
+                    ModelState.AddModelError("", "Неверный логин или пароль.");
                 }
                 else
                 {
-                    ClaimsIdentity claim = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
                     AuthenticationManager.SignOut();
-                    AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = false }, claim);
-                    if (String.IsNullOrEmpty(returnUrl))
+                    AuthenticationManager.SignIn(new AuthenticationProperties
                     {
-                        return RedirectToAction("Index", "Home");
-                    } 
-                    return Redirect(returnUrl);
+                        IsPersistent = true
+                    }, claim);
+                    return RedirectToAction("Index", "Home");
                 }
             }
-            ViewBag.returnUrl = returnUrl;
             return View(model);
         }
+
         public ActionResult Logout()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Login","Account");
+            return RedirectToAction("Index", "Home");
         }
 
-
-        [HttpGet]
-        public ActionResult Delete()
+        public ActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        [ActionName("Delete")]
-        public async Task<ActionResult> DeleteConfirmed()
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Register(RegisterModel model)
         {
-            ApplicationUser user = await UserManager.FindByEmailAsync(User.Identity.Name);
-            if (user == null)
+            await SetInitialDataAsync();
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Index", "Home");
+                UserDTO userDto = new UserDTO
+                {
+                    Email = model.Email,
+                    Password = model.Password,
+                    Name = model.Name,
+                    Role = "user"
+                };
+                OperationDetails operationDetails = await UserService.Create(userDto);
+                if (operationDetails.Succedeed)
+                    return View("SuccessRegister");
+                else
+                    ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
-            IdentityResult result = await UserManager.DeleteAsync(user);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            return RedirectToAction("Index", "Home");
+            return View(model);
         }
+        private async Task SetInitialDataAsync()
+        {
+            await UserService.SetInitialData(new UserDTO
+            {
+                Email = "somemail@mail.ru",
+                UserName = "somemail@mail.ru",
+                Password = "ad46D_ewr3",
+                Name = "Semen",
+                Role = "admin",
+            }, new List<string> { "user", "admin" });
+        }
+        //private ApplicationUserManager UserManager
+        //{
+        //    get
+        //    {
+        //        return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+        //    }
+        //}
+
+        //public ActionResult Register()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //public async Task<ActionResult> Register(RegisterModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        ApplicationUser user = new ApplicationUser();
+        //        user.UserName = model.Email;
+        //        user.Email = model.Email;
+
+        //        IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            await UserManager.AddToRoleAsync(user.Id, IdentityConfiguration._USER_ROLE);
+        //            return RedirectToAction("Login", "Account");
+        //        }
+        //        else
+        //        {
+        //            foreach (string error in result.Errors)
+        //            {
+        //                ModelState.AddModelError(string.Empty, error);
+        //            }
+        //        }
+        //    }
+        //    return View(model);
+        //}
+
+        //private IAuthenticationManager AuthenticationManager
+        //{
+        //    get
+        //    {
+        //        return HttpContext.GetOwinContext().Authentication;
+        //    }
+        //}
+
+        //public ActionResult Login(string returnUrl)
+        //{
+        //    ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
+        //    ViewBag.returnUrl = returnUrl;
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Login(LoginModel model, string returnUrl)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        ApplicationUser user = await UserManager.FindAsync(model.Email, model.Password);
+        //        if (user == null)
+        //        {
+        //            ModelState.AddModelError("", "Wrong login or password.");
+        //        }
+        //        else
+        //        {
+        //            ClaimsIdentity claim = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+        //            AuthenticationManager.SignOut();
+        //            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = false }, claim);
+        //            if (String.IsNullOrEmpty(returnUrl))
+        //            {
+        //                return RedirectToAction("Index", "Home");
+        //            } 
+        //            return Redirect(returnUrl);
+        //        }
+        //    }
+        //    ViewBag.returnUrl = returnUrl;
+        //    return View(model);
+        //}
+        //public ActionResult Logout()
+        //{
+        //    AuthenticationManager.SignOut();
+        //    return RedirectToAction("Login","Account");
+        //}
+
+
+        //[HttpGet]
+        //public ActionResult Delete()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //[ActionName("Delete")]
+        //public async Task<ActionResult> DeleteConfirmed()
+        //{
+        //    ApplicationUser user = await UserManager.FindByEmailAsync(User.Identity.Name);
+        //    if (user == null)
+        //    {
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    IdentityResult result = await UserManager.DeleteAsync(user);
+        //    if (result.Succeeded)
+        //    {
+        //        return RedirectToAction("Login", "Account");
+        //    }
+        //    return RedirectToAction("Index", "Home");
+        //}
     }
 }

@@ -11,7 +11,7 @@ namespace LibraryProject
     {
         protected void Application_Start()
         {
-            Database.SetInitializer<ApplicationContext>(new AppDbInitializer());
+           // Database.SetInitializer<ApplicationContext>(new AppDbInitializer());
 
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);

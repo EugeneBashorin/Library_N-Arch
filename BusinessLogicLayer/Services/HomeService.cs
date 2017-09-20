@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace BusinessLogicLayer.Services
 {
-    public class HomeService : IHomeService//, IBookService, IMagazineService, INewspaperService
+    public class HomeService : IHomeService
     {
         IUnitOfWork Database { get; set; }
 
