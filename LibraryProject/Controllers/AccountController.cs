@@ -88,7 +88,8 @@ namespace LibraryProject.Controllers
                     Email = model.Email,
                     Password = model.Password,
                     Name = model.Name,
-                    Role = "user"
+                    Role = "user",
+                    IsBanned = false
                 };
                 OperationDetails operationDetails = await UserService.Create(userDto);
                 if (operationDetails.Succedeed)                    
@@ -108,8 +109,29 @@ namespace LibraryProject.Controllers
                 Password = "ad46D_ewr3",
                 Name = "Semen",
                 Role = "admin",
+                IsBanned = false,
             }, new List<string> { "user", "admin" });
         }
+
+        [HttpGet]
+        public ActionResult Index()
+        {
+            List<UserDTO> usersList = UserService.GetUsers();
+            List<ManageUsersModel> users = new List<ManageUsersModel>();
+            foreach (var a in usersList)
+            {
+                users.Add(new ManageUsersModel { Id = a.Id, Email = a.Email, Name = a.Name, IsBanned = a.IsBanned });
+            }            
+            return View(users);
+        }
+
+        [HttpPost]
+        public ActionResult SetBannUser(string id, bool banned)
+        {
+            UserService.UpdateBannState(id, banned);
+            return RedirectToAction("Index");
+        }
+
         //private ApplicationUserManager UserManager
         //{
         //    get

@@ -14,5 +14,7 @@ namespace BusinessLogicLayer.Interfaces
         Task<OperationDetails> Create(UserDTO userDto);
         Task<ClaimsIdentity> Authenticate(UserDTO userDto);
         Task SetInitialData(UserDTO adminDto, List<string> roles);
+        List<UserDTO> GetUsers();
+        void UpdateBannState(string Id, bool bannedState);
     }
 }

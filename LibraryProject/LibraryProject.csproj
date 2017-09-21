@@ -241,6 +241,7 @@
     <Compile Include="Models\BookViewModel.cs" />
     <Compile Include="Models\CreateRoleModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\ManageUsersModel.cs" />
     <Compile Include="Models\NewspaperFilterModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -277,6 +278,8 @@
     <Content Include="Views\Home\BookViewModel.cshtml" />
     <Content Include="Views\Home\MagazineViewModel.cshtml" />
     <Content Include="Views\Home\NewspaperViewModel.cshtml" />
+    <Content Include="Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

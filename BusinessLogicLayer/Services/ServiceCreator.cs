@@ -3,7 +3,7 @@ using DataAccessLayer.Repositories;
 
 namespace BusinessLogicLayer.Services
 {
-    public class ServiceCreator : IServiceCreatoor
+    public class ServiceCreator : IServiceCreator
     {
         public IUserService CreateUserService(string connection)
         {

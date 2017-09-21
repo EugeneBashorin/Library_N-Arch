@@ -32,7 +32,7 @@ namespace BusinessLogicLayer.Services
                 // добавляем роль
                 await Database.UserManager.AddToRoleAsync(user.Id, userDto.Role);
                 // создаем профиль клиента
-                ClientProfile clientProfile = new ClientProfile { Id = user.Id, Name = userDto.Name };
+                ClientProfile clientProfile = new ClientProfile { Id = user.Id, Name = userDto.Name, IsBanned = false };
                 Database.ClientManager.Create(clientProfile);
                 await Database.SaveAsync();
                 return new OperationDetails(true, "Регистрация успешно пройдена", "");
@@ -69,6 +69,31 @@ namespace BusinessLogicLayer.Services
             }
             await Create(adminDto);
         }
+
+        //********************************************GET_USERS****************************
+        public List<UserDTO> GetUsers()
+        {
+            List<UserDTO> userList = new List<UserDTO>();
+            var clientProfileList = Database.ClientManager.GetUsersList();
+            foreach (var user in clientProfileList)
+            {
+                userList.Add(new UserDTO
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.ApplicationUser.Email,
+                    IsBanned = user.IsBanned,
+                });
+            }
+            return userList;
+        }
+
+        //********************************************GET_USERS****************************
+        public void UpdateBannState(string Id, bool bannedState)
+        {
+            Database.ClientManager.UpdateBannState(Id, bannedState);
+        }
+
 
         public void Dispose()
         {

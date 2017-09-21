@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Interfaces
 {
-    public interface IServiceCreatoor
+    public interface IServiceCreator
     {
         IUserService CreateUserService(string connection);
     }
