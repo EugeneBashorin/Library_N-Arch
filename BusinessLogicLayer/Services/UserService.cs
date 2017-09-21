@@ -49,6 +49,7 @@ namespace BusinessLogicLayer.Services
             // находим пользователя
             ApplicationUser user = await Database.UserManager.FindAsync(userDto.Email, userDto.Password);
             // авторизуем его и возвращаем объект ClaimsIdentity
+            
             if (user != null)
                 claim = await Database.UserManager.CreateIdentityAsync(user,
                 DefaultAuthenticationTypes.ApplicationCookie);
@@ -88,7 +89,7 @@ namespace BusinessLogicLayer.Services
             return userList;
         }
 
-        //********************************************GET_USERS****************************
+        //********************************************GET_USERS**********************************************
         public void UpdateBannState(string Id, bool bannedState)
         {
             Database.ClientManager.UpdateBannState(Id, bannedState);

@@ -52,6 +52,12 @@ namespace LibraryProject.Controllers
                 {
                     ModelState.AddModelError("", "Неверный логин или пароль.");
                 }
+                 
+                if (userDto.IsBanned)
+                {
+                    ModelState.AddModelError("", "Fuck You, Your Login Is Bunned!!!!!!");
+                    return RedirectToAction("Index", "Home");
+                }
                 else
                 {
                     AuthenticationManager.SignOut();
@@ -157,7 +163,7 @@ namespace LibraryProject.Controllers
         //        IdentityResult result = await UserManager.CreateAsync(user, model.Password);
         //        if (result.Succeeded)
         //        {
-        //            await UserManager.AddToRoleAsync(user.Id, IdentityConfiguration._USER_ROLE);
+        //            await UserManager.AddToRoleAsync(user.Id, "user");
         //            return RedirectToAction("Login", "Account");
         //        }
         //        else
