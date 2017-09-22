@@ -22,13 +22,19 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
+                    <li class="active">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Home<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Home", "Index", "Home") </li>
+                            <li>@Html.ActionLink("Admin", "Index", "Account")</li>
+                        </ul>
                     <li class="active">
                         <a class="dropdown-toggle" data-toggle="dropdown">Login<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Log In", "Login", "Account",new { },new { @class = @ViewBag.accountElementState }) </li>
-                            <li>@Html.ActionLink("Registrate", "Register", "Account", new { }, new {@class = @ViewBag.accountElementState })</li>
-                            <li>@Html.ActionLink("Log Out", "Logout", "Account",new { },new { @class = @ViewBag.logoutLinkElement })</li>
+                            <li>@Html.ActionLink("Log In", "Login", "Account", new { }, new { @class = @ViewBag.accountElementState }) </li>
+                            <li>@Html.ActionLink("Registrate", "Register", "Account", new { }, new { @class = @ViewBag.accountElementState })</li>
+                            <li>@Html.ActionLink("Log Out", "Logout", "Account", new { }, new { @class = @ViewBag.logoutLinkElement })</li>
                         </ul>
                     </li>
                 </ul>

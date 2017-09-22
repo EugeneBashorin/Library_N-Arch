@@ -10,6 +10,7 @@ namespace LibraryProject.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public bool IsBanned { get; set; }
+        public string Role { get; set; }
+        public string IsBanned { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using ConfigurationData.Configurations;
 using Entities.Entities;
 using LibraryProject.Models;
+using LibraryProject.Util;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -20,38 +21,38 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult Index(string bookPublisher = FilterConfiguration._ALL_PUBLISHER, string magazinePublisher = FilterConfiguration._ALL_PUBLISHER, string newspaperPublisher = FilterConfiguration._ALL_PUBLISHER)
         {
-            //CheckRole();
+            CheckRole();
             IndexModel indexModel = new IndexModel();
             Initialize(indexModel);
             indexModel = CheckPublisher(indexModel, bookPublisher, magazinePublisher, newspaperPublisher);
 
             return View(indexModel);
         }
+        
+        private void CheckRole()
+        {
+            if (User.IsInRole(IdentityConfiguration._USER_ROLE))
+            {
+                ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
+            }
 
-        //private void CheckRole()
-        //{
-        //    if (User.IsInRole(IdentityConfiguration._USER_ROLE))
-        //    {
-        //        ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
-        //    }
+            if (User.IsInRole(IdentityConfiguration._ADMIN_ROLE) & User.IsInRole(IdentityConfiguration._USER_ROLE))
+            {
+                ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
+            }
 
-        //    if (User.IsInRole(IdentityConfiguration._ADMIN_ROLE) & User.IsInRole(IdentityConfiguration._USER_ROLE))
-        //    {
-        //        ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
-        //    }
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
+                ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
+            }
 
-        //    if (User.Identity.IsAuthenticated)
-        //    {
-        //        ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
-        //        ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
-        //    }
-
-        //    if (!User.Identity.IsAuthenticated)
-        //    {
-        //        ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
-        //        ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
-        //    }
-        //}
+            if (!User.Identity.IsAuthenticated)
+            {
+                ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
+                ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
+            }
+        }
 
         private IndexModel Initialize(IndexModel model)
         {
@@ -64,7 +65,7 @@ namespace LibraryProject.Controllers
             model.BooksFilterModel.Books = new List<Book>();
 
             model.MagazineFilterModel = new MagazineFilterModel();
-            model.MagazineFilterModel.MagazinesPublisher = new SelectList(magazinePublisherList, FilterConfiguration._ALL_PUBLISHER);           
+            model.MagazineFilterModel.MagazinesPublisher = new SelectList(magazinePublisherList, FilterConfiguration._ALL_PUBLISHER);
             model.MagazineFilterModel.Magazines = new List<Magazine>();
 
             model.NewspaperFilterModel = new NewspaperFilterModel();
@@ -82,7 +83,7 @@ namespace LibraryProject.Controllers
 
             model.BooksFilterModel.Books = bookList;
             model.MagazineFilterModel.Magazines = magazineList;
-            model.NewspaperFilterModel.Newspapers = newspaperList; 
+            model.NewspaperFilterModel.Newspapers = newspaperList;
 
             return model;
         }
@@ -123,7 +124,7 @@ namespace LibraryProject.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public ActionResult CreateBook()
         {
@@ -193,14 +194,14 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult ShowMagazine(int id)
         {
-            Magazine magazine = homeService.GetMagazine(id);           
+            Magazine magazine = homeService.GetMagazine(id);
             return View(magazine);
         }
 
         [HttpGet]
         public ActionResult EditMagazine(int id)
         {
-            Magazine magazine = homeService.GetMagazine(id);           
+            Magazine magazine = homeService.GetMagazine(id);
             return View(magazine);
         }
 
@@ -216,7 +217,7 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult DeleteMagazine(int? id)
         {
-            Magazine magazine = homeService.GetMagazine(id);          
+            Magazine magazine = homeService.GetMagazine(id);
             return PartialView(magazine);
         }
 
@@ -244,7 +245,7 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult ShowNewspaper(int id)
         {
-            Newspaper newspaper = homeService.GetNewspaper(id);           
+            Newspaper newspaper = homeService.GetNewspaper(id);
             return View(newspaper);
         }
 
@@ -252,7 +253,7 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult EditNewspaper(int id)
         {
-            Newspaper newspaper = homeService.GetNewspaper(id);           
+            Newspaper newspaper = homeService.GetNewspaper(id);
             return View(newspaper);
         }
 
@@ -267,7 +268,7 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult DeleteNewspaper(int? id)
         {
-            Newspaper newspaper = homeService.GetNewspaper(id);          
+            Newspaper newspaper = homeService.GetNewspaper(id);
             return PartialView(newspaper);
         }
 

@@ -2,12 +2,11 @@
 using BusinessLogicLayer.Infrastructure;
 using BusinessLogicLayer.Interfaces;
 using Entities.Entities;
-using ConfigurationData.Configurations;
 using LibraryProject.Models;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -16,6 +15,7 @@ using System.Web.Mvc;
 
 namespace LibraryProject.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private IUserService UserService
@@ -34,12 +34,14 @@ namespace LibraryProject.Controllers
             }
         }
 
+        [AllowAnonymous]
         public ActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginModel model)
         {
@@ -48,16 +50,11 @@ namespace LibraryProject.Controllers
             {
                 UserDTO userDto = new UserDTO { Email = model.Email, Password = model.Password };
                 ClaimsIdentity claim = await UserService.Authenticate(userDto);
+                
                 if (claim == null)
                 {
                     ModelState.AddModelError("", "Неверный логин или пароль.");
-                }
-                 
-                if (userDto.IsBanned)
-                {
-                    ModelState.AddModelError("", "Fuck You, Your Login Is Bunned!!!!!!");
-                    return RedirectToAction("Index", "Home");
-                }
+                }                 
                 else
                 {
                     AuthenticationManager.SignOut();
@@ -71,31 +68,41 @@ namespace LibraryProject.Controllers
             return View(model);
         }
 
+        
         public ActionResult Logout()
         {
             AuthenticationManager.SignOut();
             return RedirectToAction("Index", "Home");
         }
 
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterModel model)
         {
             await SetInitialDataAsync();
+
+            //if (ModelState.IsValid)
+            //{
+            //    var user = new ApplicationUser {  UserName = model.Email, Email = model.Email,  IsBanned = "false" };
+            //    var result = await UserService.Create(user);
+            //    //if (result.Succeeded)
+            //}
+
             if (ModelState.IsValid)
             {
-                UserDTO userDto = new UserDTO
-                {
+                UserDTO userDto = new UserDTO {
                     Email = model.Email,
                     Password = model.Password,
                     Name = model.Name,
                     Role = "user",
-                    IsBanned = false
+                    IsBanned = "false"
                 };
                 OperationDetails operationDetails = await UserService.Create(userDto);
                 if (operationDetails.Succedeed)                    
@@ -106,6 +113,7 @@ namespace LibraryProject.Controllers
             }
             return View(model);
         }
+
         private async Task SetInitialDataAsync()
         {
             await UserService.SetInitialData(new UserDTO
@@ -115,11 +123,14 @@ namespace LibraryProject.Controllers
                 Password = "ad46D_ewr3",
                 Name = "Semen",
                 Role = "admin",
-                IsBanned = false,
-            }, new List<string> { "user", "admin" });
+                IsBanned = "false"
+            }, 
+            new List<string> { "user", "admin" }
+            );
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public ActionResult Index()
         {
             List<UserDTO> usersList = UserService.GetUsers();
@@ -132,7 +143,7 @@ namespace LibraryProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult SetBannUser(string id, bool banned)
+        public ActionResult SetBannUser(string id, string banned)
         {
             UserService.UpdateBannState(id, banned);
             return RedirectToAction("Index");

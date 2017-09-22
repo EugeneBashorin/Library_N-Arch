@@ -1,10 +1,9 @@
 ﻿using BusinessLogicLayer.DTO;
 using BusinessLogicLayer.Infrastructure;
+using Entities.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Interfaces
@@ -15,6 +14,6 @@ namespace BusinessLogicLayer.Interfaces
         Task<ClaimsIdentity> Authenticate(UserDTO userDto);
         Task SetInitialData(UserDTO adminDto, List<string> roles);
         List<UserDTO> GetUsers();
-        void UpdateBannState(string Id, bool bannedState);
+        void UpdateBannState(string Id, string bannedState);
     }
 }

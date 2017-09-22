@@ -4,6 +4,7 @@ using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 using Entities.Entities;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -25,14 +26,14 @@ namespace BusinessLogicLayer.Services
             ApplicationUser user = await Database.UserManager.FindByEmailAsync(userDto.Email);
             if (user == null)
             {
-                user = new ApplicationUser { Email = userDto.Email, UserName = userDto.Email };
+                user = new ApplicationUser { Email = userDto.Email, UserName = userDto.Email, IsBanned = "false" };
                 var result = await Database.UserManager.CreateAsync(user, userDto.Password);
                 if (result.Errors.Count() > 0)
                     return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
                 // добавляем роль
                 await Database.UserManager.AddToRoleAsync(user.Id, userDto.Role);
                 // создаем профиль клиента
-                ClientProfile clientProfile = new ClientProfile { Id = user.Id, Name = userDto.Name, IsBanned = false };
+                ClientProfile clientProfile = new ClientProfile { Id = user.Id, Name = userDto.Name, IsBanned = "false" };
                 Database.ClientManager.Create(clientProfile);
                 await Database.SaveAsync();
                 return new OperationDetails(true, "Регистрация успешно пройдена", "");
@@ -46,13 +47,18 @@ namespace BusinessLogicLayer.Services
         public async Task<ClaimsIdentity> Authenticate(UserDTO userDto)
         {
             ClaimsIdentity claim = null;
-            // находим пользователя
-            ApplicationUser user = await Database.UserManager.FindAsync(userDto.Email, userDto.Password);
-            // авторизуем его и возвращаем объект ClaimsIdentity
-            
+            // находим пользователя
+            ApplicationUser user = await Database.UserManager.FindAsync(userDto.Email, userDto.Password);           
             if (user != null)
-                claim = await Database.UserManager.CreateIdentityAsync(user,
-                DefaultAuthenticationTypes.ApplicationCookie);
+            {              
+                claim = await Database.UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);               
+            }
+            if (user.IsBanned == "true")
+            {
+                //**********Заглушка возврата***********//
+                claim = null;
+                //**********Заглушка возврата***********//
+            }
             return claim;
         }
 
@@ -89,12 +95,11 @@ namespace BusinessLogicLayer.Services
             return userList;
         }
 
-        //********************************************GET_USERS**********************************************
-        public void UpdateBannState(string Id, bool bannedState)
+        //*******************************GET_USERS*****************************
+        public void UpdateBannState(string Id, string bannedState)
         {
             Database.ClientManager.UpdateBannState(Id, bannedState);
         }
-
 
         public void Dispose()
         {

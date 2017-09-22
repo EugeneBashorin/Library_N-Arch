@@ -8,6 +8,6 @@ namespace DataAccessLayer.Interfaces
     {
         void Create(ClientProfile item);
         List<ClientProfile> GetUsersList();
-        void UpdateBannState(string userId, bool IsBanned); // id & IsBanned
+        void UpdateBannState(string userId, string IsBanned);
     }
 }
