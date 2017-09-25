@@ -43,7 +43,7 @@ namespace DataAccessLayer.Repositories
             return newspapersList;
         }
 
-        public Newspaper GetItemById(int id)
+        public Newspaper GetItemById(int? id)
         {
             Newspaper newspaper = new Newspaper();
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -87,7 +87,7 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public void Update(int Id, Newspaper newspaper)
+        public void Update(int? Id, Newspaper newspaper)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -107,7 +107,7 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public void Delete(int id)
+        public void Delete(int? id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

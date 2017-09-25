@@ -62,6 +62,9 @@
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="jQuery.Validation.Unobtrusive.Native, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jQuery.Validation.Unobtrusive.Native.MVC4.1.1.1.0\lib\net45\jQuery.Validation.Unobtrusive.Native.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -226,6 +229,13 @@
     <Content Include="Scripts\jquery-1.12.4.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -239,7 +249,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Models\BooksFilterModel.cs" />
     <Compile Include="Models\BookViewModel.cs" />
-    <Compile Include="Models\CreateRoleModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\ManageUsersModel.cs" />
     <Compile Include="Models\NewspaperFilterModel.cs" />
@@ -280,6 +289,7 @@
     <Content Include="Views\Home\NewspaperViewModel.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

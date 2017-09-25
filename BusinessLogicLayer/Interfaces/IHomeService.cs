@@ -12,8 +12,8 @@ namespace BusinessLogicLayer.Interfaces
         Book GetBook(int? id);
         List<Book> GetBooks();
         void AddBook(Book book);
-        void UpdateBook(int id, Book book);
-        void DeleteBook(int id);
+        void UpdateBook(int? id, Book book);
+        void DeleteBook(int? id);
         void GetBooksTxtList();
         void GetBooksXmlList();
         List<Book> CheckBookPublisher(string publisherName);
@@ -22,8 +22,8 @@ namespace BusinessLogicLayer.Interfaces
         Magazine GetMagazine(int? id);
         List<Magazine> GetMagazines();
         void AddMagazine(Magazine magazine);
-        void UpdateMagazine(int id, Magazine magazine);
-        void DeleteMagazine(int id);
+        void UpdateMagazine(int? id, Magazine magazine);
+        void DeleteMagazine(int? id);
         void GetMagazinesTxtList();
         void GetMagazinesXmlList();
         List<Magazine> CheckMagazinePublisher(string publisherName);
@@ -32,8 +32,8 @@ namespace BusinessLogicLayer.Interfaces
         Newspaper GetNewspaper(int? id);
         List<Newspaper> GetNewspapers();
         void AddNewspaper(Newspaper newspaper);
-        void UpdateNewspaper(int id, Newspaper newspaper);
-        void DeleteNewspaper(int id);
+        void UpdateNewspaper(int? id, Newspaper newspaper);
+        void DeleteNewspaper(int? id);
         void GetNewspapersTxtList();
         void GetNewspapersXmlList();
         List<Newspaper> CheckNewspaperPublisher(string publisherName);

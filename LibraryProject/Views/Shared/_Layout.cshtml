@@ -22,19 +22,27 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
                     <li class="active">
                         <a class="dropdown-toggle" data-toggle="dropdown">Home<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Home", "Index", "Home") </li>
+                             @if (User.IsInRole("admin"))
+                             {
                             <li>@Html.ActionLink("Admin", "Index", "Account")</li>
+                             }
                         </ul>
                     <li class="active">
                         <a class="dropdown-toggle" data-toggle="dropdown">Login<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Log In", "Login", "Account", new { }, new { @class = @ViewBag.accountElementState }) </li>
-                            <li>@Html.ActionLink("Registrate", "Register", "Account", new { }, new { @class = @ViewBag.accountElementState })</li>
-                            <li>@Html.ActionLink("Log Out", "Logout", "Account", new { }, new { @class = @ViewBag.logoutLinkElement })</li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li>@Html.ActionLink("Log Out", "Logout", "Account")</li> 
+                            }
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <li>@Html.ActionLink("Registrate", "Register", "Account")</li>
+                                <li>@Html.ActionLink("Log In", "Login", "Account") </li>
+                            }                 
                         </ul>
                     </li>
                 </ul>
@@ -48,9 +56,12 @@
     </div>
     <script src='@Url.Content("~/Scripts/jquery-1.12.4.min.js")' type="text/javascript"></script>
     <script src='@Url.Content("~/Scripts/jquery-ui-1.12.1.min.js")' type="text/javascript"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     @Scripts.Render("~/bundles/buttonHandler")
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
 </html>
+

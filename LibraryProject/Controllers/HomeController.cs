@@ -2,7 +2,6 @@
 using ConfigurationData.Configurations;
 using Entities.Entities;
 using LibraryProject.Models;
-using LibraryProject.Util;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -21,37 +20,11 @@ namespace LibraryProject.Controllers
         [HttpGet]
         public ActionResult Index(string bookPublisher = FilterConfiguration._ALL_PUBLISHER, string magazinePublisher = FilterConfiguration._ALL_PUBLISHER, string newspaperPublisher = FilterConfiguration._ALL_PUBLISHER)
         {
-            CheckRole();
             IndexModel indexModel = new IndexModel();
             Initialize(indexModel);
             indexModel = CheckPublisher(indexModel, bookPublisher, magazinePublisher, newspaperPublisher);
 
             return View(indexModel);
-        }
-        
-        private void CheckRole()
-        {
-            if (User.IsInRole(IdentityConfiguration._USER_ROLE))
-            {
-                ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
-            }
-
-            if (User.IsInRole(IdentityConfiguration._ADMIN_ROLE) & User.IsInRole(IdentityConfiguration._USER_ROLE))
-            {
-                ViewBag.hideElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
-            }
-
-            if (User.Identity.IsAuthenticated)
-            {
-                ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
-                ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
-            }
-
-            if (!User.Identity.IsAuthenticated)
-            {
-                ViewBag.accountElementState = ViewsElementsConfiguration._ATTRIBUTES_STATE_ON;
-                ViewBag.logoutLinkElement = ViewsElementsConfiguration._ATTRIBUTES_STATE_OFF;
-            }
         }
 
         private IndexModel Initialize(IndexModel model)
@@ -124,7 +97,7 @@ namespace LibraryProject.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles =IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]
         public ActionResult CreateBook()
         {
@@ -134,50 +107,88 @@ namespace LibraryProject.Controllers
         [HttpPost]
         public ActionResult CreateBook(Book book)
         {
-            homeService.AddBook(book);
-            return RedirectToAction("Index");
+            if( book.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.AddBook(book);
+
+                return RedirectToAction("Index");
+            }
+            return View();
         }
 
         [HttpGet]
-        public ActionResult ShowBook(int id)
+        public ActionResult ShowBook(int? id)
         {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
             Book book = homeService.GetBook(id);
             return View(book);
         }
 
-        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]
-        public ActionResult EditBook(int id)
+        public ActionResult EditBook(int? id)
         {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
             Book book = homeService.GetBook(id);
             return View(book);
         }
 
         [HttpPost]
-        public ActionResult EditBook(int Id, Book newBook)
+        public ActionResult EditBook(int? Id, Book newBook)
         {
-            homeService.UpdateBook(Id, newBook);
-            return RedirectToAction("Index");
+            if (Id == null)
+            {
+                return HttpNotFound();
+            }
+            if (newBook.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.UpdateBook(Id, newBook);
+
+                return RedirectToAction("Index");
+            }           
+            return View();
         }
 
 
-        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]
-        public ActionResult DeleteBook(int id)
+        public ActionResult DeleteBook(int? id)
         {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
             Book book = homeService.GetBook(id);
             return PartialView(book);
         }
 
-        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpPost, ActionName("DeleteBook")]
-        public ActionResult DeleteConfirmedBook(int id)
+        public ActionResult DeleteConfirmedBook(int? id)
         {
+            if(id==null)
+            {
+                return HttpNotFound();
+            }
             homeService.DeleteBook(id);
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "admin" /*ConfigurationData._ADMIN_ROLE*/)]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]
         public ActionResult CreateMagazine()
         {
@@ -187,48 +198,84 @@ namespace LibraryProject.Controllers
         [HttpPost]
         public ActionResult CreateMagazine(Magazine magazine)
         {
-            homeService.AddMagazine(magazine);
-            return RedirectToAction("Index");
+            if (magazine.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.AddMagazine(magazine);
+                return RedirectToAction("Index");
+            }
+            return View();          
         }
 
         [HttpGet]
-        public ActionResult ShowMagazine(int id)
+        public ActionResult ShowMagazine(int? id)
         {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
             Magazine magazine = homeService.GetMagazine(id);
             return View(magazine);
         }
 
         [HttpGet]
-        public ActionResult EditMagazine(int id)
+        public ActionResult EditMagazine(int? id)
         {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
             Magazine magazine = homeService.GetMagazine(id);
             return View(magazine);
         }
 
         [HttpPost]
-        public ActionResult EditMagazine(int Id, Magazine newMagazine)
+        public ActionResult EditMagazine(int? id, Magazine newMagazine)
         {
-            homeService.UpdateMagazine(Id, newMagazine);
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+            if (newMagazine.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.UpdateMagazine(id, newMagazine);
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }         
+            return View();
         }
 
-        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]
         public ActionResult DeleteMagazine(int? id)
         {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
             Magazine magazine = homeService.GetMagazine(id);
             return PartialView(magazine);
         }
 
         [HttpPost, ActionName("DeleteMagazine")]
-        public ActionResult DeleteConfirmedMagazine(int id)
+        public ActionResult DeleteConfirmedMagazine(int? id)
         {
+            if(id == null)
+            {
+               return HttpNotFound();
+            }
             homeService.DeleteMagazine(id);
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]
         public ActionResult CreateNewspaper()
         {
@@ -238,43 +285,79 @@ namespace LibraryProject.Controllers
         [HttpPost]
         public ActionResult CreateNewspaper(Newspaper newspaper)
         {
-            homeService.AddNewspaper(newspaper);
-            return RedirectToAction("Index");
+            if (newspaper.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.AddNewspaper(newspaper);
+                return RedirectToAction("Index");
+            }
+            return View();        
         }
 
         [HttpGet]
-        public ActionResult ShowNewspaper(int id)
+        public ActionResult ShowNewspaper(int? id)
         {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
             Newspaper newspaper = homeService.GetNewspaper(id);
             return View(newspaper);
         }
 
-        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]
-        public ActionResult EditNewspaper(int id)
+        public ActionResult EditNewspaper(int? id)
         {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
             Newspaper newspaper = homeService.GetNewspaper(id);
             return View(newspaper);
         }
 
         [HttpPost]
-        public ActionResult EditNewspaper(int Id, Newspaper newNewspaper)
+        public ActionResult EditNewspaper(int? Id, Newspaper newNewspaper)
         {
-            homeService.UpdateNewspaper(Id, newNewspaper);
-            return RedirectToAction("Index");
+            if (Id == null)
+            {
+                return HttpNotFound();
+            }
+            if (newNewspaper.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.UpdateNewspaper(Id, newNewspaper);
+                return RedirectToAction("Index");
+            }
+            return View();
         }
 
-        [Authorize(Roles = "admin"/*ConfigurationData._ADMIN_ROLE*/)]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]
         public ActionResult DeleteNewspaper(int? id)
         {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
             Newspaper newspaper = homeService.GetNewspaper(id);
             return PartialView(newspaper);
         }
 
         [HttpPost, ActionName("DeleteNewspaper")]
-        public ActionResult DeleteConfirmedNewspaper(int id)
+        public ActionResult DeleteConfirmedNewspaper(int? id)
         {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
             homeService.DeleteNewspaper(id);
             return RedirectToAction("Index");
         }

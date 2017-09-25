@@ -8,14 +8,11 @@ namespace LibraryProject.Models
 {
     public class LoginModel
     {
-        //    [Required]
-        //    public string Email { get; set; }
-        //    [Required]
-        //    [DataType(DataType.Password)]
-        //    public string Password { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Important field")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-        [Required]
+
+        [Required(ErrorMessage ="Important field")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

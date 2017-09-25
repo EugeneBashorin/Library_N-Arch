@@ -9,7 +9,7 @@ namespace Entities.Entities
         [ForeignKey("ApplicationUser")]
         public string Id { get; set; }
 
-        public string IsBanned { get; set; }
+        [UIHint("String")]
         public string Name { get; set; }
         
         public virtual ApplicationUser ApplicationUser { get; set; }

@@ -8,6 +8,7 @@
 
 @using (Html.BeginForm())
 {
+    @Html.ValidationSummary()
     <div class="form-group">
         @Html.LabelFor(model => model.Name, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
@@ -30,7 +31,7 @@
         @Html.LabelFor(model => model.Price, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(model => model.Price, new { @class = "form-control", placeholder = "Price" })
-        </div>
+        </div>                            
     </div>
 
     <input type="submit" class="btn btn-sm btn-success" value="Add">

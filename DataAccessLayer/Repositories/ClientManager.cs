@@ -13,7 +13,6 @@ namespace DataAccessLayer.Repositories
         public ClientManager(ApplicationContext db)
         {
             Database = db;
-            /*DatabaseIOW = unitOfWork;*/
         }
 
         public void Create(ClientProfile item)
@@ -22,7 +21,8 @@ namespace DataAccessLayer.Repositories
             Database.SaveChanges();
         }
 
-        //************************************************************************GET_USER_LIST*****************************************************************************       
+
+
         public List<ClientProfile> GetUsersList()
         {
             List<ClientProfile> clientList = new List<ClientProfile>();
@@ -34,12 +34,12 @@ namespace DataAccessLayer.Repositories
             return clientList;
         }
 
-        //*************************************************************************Update_USER_BannedState****************************************************************************
+
+
         public void UpdateBannState(string userId, string bannedState)
         {
             ClientProfile user = Database.ClientProfiles.Find(userId);
             if (user != null)
-            user.IsBanned = bannedState;
             user.ApplicationUser.IsBanned = bannedState;
             Database.Entry(user).State = EntityState.Modified;
             Database.SaveChanges();

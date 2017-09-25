@@ -1,10 +1,7 @@
 ﻿using BusinessLogicLayer.DTO;
 using BusinessLogicLayer.Infrastructure;
 using BusinessLogicLayer.Interfaces;
-using Entities.Entities;
 using LibraryProject.Models;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Collections.Generic;
@@ -50,11 +47,11 @@ namespace LibraryProject.Controllers
             {
                 UserDTO userDto = new UserDTO { Email = model.Email, Password = model.Password };
                 ClaimsIdentity claim = await UserService.Authenticate(userDto);
-                
+
                 if (claim == null)
                 {
-                    ModelState.AddModelError("", "Неверный логин или пароль.");
-                }                 
+                    ModelState.AddModelError("", "Wrong Login or Password or your profile was banned.");
+                }
                 else
                 {
                     AuthenticationManager.SignOut();
@@ -68,7 +65,7 @@ namespace LibraryProject.Controllers
             return View(model);
         }
 
-        
+
         public ActionResult Logout()
         {
             AuthenticationManager.SignOut();
@@ -88,16 +85,10 @@ namespace LibraryProject.Controllers
         {
             await SetInitialDataAsync();
 
-            //if (ModelState.IsValid)
-            //{
-            //    var user = new ApplicationUser {  UserName = model.Email, Email = model.Email,  IsBanned = "false" };
-            //    var result = await UserService.Create(user);
-            //    //if (result.Succeeded)
-            //}
-
             if (ModelState.IsValid)
             {
-                UserDTO userDto = new UserDTO {
+                UserDTO userDto = new UserDTO
+                {
                     Email = model.Email,
                     Password = model.Password,
                     Name = model.Name,
@@ -105,8 +96,8 @@ namespace LibraryProject.Controllers
                     IsBanned = "false"
                 };
                 OperationDetails operationDetails = await UserService.Create(userDto);
-                if (operationDetails.Succedeed)                    
-                return RedirectToAction("Index", "Home");
+                if (operationDetails.Succedeed)
+                    return RedirectToAction("Index", "Home");
                 //return View("SuccessRegister");
                 else
                     ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
@@ -116,17 +107,8 @@ namespace LibraryProject.Controllers
 
         private async Task SetInitialDataAsync()
         {
-            await UserService.SetInitialData(new UserDTO
-            {
-                Email = "somemail@mail.ru",
-                UserName = "somemail@mail.ru",
-                Password = "ad46D_ewr3",
-                Name = "Semen",
-                Role = "admin",
-                IsBanned = "false"
-            }, 
-            new List<string> { "user", "admin" }
-            );
+            await UserService.SetInitialData(new UserDTO { Email = "somemail@mail.ru", UserName = "somemail@mail.ru", Password = "ad46D_ewr3", Name = "Semen", Role = "admin", IsBanned = "false" },
+                                             new List<string> { "user", "admin" });
         }
 
         [HttpGet]
@@ -138,7 +120,7 @@ namespace LibraryProject.Controllers
             foreach (var a in usersList)
             {
                 users.Add(new ManageUsersModel { Id = a.Id, Email = a.Email, Name = a.Name, IsBanned = a.IsBanned });
-            }            
+            }
             return View(users);
         }
 

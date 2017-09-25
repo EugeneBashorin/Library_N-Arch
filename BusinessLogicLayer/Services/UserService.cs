@@ -30,24 +30,23 @@ namespace BusinessLogicLayer.Services
                 var result = await Database.UserManager.CreateAsync(user, userDto.Password);
                 if (result.Errors.Count() > 0)
                     return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
-                // добавляем роль
+                // add role
                 await Database.UserManager.AddToRoleAsync(user.Id, userDto.Role);
-                // создаем профиль клиента
-                ClientProfile clientProfile = new ClientProfile { Id = user.Id, Name = userDto.Name, IsBanned = "false" };
+                // create profile
+                ClientProfile clientProfile = new ClientProfile { Id = user.Id, Name = userDto.Name };
                 Database.ClientManager.Create(clientProfile);
                 await Database.SaveAsync();
-                return new OperationDetails(true, "Регистрация успешно пройдена", "");
+                return new OperationDetails(true, "Register complite", "");
             }
             else
             {
-                return new OperationDetails(false, "Пользователь с таким логином уже существует", "Email");
+                return new OperationDetails(false, "User with the same login exist", "Email");
             }
         }
 
         public async Task<ClaimsIdentity> Authenticate(UserDTO userDto)
         {
             ClaimsIdentity claim = null;
-            // находим пользователя
             ApplicationUser user = await Database.UserManager.FindAsync(userDto.Email, userDto.Password);           
             if (user != null)
             {              
@@ -55,14 +54,11 @@ namespace BusinessLogicLayer.Services
             }
             if (user.IsBanned == "true")
             {
-                //**********Заглушка возврата***********//
                 claim = null;
-                //**********Заглушка возврата***********//
             }
             return claim;
         }
 
-        // начальная инициализация бд
         public async Task SetInitialData(UserDTO adminDto, List<string> roles)
         {
             foreach (string roleName in roles)
@@ -77,7 +73,6 @@ namespace BusinessLogicLayer.Services
             await Create(adminDto);
         }
 
-        //********************************************GET_USERS****************************
         public List<UserDTO> GetUsers()
         {
             List<UserDTO> userList = new List<UserDTO>();
@@ -89,13 +84,12 @@ namespace BusinessLogicLayer.Services
                     Id = user.Id,
                     Name = user.Name,
                     Email = user.ApplicationUser.Email,
-                    IsBanned = user.IsBanned,
+                    IsBanned = user.ApplicationUser.IsBanned,
                 });
             }
             return userList;
         }
 
-        //*******************************GET_USERS*****************************
         public void UpdateBannState(string Id, string bannedState)
         {
             Database.ClientManager.UpdateBannState(Id, bannedState);

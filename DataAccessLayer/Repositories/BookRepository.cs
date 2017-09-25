@@ -44,7 +44,7 @@ namespace DataAccessLayer.Repositories
             return booksList;
         }
 
-        public Book GetItemById(int id)
+        public Book GetItemById(int? id)
         {         
             Book book = new Book();
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -88,7 +88,7 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public void Update(int Id, Book book) 
+        public void Update(int? Id, Book book) 
         {
            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -108,7 +108,7 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public void Delete(int id)
+        public void Delete(int? id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

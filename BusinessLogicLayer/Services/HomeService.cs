@@ -20,7 +20,6 @@ namespace BusinessLogicLayer.Services
             Database = database;
         }
 
-        //*****************************************IBookService**************************************
         public List<Book> GetBooks()
         {
             return Database.Books.GetAll();
@@ -42,11 +41,11 @@ namespace BusinessLogicLayer.Services
             return book;
         }
 
-        public void UpdateBook(int id, Book book)
+        public void UpdateBook(int? id, Book book)
         {
             Database.Books.Update(id, book);
         }
-        public void DeleteBook(int id)
+        public void DeleteBook(int? id)
         {
             Database.Books.Delete(id);
         }
@@ -100,7 +99,8 @@ namespace BusinessLogicLayer.Services
             return booksPublishers;
         }
 
-        //*****************************************IMagazineService**************************************
+
+
         public List<Magazine> GetMagazines()
         {
             return Database.Magazines.GetAll();
@@ -121,11 +121,11 @@ namespace BusinessLogicLayer.Services
             return magazine;
         }
 
-        public void UpdateMagazine(int id, Magazine magazine)
+        public void UpdateMagazine(int? id, Magazine magazine)
         {
             Database.Magazines.Update(id, magazine);
         }
-        public void DeleteMagazine(int id)
+        public void DeleteMagazine(int? id)
         {
             Database.Magazines.Delete(id);
         }
@@ -176,7 +176,9 @@ namespace BusinessLogicLayer.Services
             magazinesPublishers.Add(FilterConfiguration._ALL_PUBLISHER);
             return magazinesPublishers;
         }
-        //*****************************************INewspaperService**************************************
+
+
+
         public List<Newspaper> GetNewspapers()
         {
             return Database.Newspapers.GetAll();
@@ -197,12 +199,12 @@ namespace BusinessLogicLayer.Services
             return newspaper;
         }
 
-        public void UpdateNewspaper(int id, Newspaper newspaper)
+        public void UpdateNewspaper(int? id, Newspaper newspaper)
         {
             Database.Newspapers.Update(id, newspaper);
         }
 
-        public void DeleteNewspaper(int id)
+        public void DeleteNewspaper(int? id)
         {
             Database.Newspapers.Delete(id);
         }

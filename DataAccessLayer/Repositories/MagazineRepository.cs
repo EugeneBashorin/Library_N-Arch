@@ -43,7 +43,7 @@ namespace DataAccessLayer.Repositories
             return magazinesList;
         }
 
-        public Magazine GetItemById(int id)
+        public Magazine GetItemById(int? id)
         {
             Magazine magazine = new Magazine();
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -87,7 +87,7 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public void Update(int Id, Magazine magazine)
+        public void Update(int? Id, Magazine magazine)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -107,7 +107,7 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public void Delete(int id)
+        public void Delete(int? id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
