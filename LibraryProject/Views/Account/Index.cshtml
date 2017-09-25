@@ -11,14 +11,13 @@
         <th>
             @Html.DisplayNameFor(model => model.Email)
         </th>
-        <th>
+        @*<th>
             @Html.Label("Bann state")
-        </th>
+        </th>*@
         <th>
             @Html.Label("Action")
         </th>
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>
@@ -28,17 +27,22 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.IsBanned)
-            </td>
+            </td>*@
             <td>
                 @using (Html.BeginForm("SetBannUser", "Account", new { id = item.Id }))
                 {
+                    @if (FlagsAttribute == 1)
+                    {
                     <button type="submit" name="banned" value="true" class="btn btn-sm btn-danger">Bann</button>
+                    }
+                    @if (FlagsAttribute == 2)
+                    {
                     <button type="submit" name="banned" value="false" class="btn btn-sm btn-success">UnBann</button>
-                }
+                        }
+                    }
             </td>
         </tr>
     }
-
 </table>
