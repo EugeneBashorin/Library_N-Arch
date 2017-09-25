@@ -283,11 +283,9 @@
     <Content Include="Scripts\jquery-1.12.4.min.map" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Delete.cshtml" />
     <Content Include="Views\Home\BookViewModel.cshtml" />
     <Content Include="Views\Home\MagazineViewModel.cshtml" />
     <Content Include="Views\Home\NewspaperViewModel.cshtml" />
-    <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js.map" />
     <None Include="Web.Debug.config">

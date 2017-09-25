@@ -4,7 +4,6 @@ using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 using Entities.Entities;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -99,6 +98,5 @@ namespace BusinessLogicLayer.Services
         {
             Database.Dispose();
         }
-
     }
 }

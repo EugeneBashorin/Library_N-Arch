@@ -138,7 +138,7 @@ namespace LibraryProject.Controllers
             if (id == null)
             {
                 return HttpNotFound();
-            }
+            }         
             Book book = homeService.GetBook(id);
             return View(book);
         }
@@ -162,7 +162,6 @@ namespace LibraryProject.Controllers
             }           
             return View();
         }
-
 
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]

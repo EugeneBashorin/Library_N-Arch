@@ -9,7 +9,6 @@ namespace Entities.Entities
         [ForeignKey("ApplicationUser")]
         public string Id { get; set; }
 
-        [UIHint("String")]
         public string Name { get; set; }
         
         public virtual ApplicationUser ApplicationUser { get; set; }
