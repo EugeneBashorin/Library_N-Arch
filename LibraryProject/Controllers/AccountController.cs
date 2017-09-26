@@ -127,6 +127,7 @@ namespace LibraryProject.Controllers
         [HttpPost]
         public ActionResult SetBannUser(string id, string banned)
         {
+            
             UserService.UpdateBannState(id, banned);
             return RedirectToAction("Index");
         }
