@@ -131,18 +131,6 @@ namespace LibraryProject.Controllers
             return View(book);
         }
 
-        public JsonResult SomeBook()
-        {
-            Book book = new Book();
-            book.Id = 16;
-            book.Name = "djfgsjlflsgf";
-            book.Author = "slktgh";
-            book.Publisher = "bskjha;dkbglad";
-            book.Price = 1566;
-
-            return Json(book);
-        }
-
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]
         public ActionResult EditBook(int? id)

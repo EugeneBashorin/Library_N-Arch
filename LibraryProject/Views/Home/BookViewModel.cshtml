@@ -37,9 +37,16 @@
                             }
                         }
                     },
-                pagesize: 20
+                pagesize: 10
             },
-                height: 550,
+                //height: 500,
+                //groupable: true,
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: true,
+                    buttonCount: 5
+                },
                 columns: [
                     {
                         field: "Id",
@@ -66,95 +73,8 @@
         });
     </script>
 </div>
-@*EXAMPLE 1
-    <div id="example">
 
-        <div id="grid">
-            WRITE PLACE
-        </div>
-
-        <script>
-
-
-            $(document).ready(function () {
-                $("#grid").kendoGrid({
-                    dataSource: {
-                        type: "odata",
-                        transport: {
-                            read: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Customers"
-                        },
-                        pageSize: 20
-                    },
-                    height: 550,
-                    groupable: true,
-                    sortable: true,
-                    pageable: {
-                        refresh: true,
-                        pageSizes: true,
-                        buttonCount: 5
-                    },
-                    columns: [{
-                        template: "<div class='customer-photo'" +
-                        "style='background-image: url(../content/web/Customers/#:data.CustomerID#.jpg);'></div>" +
-                        "<div class='customer-name'>#: ContactName #</div>",
-                        field: "ContactName",
-                        title: "Contact Name",
-                        width: 240
-                    }, {
-                        field: "ContactTitle",
-                        title: "Contact Title"
-                    }, {
-                        field: "CompanyName",
-                        title: "Company Name"
-                    }, {
-                        field: "Country",
-                        width: 150
-                    }]
-                });
-            });
-        </script>
-    </div>
-
-    <style type="text/css">
-        .customer-photo {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-size: 32px 35px;
-            background-position: center center;
-            vertical-align: middle;
-            line-height: 32px;
-            box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
-            margin-left: 5px;
-        }
-
-        .customer-name {
-            display: inline-block;
-            vertical-align: middle;
-            line-height: 32px;
-            padding-left: 3px;
-        }
-    </style>*@
-
-
-@*<hr />*@
-@*@(Html.Kendo().Grid<LibraryProject.Models.BookViewModel>()
-                .Name("booksList")
-                .Columns(columns =>
-                {
-                    columns.Bound(c => c.Name).Title("Name");
-                    columns.Bound(c => c.Author).Title("Author");
-                    columns.Bound(c => c.Publisher).Title("Publisher");
-                    columns.Bound(c => c.Price).Title("Price");
-                    //columns.Command(command =>
-                    //{
-                    //    command.Destroy();
-                    //});
-                })
-    )*@
-
-@*<table class="table table-striped table-condensed table-bordered col-md-12">
+<table class="table table-striped table-condensed table-bordered col-md-12">
         <tr>
 
             <td colspan="1" align="left">
@@ -225,4 +145,4 @@
                 @Html.ActionLink("Save xml list", "GetBooksXmlList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
             </td>
         </tr>
-    </table>*@
+    </table>
