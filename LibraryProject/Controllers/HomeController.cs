@@ -97,7 +97,7 @@ namespace LibraryProject.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles =IdentityConfiguration._ADMIN_ROLE)]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]
         public ActionResult CreateBook()
         {
@@ -107,7 +107,7 @@ namespace LibraryProject.Controllers
         [HttpPost]
         public ActionResult CreateBook(Book book)
         {
-            if( book.Price < 0)
+            if (book.Price < 0)
             {
                 ModelState.AddModelError("Price", "Price should be positive");
             }
@@ -138,7 +138,7 @@ namespace LibraryProject.Controllers
             if (id == null)
             {
                 return HttpNotFound();
-            }         
+            }
             Book book = homeService.GetBook(id);
             return View(book);
         }
@@ -159,9 +159,31 @@ namespace LibraryProject.Controllers
                 homeService.UpdateBook(Id, newBook);
 
                 return RedirectToAction("Index");
-            }           
+            }
             return View();
         }
+
+        //************************!!!!!!!!!!!!!!!!!!!!!!!!
+        [Route("/home/edit/{id}/{value}")]
+        [HttpPost]
+        public ActionResult Edit(int? Id, Book newBook)
+        {
+            if (Id == null)
+            {
+                return HttpNotFound();
+            }
+            if (newBook.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.UpdateBook(Id, newBook);
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+        //*****************************!!!!!!!!!!!!!!
 
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]
@@ -175,11 +197,12 @@ namespace LibraryProject.Controllers
             return PartialView(book);
         }
 
+        // [HttpPost, ActionName("DeleteBook")]
+        [HttpPost]
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
-        [HttpPost, ActionName("DeleteBook")]
         public ActionResult DeleteConfirmedBook(int? id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return HttpNotFound();
             }
@@ -206,7 +229,7 @@ namespace LibraryProject.Controllers
                 homeService.AddMagazine(magazine);
                 return RedirectToAction("Index");
             }
-            return View();          
+            return View();
         }
 
         [HttpGet]
@@ -247,7 +270,7 @@ namespace LibraryProject.Controllers
                 homeService.UpdateMagazine(id, newMagazine);
 
                 return RedirectToAction("Index");
-            }         
+            }
             return View();
         }
 
@@ -266,9 +289,9 @@ namespace LibraryProject.Controllers
         [HttpPost, ActionName("DeleteMagazine")]
         public ActionResult DeleteConfirmedMagazine(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
-               return HttpNotFound();
+                return HttpNotFound();
             }
             homeService.DeleteMagazine(id);
             return RedirectToAction("Index");
@@ -293,7 +316,7 @@ namespace LibraryProject.Controllers
                 homeService.AddNewspaper(newspaper);
                 return RedirectToAction("Index");
             }
-            return View();        
+            return View();
         }
 
         [HttpGet]

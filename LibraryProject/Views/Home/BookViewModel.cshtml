@@ -6,8 +6,6 @@
     ViewBag.Title = "BooksFilterViewModel";
 }
 
-@*@Html.Raw(Json.Encode(Model));*@
-
 <h4>Books</h4>
 
 <div id="example">
@@ -16,15 +14,56 @@
         $(document).ready(function () {
             $('#grid').kendoGrid({
                 dataSource: {
-                    type: 'json',
-                    data:  @Html.Raw(Json.Encode(Model.Books)),
-                    @*transport: {
-                        read: {
-                           value = @Html.Raw(Json.Encode(Model.Books)),
-                            //url: "/api/Test/GetBook",
-                            //dataType: "json"
-                        }
-                    },*@
+                    //type: 'json',
+                    @*data:  @Html.Raw(Json.Encode(Model.Books)),*@
+                    transport: {
+                        read: function (options) {
+                            options.success(@Html.Raw(Json.Encode(Model.Books)));
+                        },
+                        destroy: function (options) {
+                            $.ajax({
+                                url: "/Home/DeleteConfirmedBook/" + options.data.Id,//"/Home/DeleteBook/" + options.data.Id,
+                                dataType: 'json',
+                                type: 'POST',
+                                success: function (result) {
+                                    options.success(result);
+                                }
+                            });
+                        },
+
+                        update: function (options) {
+                            $.ajax({
+                                type: 'POST',
+                                url: "/Home/Edit/" + options.data.Id,
+                                contentType: "application/json; charset=utf-8",
+                                data: JSON.stringify(options.data),
+                                dataType: 'json',
+
+                                success: function (result) {
+                                    options.success(result);
+                                }
+                            });
+                        },
+
+                        create: function (options) {
+                            $.ajax({
+                                type: 'POST',
+                                url: "/Home/CreateBook",
+                                contentType: "application/json; charset=utf-8",
+                                data: JSON.stringify(options.data),
+                                dataType: 'json',
+
+                                success: function (result) {
+                                    options.success(result);
+                                }
+                            });
+                        },
+                    //parameterMap: function (options, operation) {
+                    //    if (operation !== "read" && options.models) {
+                    //        return { models: kendo.stringify(options.models) };
+                    //    }
+                    //},
+                    },//transport
                     schema: {
                         data: function (data) {
                             return data;
@@ -33,17 +72,18 @@
                             return data['odata.count'];
                         },
                         model: {
+                            id: "Id",
                             fields: {
                                 Id: { type: "number" },
-                                Name: {type:"string"},
-                                Author: {type:"string"},
-                                Publisher: {type:"string"},
-                                Price:{type:"number"}
+                                Name: { type: "string" },
+                                Author: { type: "string" },
+                                Publisher: { type: "string" },
+                                Price: { type: "number" }
                             }
                         }
                     },
-                pagesize: 10
-            },
+                    pagesize: 10
+                    },
                 //height: 500,
                 //groupable: true,
                 //Filters
@@ -57,48 +97,42 @@
                         }
                     }
                 },
-                sortable: true,
-                pageable: {
-                    refresh: true,
-                    pageSizes: true,
-                    buttonCount: 5
-                },
+                //sortable: true,
+                //pageable: {
+                //    refresh: false,
+                //    pageSizes: true,
+                //    buttonCount: 5
+                //},
+                toolbar: ["create"],
                 columns: [
-                    //{
-                    //    field: "Id",
-                    //    title: "Id",
-                    //    filterable: false,
-                    //},
-                    {
-                        field: "Name",
-                        title: "Name",
-                        filterable: false,
-                    },
-                    {
-                        field: "Author",
-                        title: "Author",
-                        filterable: false,
-                    },
-                    {
-                        field: "Publisher",
-                        title: "Publisher",
-                        filterable: {
-                            ui: publisherFilter
-                        }
-                    },
-                    {
-                        field: "Price",
-                        title: "Price",
-                        filterable: false,
-                    }
-                ]
+                    { field: "Name", title: "Name", filterable: false, },
+                    { field: "Author", title: "Author", filterable: false, },
+                    { field: "Publisher", title: "Publisher", filterable: { ui: publisherFilter } },
+                    { field: "Price", title: "Price", filterable: false, },
+                    { command: ["edit", "destroy"], title: "Action" }
+                   ],
+                editable : "inline"
             });
         });
         function publisherFilter(element) {
             element.kendoAutoComplete({
-                dataSource:  @Html.Raw(Json.Encode(Model.BooksPublisher.Items)),                
+                dataSource:  @Html.Raw(Json.Encode(Model.BooksPublisher.Items)),
             });
-        }
+        };
+
+        //destroy: function(options) {
+        //    debugger;
+        //    var localData = JSON.parse(localStorage["grid_data"]);
+        //    for (var i = 0; i < localData.length; i++) {
+        //        if (localData[i].ID === options.data.ID) {
+        //            localData.splice(i, 1);
+        //            break;
+        //        }
+        //    }
+        //    localStorage["grid_data"] = JSON.stringify(localData);
+        //    options.success(localData);
+        //}
+
     </script>
 </div>
 

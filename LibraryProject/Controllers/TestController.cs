@@ -40,5 +40,31 @@ namespace LibraryProject.Controllers
             //};          
             return Json(booksList);
         }
+
+        public JsonResult<List<Book>> DeleteBook()
+        {
+            List<Book> booksList;
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                connection.Open();
+                booksList = new List<Book>();
+                if (connection != null)
+                {
+                    string booksSelectAllExpression = "SELECT * FROM Books";
+                    SqlCommand command = new SqlCommand(booksSelectAllExpression, connection);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            booksList.Add(new Book { Id = (int)reader.GetValue(0), Name = (string)reader.GetValue(1), Author = (string)reader.GetValue(2), Publisher = (string)reader.GetValue(3), Price = (int)reader.GetValue(4) });
+                        }
+                    }
+                }
+
+            }
+           
+            return Json(booksList);
+        }
     }
 }
