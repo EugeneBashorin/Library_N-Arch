@@ -1,6 +1,4 @@
-﻿
-
-@model LibraryProject.Models.BooksFilterModel
+﻿@model LibraryProject.Models.BooksFilterModel
 
 @{
     ViewBag.Title = "BooksFilterViewModel";
@@ -8,203 +6,269 @@
 
 <h4>Books</h4>
 
+@*@if(User.IsInRole("admin"))
+    {
+        <script>
+           var a = function(){
+                alert("woorks")
+            }
+            a();
+        </script>
+    }*@
+
 <div id="example">
     <div id="grid"></div>
+    <div id="details"></div>
     <script>
+        //var showDetailsWindow =
+        //detailsTemplate;
+        var Allow = function () {
+            if (@Html.Raw(Json.Encode(User.IsInRole("admin"))))
+                return false;
+            else
+                return true;
+        }
+
         $(document).ready(function () {
-            $('#grid').kendoGrid({
-                dataSource: {
-                    //type: 'json',
-                    @*data:  @Html.Raw(Json.Encode(Model.Books)),*@
-                    transport: {
-                        read: function (options) {
-                            options.success(@Html.Raw(Json.Encode(Model.Books)));
-                        },
-                        destroy: function (options) {
-                            $.ajax({
-                                url: "/Home/DeleteConfirmedBook/" + options.data.Id,//"/Home/DeleteBook/" + options.data.Id,
-                                dataType: 'json',
-                                type: 'POST',
-                                success: function (result) {
-                                    options.success(result);
-                                }
-                            });
-                        },
+            debugger;
+            var flag = Allow();
+           $('#grid').kendoGrid({
+               
+               dataSource: {
 
-                        update: function (options) {
-                            $.ajax({
-                                type: 'POST',
-                                url: "/Home/Edit/" + options.data.Id,
-                                contentType: "application/json; charset=utf-8",
-                                data: JSON.stringify(options.data),
-                                dataType: 'json',
+                   transport: {
+                       read: function (options) {
+                           options.success(@Html.Raw(Json.Encode(Model.Books)));
+                       },
 
-                                success: function (result) {
-                                    options.success(result);
-                                }
-                            });
-                        },
+                       @*Allow : function () {
+                          if (@Html.Raw(Json.Encode(User.IsInRole("admin"))))
+                                return true;
+                            else
+                                return false;
+                        },*@
 
-                        create: function (options) {
-                            $.ajax({
-                                type: 'POST',
-                                url: "/Home/CreateBook",
-                                contentType: "application/json; charset=utf-8",
-                                data: JSON.stringify(options.data),
-                                dataType: 'json',
+                       destroy: function (options) {
+                           $.ajax({
+                               url: "/Home/ConfirmedDeleteBook/" + options.data.Id,
+                               dataType: 'json',
+                               type: 'POST',
+                           });
+                       },
 
-                                success: function (result) {
-                                    options.success(result);
-                                }
-                            });
-                        },
-                    //parameterMap: function (options, operation) {
-                    //    if (operation !== "read" && options.models) {
-                    //        return { models: kendo.stringify(options.models) };
-                    //    }
-                    //},
-                    },//transport
-                    schema: {
-                        data: function (data) {
-                            return data;
-                        },
-                        total: function (data) {
-                            return data['odata.count'];
-                        },
-                        model: {
-                            id: "Id",
-                            fields: {
-                                Id: { type: "number" },
-                                Name: { type: "string" },
-                                Author: { type: "string" },
-                                Publisher: { type: "string" },
-                                Price: { type: "number" }
-                            }
-                        }
-                    },
-                    pagesize: 10
-                    },
-                //height: 500,
-                //groupable: true,
-                //Filters
-                filterable: {
-                    extra: false,
-                    operators: {
-                        string: {
-                            startswith: "Starts with",
-                            eq: "Is equal to",
-                            neq: "Is not equal to"
-                        }
-                    }
-                },
-                //sortable: true,
-                //pageable: {
-                //    refresh: false,
-                //    pageSizes: true,
-                //    buttonCount: 5
-                //},
-                toolbar: ["create"],
-                columns: [
-                    { field: "Name", title: "Name", filterable: false, },
-                    { field: "Author", title: "Author", filterable: false, },
-                    { field: "Publisher", title: "Publisher", filterable: { ui: publisherFilter } },
-                    { field: "Price", title: "Price", filterable: false, },
-                    { command: ["edit", "destroy"], title: "Action" }
+                       update: function (options) {
+                           $.ajax({
+                               type: 'POST',
+                               url: "/Home/Edit/" + options.data.Id,
+                               contentType: "application/json; charset=utf-8",
+                               data: JSON.stringify(options.data),
+                               dataType: 'json',
+                               success: function (data) {
+                                   alert(data);
+                                   options.success(data);
+                               }
+                           });
+                       },
+
+                       create: function (options) {
+                           $.ajax({
+                               type: 'POST',
+                               url: "/Home/CreateNewBook",
+                               contentType: "application/json; charset=utf-8",
+                               data: JSON.stringify(options.data),
+                               dataType: 'json',
+                               success: function (data) {
+                                   alert(data);
+                                   options.success(data);
+                               }
+                           });
+                       },
+
+
+                       //showDetails: function (options) {
+                       //      var dataItem = if;
+                       //  },
+
+
+                       parameterMap: function (options, operation) {
+                           if (operation !== "read" && options.models) {
+                               return { models: kendo.stringify(options.models) };
+                           }
+                       },
+                   },//close transport
+                   schema: {
+                       data: function (data) {
+                           return data;
+                       },
+                       total: function (data) {
+                           return data['odata.count'];
+                       },
+                       model: {
+                           id: "Id",
+                           fields: {
+                               Id: { type: "number" },
+                               Name: { type: "string" },
+                               Author: { type: "string" },
+                               Publisher: { type: "string" },
+                               Price: { type: "number" }
+                           }
+                       }
+                   },
+                   pagesize: 10
+               },
+               //height: 500,
+               //groupable: true,
+               //Filters
+               filterable: {
+                   extra: false,
+                   operators: {
+                       string: {
+                           startswith: "Starts with",
+                           eq: "Is equal to",
+                           neq: "Is not equal to"
+                       }
+                   }
+               },
+               //sortable: true,
+               //pageable: {
+               //    refresh: false,
+               //    pageSizes: true,
+               //    buttonCount: 5
+               //},
+               toolbar: ["create","save","cancel"], 
+               //toolbar: [{ "name": "create", "hidden": flag }], 
+               columns: [
+                   { field: "Name", title: "Name", filterable: false, },
+                   { field: "Author", title: "Author", filterable: false, },
+                   { field: "Publisher", title: "Publisher", filterable: { ui: publisherFilter } },
+                   { field: "Price", title: "Price", filterable: false, },
+                   { command: ["edit", "destroy"], title: "Action", hidden: flag },                 //HIDE element
+                   { command: "View Details", click: "showDetails", title: " ", width: "180px" }
                    ],
-                editable : "inline"
+                editable: "inline",
             });
+            $("#details").kendoWindow({
+                title: "Customer Details",
+                modal: true,
+                visible: false,
+                resizable: false,
+                width: 300
+            }).data("kendoWindow");
+            detailsTemplate = kendo.template($("#template").html());
+
         });
+
         function publisherFilter(element) {
             element.kendoAutoComplete({
                 dataSource:  @Html.Raw(Json.Encode(Model.BooksPublisher.Items)),
             });
         };
 
-        //destroy: function(options) {
-        //    debugger;
-        //    var localData = JSON.parse(localStorage["grid_data"]);
-        //    for (var i = 0; i < localData.length; i++) {
-        //        if (localData[i].ID === options.data.ID) {
-        //            localData.splice(i, 1);
-        //            break;
-        //        }
-        //    }
-        //    localStorage["grid_data"] = JSON.stringify(localData);
-        //    options.success(localData);
-        //}
+
 
     </script>
+
+    <script type="text/x-kendo-template" id="template">
+        <div id="details-container">
+            <h2>#= FirstName # #= LastName #</h2>
+            <em>#= Title #</em>
+            <dl>
+                <dt>City: #= City #</dt>
+                <dt>Birth Date: #= kendo.toString(BirthDate, "MM/dd/yyyy") #</dt>
+            </dl>
+        </div>
+    </script>
+    <style type="text/css">
+        #details-container {
+            padding: 10px;
+        }
+
+            #details-container h2 {
+                margin: 0;
+            }
+
+            #details-container em {
+                color: #8c8c8c;
+            }
+
+            #details-container dt {
+                margin: 0;
+                display: inline;
+            }
+    </style>
+    @Html.ActionLink("Save txt list", "GetBooksList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
+    @Html.ActionLink("Save xml list", "GetBooksXmlList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
 </div>
 
-<table class="table table-striped table-condensed table-bordered col-md-12">
-    <tr>
-
-        <td colspan="1" align="left">
-            @if (User.IsInRole("admin"))
-            {
-                @Html.ActionLink("Create New", "CreateBook", "Home", new { }, new { @class = "btn btn-sm btn-success " })
-            }
-        </td>
-
-        <td colspan="4" align="left">
-            @using (Html.BeginForm("Index", "Home", FormMethod.Get))
-            {
-                <div class="form-inline">
-                    @Html.DropDownList("bookPublisher", Model.BooksPublisher as SelectList, htmlAttributes: new { @class = "form-control" })
-                    <input type="submit" value="Filtr publisher" class="btn btn-sm btn-primary" />
-                </div>
-            }
-        </td>
-    </tr>
-    <tr>
-        <th align="left">
-            @Html.Label("Name")
-        </th>
-        <th align="left">
-            @Html.Label("Author")
-        </th>
-        <th align="left">
-            @Html.Label("Publisher")
-        </th>
-        <th align="left">
-            @Html.Label("Price")
-        </th>
-        <th align="left">
-            @Html.Label("Action")
-        </th>
-    </tr>
-    @foreach (var item in Model.Books)
-    {
+@*<table class="table table-striped table-condensed table-bordered col-md-12">
         <tr>
-            <td align="left">
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td align="left">
-                @Html.DisplayFor(modelItem => item.Author)
-            </td>
-            <td align="left">
-                @Html.DisplayFor(modelItem => item.Publisher)
-            </td>
-            <td align="left">
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td align="left">
+
+            <td colspan="1" align="left">
                 @if (User.IsInRole("admin"))
                 {
-                    @Html.ActionLink("Edit book", "EditBook", new { id = item.Id }, new { @class = "btn btn-sm btn-info " })
+                    @Html.ActionLink("Create New", "CreateBook", "Home", new { }, new { @class = "btn btn-sm btn-success " })
                 }
-                @Html.ActionLink("Show", "ShowBook", new { id = item.Id }, new { @class = "btn btn-sm btn-info" })
-                @if (User.IsInRole("admin"))
+            </td>
+
+            <td colspan="4" align="left">
+                @using (Html.BeginForm("Index", "Home", FormMethod.Get))
                 {
-                    @Html.ActionLink("Delete", "DeleteBook", "Home", new { id = item.Id }, new { @class = "btn btn-sm btn-danger viewDialog ", data_dialog_title = "Delete" })
+                    <div class="form-inline">
+                        @Html.DropDownList("bookPublisher", Model.BooksPublisher as SelectList, htmlAttributes: new { @class = "form-control" })
+                        <input type="submit" value="Filtr publisher" class="btn btn-sm btn-primary" />
+                    </div>
                 }
             </td>
         </tr>
-    }
-    <tr>
-        <td align="left" colspan="5">
-            @Html.ActionLink("Save txt list", "GetBooksList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
-            @Html.ActionLink("Save xml list", "GetBooksXmlList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
-        </td>
-    </tr>
-</table>
+        <tr>
+            <th align="left">
+                @Html.Label("Name")
+            </th>
+            <th align="left">
+                @Html.Label("Author")
+            </th>
+            <th align="left">
+                @Html.Label("Publisher")
+            </th>
+            <th align="left">
+                @Html.Label("Price")
+            </th>
+            <th align="left">
+                @Html.Label("Action")
+            </th>
+        </tr>
+        @foreach (var item in Model.Books)
+        {
+            <tr>
+                <td align="left">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td align="left">
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td align="left">
+                    @Html.DisplayFor(modelItem => item.Publisher)
+                </td>
+                <td align="left">
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td align="left">
+                    @if (User.IsInRole("admin"))
+                    {
+                        @Html.ActionLink("Edit book", "EditBook", new { id = item.Id }, new { @class = "btn btn-sm btn-info " })
+                    }
+                    @Html.ActionLink("Show", "ShowBook", new { id = item.Id }, new { @class = "btn btn-sm btn-info" })
+                    @if (User.IsInRole("admin"))
+                    {
+                        @Html.ActionLink("Delete", "DeleteBook", "Home", new { id = item.Id }, new { @class = "btn btn-sm btn-danger viewDialog ", data_dialog_title = "Delete" })
+                    }
+                </td>
+            </tr>
+        }
+        <tr>
+            <td align="left" colspan="5">
+                @Html.ActionLink("Save txt list", "GetBooksList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
+                @Html.ActionLink("Save xml list", "GetBooksXmlList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
+            </td>
+        </tr>
+    </table>*@

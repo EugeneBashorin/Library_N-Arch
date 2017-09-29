@@ -3,6 +3,7 @@ using ConfigurationData.Configurations;
 using Entities.Entities;
 using LibraryProject.Models;
 using System.Collections.Generic;
+using System.Net;
 using System.Web.Mvc;
 
 namespace LibraryProject.Controllers
@@ -163,8 +164,23 @@ namespace LibraryProject.Controllers
             return View();
         }
 
-        //************************!!!!!!!!!!!!!!!!!!!!!!!!
-        [Route("/home/edit/{id}/{value}")]
+        //**************CRUD FOR KENDO GRID
+        [HttpPost]
+        public ActionResult CreateNewBook(Book book)
+        {
+            if (book.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.AddBook(book);
+
+                return Json(HttpStatusCode.OK);
+            }
+            return Json(HttpStatusCode.NotModified);
+        }
+
         [HttpPost]
         public ActionResult Edit(int? Id, Book newBook)
         {
@@ -179,11 +195,23 @@ namespace LibraryProject.Controllers
             if (ModelState.IsValid)
             {
                 homeService.UpdateBook(Id, newBook);
-                return RedirectToAction("Index");
+                return Json(HttpStatusCode.OK);
             }
-            return View();
+            return Json(HttpStatusCode.NotModified);
         }
-        //*****************************!!!!!!!!!!!!!!
+
+        [HttpPost]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
+        public ActionResult ConfirmedDeleteBook(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+            homeService.DeleteBook(id);
+            return Json(HttpStatusCode.OK);
+        }
+        //************************CRUD FOR KENDO GRID
 
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         [HttpGet]

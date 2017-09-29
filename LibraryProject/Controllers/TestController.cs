@@ -1,7 +1,10 @@
 ﻿using Entities.Entities;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Results;
 
@@ -65,6 +68,29 @@ namespace LibraryProject.Controllers
             }
            
             return Json(booksList);
+        }
+
+        [HttpPost]
+        public HttpResponseMessage Edit(int? Id, Book book)
+        {
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                connection.Open();
+                if (connection != null)
+                {
+                    string editBookExpression = $"UPDATE Books SET Name = '{book.Name}', Author = '{book.Author}', Publisher = '{book.Publisher}', Price = '{book.Price}' WHERE Id = '{Id}'";
+                    SqlCommand command = new SqlCommand(editBookExpression, connection);
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+            
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }
