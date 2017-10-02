@@ -225,8 +225,8 @@ namespace LibraryProject.Controllers
             return PartialView(book);
         }
 
-        // [HttpPost, ActionName("DeleteBook")]
-        [HttpPost]
+        
+        [HttpPost, ActionName("DeleteBook")]
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         public ActionResult DeleteConfirmedBook(int? id)
         {
