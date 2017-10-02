@@ -211,6 +211,100 @@ namespace LibraryProject.Controllers
             homeService.DeleteBook(id);
             return Json(HttpStatusCode.OK);
         }
+
+        [HttpPost]
+        public ActionResult CreateNewMagazine(Magazine magazine)
+        {
+            if (magazine.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.AddMagazine(magazine);
+
+                return Json(magazine);
+            }
+            return Json(HttpStatusCode.NotModified);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int? Id, Magazine newMagazine)
+        {
+            if (Id == null)
+            {
+                return HttpNotFound();
+            }
+            if (newMagazine.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.UpdateMagazine(Id, newMagazine);
+                return Json(newMagazine);
+            }
+            return Json(HttpStatusCode.NotModified);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
+        public ActionResult ConfirmedDeleteMagazine(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+            homeService.DeleteMagazine(id);
+            return Json(HttpStatusCode.OK);
+        }
+
+        [HttpPost]
+        public ActionResult CreateNewNewspaper(Newspaper newspaper)
+        {
+            if (newspaper.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.AddNewspaper(newspaper);
+
+                return Json(newspaper);
+            }
+            return Json(HttpStatusCode.NotModified);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int? Id, Newspaper newNewspaper)
+        {
+            if (Id == null)
+            {
+                return HttpNotFound();
+            }
+            if (newNewspaper.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.UpdateNewspaper(Id, newNewspaper);
+                return Json(newNewspaper);
+            }
+            return Json(HttpStatusCode.NotModified);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
+        public ActionResult ConfirmedDeleteNewspaper(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+            homeService.DeleteNewspaper(id);
+            return Json(HttpStatusCode.OK);
+        }
         //************************CRUD FOR KENDO GRID
 
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
