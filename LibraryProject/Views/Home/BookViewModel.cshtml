@@ -6,22 +6,10 @@
 
 <h4>Books</h4>
 
-@*@if(User.IsInRole("admin"))
-    {
-        <script>
-           var a = function(){
-                alert("woorks")
-            }
-            a();
-        </script>
-    }*@
-
 <div id="example">
     <div id="grid"></div>
     <div id="details"></div>
     <script>
-        //var showDetailsWindow =
-        //detailsTemplate;
         var Allow = function () {
             if (@Html.Raw(Json.Encode(User.IsInRole("admin"))))
                 return false;
@@ -29,25 +17,18 @@
                 return true;
         }
 
-        $(document).ready(function () {
-            debugger;
-            var flag = Allow();
-           $('#grid').kendoGrid({
-               
-               dataSource: {
+        var wnd;
+        var detailsTemplate;
 
+        $(document).ready(function () {
+            var flag = Allow();
+
+           $('#grid').kendoGrid({
+               dataSource: {
                    transport: {
                        read: function (options) {
                            options.success(@Html.Raw(Json.Encode(Model.Books)));
                        },
-
-                       @*Allow : function () {
-                          if (@Html.Raw(Json.Encode(User.IsInRole("admin"))))
-                                return true;
-                            else
-                                return false;
-                        },*@
-
                        destroy: function (options) {
                            $.ajax({
                                url: "/Home/ConfirmedDeleteBook/" + options.data.Id,
@@ -64,7 +45,6 @@
                                data: JSON.stringify(options.data),
                                dataType: 'json',
                                success: function (data) {
-                                   alert(data);
                                    options.success(data);
                                }
                            });
@@ -78,24 +58,18 @@
                                data: JSON.stringify(options.data),
                                dataType: 'json',
                                success: function (data) {
-                                   alert(data);
                                    options.success(data);
-                               }
+                                }
                            });
                        },
-
-
-                       //showDetails: function (options) {
-                       //      var dataItem = if;
-                       //  },
-
 
                        parameterMap: function (options, operation) {
                            if (operation !== "read" && options.models) {
                                return { models: kendo.stringify(options.models) };
                            }
                        },
-                   },//close transport
+                   },                                                               //close transport
+
                    schema: {
                        data: function (data) {
                            return data;
@@ -116,9 +90,6 @@
                    },
                    pagesize: 10
                },
-               //height: 500,
-               //groupable: true,
-               //Filters
                filterable: {
                    extra: false,
                    operators: {
@@ -129,55 +100,74 @@
                        }
                    }
                },
-               //sortable: true,
-               //pageable: {
-               //    refresh: false,
-               //    pageSizes: true,
-               //    buttonCount: 5
-               //},
-               toolbar: ["create","save","cancel"], 
-               //toolbar: [{ "name": "create", "hidden": flag }], 
+               toolbar: ["create"],
+
                columns: [
+                   { field: "Id", title: "ID", filterable: false, hidden: true },
                    { field: "Name", title: "Name", filterable: false, },
                    { field: "Author", title: "Author", filterable: false, },
                    { field: "Publisher", title: "Publisher", filterable: { ui: publisherFilter } },
                    { field: "Price", title: "Price", filterable: false, },
                    { command: ["edit", "destroy"], title: "Action", hidden: flag },                 //HIDE element
-                   { command: "View Details", click: "showDetails", title: " ", width: "180px" }
+                   { command: { text: "View Details", click: showDetails }, title: " ", width: "180px" }
                    ],
                 editable: "inline",
             });
-            $("#details").kendoWindow({
-                title: "Customer Details",
-                modal: true,
-                visible: false,
-                resizable: false,
-                width: 300
-            }).data("kendoWindow");
-            detailsTemplate = kendo.template($("#template").html());
+           wnd = $("#details")
+               .kendoWindow({
+                   title: "Book Details",
+                   modal: true,
+                   visible: false,
+                   resizable: false,
+                   width: 300
+               }).data("kendoWindow");
 
-        });
+           detailsTemplate = kendo.template($("#template").html());
+
+           hideAddButton(flag);
+            });
+
+
+        var hideAddButton = function HideToolbarWithRole(flag) {
+           if (flag)
+           {
+               $(".k-grid-add", "#grid").hide();
+               $(".k-grid-toolbar").hide();
+            }
+        }
 
         function publisherFilter(element) {
+            debugger;
             element.kendoAutoComplete({
                 dataSource:  @Html.Raw(Json.Encode(Model.BooksPublisher.Items)),
             });
-        };
+        }
 
-
+        function showDetails(e)
+        {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            wnd.content(detailsTemplate(dataItem));
+            wnd.center().open();
+        }
 
     </script>
 
     <script type="text/x-kendo-template" id="template">
         <div id="details-container">
-            <h2>#= FirstName # #= LastName #</h2>
-            <em>#= Title #</em>
             <dl>
-                <dt>City: #= City #</dt>
-                <dt>Birth Date: #= kendo.toString(BirthDate, "MM/dd/yyyy") #</dt>
+                <dt>Name:</dt>
+                <dd>#= Name #</dd>
+                <dt>Author:</dt>
+                <dd>#= Author #</dd>
+                <dt>Publisher:</dt>
+                <dd>#= Publisher #</dd>
+                <dt>Price:</dt>
+                <dd>#= Price#</dd>
             </dl>
         </div>
     </script>
+
     <style type="text/css">
         #details-container {
             padding: 10px;
@@ -196,6 +186,9 @@
                 display: inline;
             }
     </style>
+
+
+
     @Html.ActionLink("Save txt list", "GetBooksList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
     @Html.ActionLink("Save xml list", "GetBooksXmlList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
 </div>

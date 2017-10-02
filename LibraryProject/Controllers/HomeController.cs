@@ -176,7 +176,7 @@ namespace LibraryProject.Controllers
             {
                 homeService.AddBook(book);
 
-                return Json(HttpStatusCode.OK);
+                return Json(book);
             }
             return Json(HttpStatusCode.NotModified);
         }
@@ -195,7 +195,7 @@ namespace LibraryProject.Controllers
             if (ModelState.IsValid)
             {
                 homeService.UpdateBook(Id, newBook);
-                return Json(HttpStatusCode.OK);
+                return Json(newBook);
             }
             return Json(HttpStatusCode.NotModified);
         }
