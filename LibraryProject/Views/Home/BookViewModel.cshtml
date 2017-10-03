@@ -1,12 +1,11 @@
 ﻿@model LibraryProject.Models.BooksFilterModel
-
 @{
     ViewBag.Title = "BooksFilterViewModel";
 }
 <h4>Books</h4>
 
 <div id="example">
-    <div id="grid"></div>
+    <div id="grid-book"></div>
     <div id="details"></div>
     @Scripts.Render("~/bundles/BooksKendoJScript")
     <script>
@@ -17,7 +16,10 @@
     </script>
 
     @*popup window to show details action*@
-    <div type="text/x-kendo-template" id="template">
+    <div id="booksViewDetails">
+
+    </div>
+    <script type="text/x-kendo-template" id="template">
         <div id="details-container">
             <dl>
                 <dt>Name:</dt>
@@ -30,8 +32,7 @@
                 <dd>#= Price#</dd>
             </dl>
         </div>
-    </div>
-  
+    </script>
     @Html.ActionLink("Save txt list", "GetBooksList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
     @Html.ActionLink("Save xml list", "GetBooksXmlList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
 </div>

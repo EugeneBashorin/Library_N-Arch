@@ -1,5 +1,4 @@
-﻿function BookAction(bookList, booksPublishers, userRole) //userRole ==>> Bool
-
+﻿function MagazineAction(magazineList, magazinesPublishers, userRole) //userRole ==>> Bool
 {
     var Allow = function () {
         if (userRole) {
@@ -9,28 +8,31 @@
             return true;
         }
     }
+
     var popupwindow;
     var detailsTemplate;
-
     $(document).ready(function () {
         var flag = Allow();
-        $('#grid-book').kendoGrid({
+
+        $('#grid-magazine').kendoGrid({
             dataSource: {
                 transport: {
                     read: function (options) {
-                        options.success(bookList);
+                        options.success(magazineList);
                     },
+
                     destroy: function (options) {
                         $.ajax({
-                            url: "/Home/ConfirmedDeleteBook/" + options.data.Id,
+                            url: "/Home/ConfirmedDeleteMagazine/" + options.data.Id,
                             dataType: 'json',
                             type: 'POST',
                         });
                     },
+
                     update: function (options) {
                         $.ajax({
                             type: 'POST',
-                            url: "/Home/EditBook/" + options.data.Id,
+                            url: "/Home/EditMagazine/" + options.data.Id,
                             contentType: "application/json; charset=utf-8",
                             data: JSON.stringify(options.data),
                             dataType: 'json',
@@ -43,7 +45,7 @@
                     create: function (options) {
                         $.ajax({
                             type: 'POST',
-                            url: "/Home/CreateNewBook",
+                            url: "/Home/CreateNewMagazine",
                             contentType: "application/json; charset=utf-8",
                             data: JSON.stringify(options.data),
                             dataType: 'json',
@@ -59,7 +61,6 @@
                         }
                     },
                 },
-
                 schema: {
                     data: function (data) {
                         return data;
@@ -85,22 +86,20 @@
                                     }
                                 }
                             },
-
-                            Author: {
+                            Category: {
                                 type: "string",
                                 validation:
                                 {
                                     required: true,
                                     authorvalidation: function (input) {
-                                        if (input.is("[name='Author']") && input.val() !== "") {
-                                            input.attr("data-authorvalidation-msg", "Author name should start with capital letter");
+                                        if (input.is("[name='Category']") && input.val() !== "") {
+                                            input.attr("data-authorvalidation-msg", "Category name should start with capital letter");
                                             return /^[A-Z]/.test(input.val());
                                         }
                                         return true;
                                     }
                                 }
                             },
-
                             Publisher: {
                                 type: "string",
                                 validation:
@@ -120,6 +119,7 @@
                     }
                 },
                 pagesize: 10,
+
             },
             pageable: {
                 pageSizes: true,
@@ -135,48 +135,43 @@
                     }
                 }
             },
-
             toolbar: ["create"],
 
             columns: [
                 { field: "Id", title: "ID", filterable: false, hidden: true },
                 { field: "Name", title: "Name", filterable: false },
-                { field: "Author", title: "Author", filterable: false },
+                { field: "Category", title: "Category", filterable: false },
                 { field: "Publisher", title: "Publisher", filterable: { ui: publisherFilter } },
                 { field: "Price", title: "Price", filterable: false },
                 { command: ["edit", "destroy"], title: "Action", hidden: flag },                 //HIDE element
                 { command: { text: "View Details", click: showDetails }, title: " ", width: "180px" }
             ],
-
             editable: "inline",
         });
+
         popupwindow = $("#details")
             .kendoWindow({
-                title: "Book Details",
+                title: "Magazine Details",
                 modal: true,
                 visible: false,
                 resizable: false,
                 width: 300
             }).data("kendoWindow");
-        detailsTemplate = kendo.template($("#template").html());
-        //detailsTemplate = kendo.template($("#template").html(function () {
-        //    '<div id="details-container">'+ '<dl>'+'<dt>Name:</dt>' +'<dd>#= Name #</dd>'+
-        //            '<dt>Author:</dt>'+'<dd>#= Author #</dd>'+'<dt>Publisher:</dt>'+'<dd>#= Publisher #</dd>'+'<dt>Price:</dt>'+
-        //            '<dd>#= Price#</dd>'+'</dl>'+'</div>'
-    //}));
+
+        detailsTemplate = kendo.template($("#magazine-template").html());
         hideAddButton(flag);
     });
 
     var hideAddButton = function HideToolbarWithRole(flag) {
         if (flag) {
-            $(".k-grid-add", "#grid-book").hide();
+            $(".k-grid-add", "#grid-magazine").hide();
             $(".k-grid-toolbar").hide();
         }
     }
 
     function publisherFilter(element) {
         element.kendoAutoComplete({
-            dataSource: publisherList,
+            dataSource: magazinesPublishers,
         });
     }
 

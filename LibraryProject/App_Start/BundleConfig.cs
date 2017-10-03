@@ -11,6 +11,12 @@ namespace LibraryProject
             bundles.Add(new ScriptBundle("~/bundles/BooksKendoJScript").Include(
                 "~/Scripts/BooksKendoJScript.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/MagazinesKendoJScript").Include(
+                "~/Scripts/MagazinesKendoJScript.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/NewspapersKendoJScript").Include(
+               "~/Scripts/NewspapersKendoJScript.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
