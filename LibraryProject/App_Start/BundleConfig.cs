@@ -8,6 +8,9 @@ namespace LibraryProject
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.Add(new ScriptBundle("~/bundles/BooksKendoJScript").Include(
+                "~/Scripts/BooksKendoJScript.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
@@ -37,6 +40,8 @@ namespace LibraryProject
             bundles.Add(new StyleBundle("~/Content/kendo/css").Include(
                 "~/Content/kendo/kendo.common-bootstrap.min.css",
                 "~/Content/kendo/kendo.bootstrap.min.css"));
+
+            
 
             bundles.IgnoreList.Clear(); //allow minified files in debug mode.
         }

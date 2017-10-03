@@ -1,0 +1,12 @@
+Name: Head First C# Author: A.Stellman, J.Greene Publisher: O.Reilly Price: 5
+Name: LINQ Succinctly Author: J.Roberts Publisher: Syncfusion Price: 200
+Name: Java Script Patterns Author: S.Stefanov Publisher: O.Reilly Price: 300
+Name: Head First JS Programming Author: E.Freeman, E.Robson Publisher: O.Reilly Price: 330
+Name: SQL The Complete Reference Author: J.Groff, P.Weinberg, A.Oppel Publisher: Williams Price: 158
+Name: Getting started with ASP.NET 5.0 Web Forms Author: N.Gaylord, Ch.Wenz, P.Rastogi, T.Miranda Publisher: O.Reilly Price: 400
+Name: C# 6.0 Complete Guide Author: J.& B.Albahairy Publisher: Williams Price: 499
+Name: ASP.NET 4.5 in C# and VB Author: J.Gaylord Publisher: Wrox Price: 274
+Name: Head First SQL Author: Lynn Beighley Publisher: O.Reilly Price: 299
+Name: Design Patterns via C# Author: A.Shevchyk, A.Kasianov, D.Ohrimenko Publisher: ITVDN Price: 830
+Name: OOP in C#. Succinctly Author: S.Rossel Publisher: Syncfusion Price: 3
+
