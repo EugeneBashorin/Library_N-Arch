@@ -11,8 +11,7 @@ namespace LibraryProject
     public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
-        {
-            // Database.SetInitializer<ApplicationContext>(new AppDbInitializer());         
+        {  
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

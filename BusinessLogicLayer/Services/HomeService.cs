@@ -45,6 +45,7 @@ namespace BusinessLogicLayer.Services
         {
             Database.Books.Update(id, book);
         }
+
         public void DeleteBook(int? id)
         {
             Database.Books.Delete(id);
@@ -81,7 +82,7 @@ namespace BusinessLogicLayer.Services
         public List<Book> CheckBookPublisher(string publisherName)
         {
             List<Book> bookList;
-            if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals(FilterConfiguration._ALL_PUBLISHER))
+            if (!String.IsNullOrEmpty(publisherName))
             {
                 bookList = Database.Books.FilterByPublisher(publisherName);
             }
@@ -95,11 +96,8 @@ namespace BusinessLogicLayer.Services
         public List<string> GetBooksPublishers()
         {
             List<string> booksPublishers = Database.Books.GetAllPublishers();
-            booksPublishers.Add(FilterConfiguration._ALL_PUBLISHER);
             return booksPublishers;
         }
-
-
 
         public List<Magazine> GetMagazines()
         {
@@ -125,6 +123,7 @@ namespace BusinessLogicLayer.Services
         {
             Database.Magazines.Update(id, magazine);
         }
+
         public void DeleteMagazine(int? id)
         {
             Database.Magazines.Delete(id);
@@ -156,10 +155,11 @@ namespace BusinessLogicLayer.Services
                 xs.Serialize(fs, xmlList);
             }
         }
+
         public List<Magazine> CheckMagazinePublisher(string publisherName)
         {
             List<Magazine> magazineList;
-            if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals(FilterConfiguration._ALL_PUBLISHER))
+            if (!String.IsNullOrEmpty(publisherName))
             {
                 magazineList = Database.Magazines.FilterByPublisher(publisherName);
             }
@@ -172,12 +172,9 @@ namespace BusinessLogicLayer.Services
 
         public List<string> GetMagazinesPublishers()
         {
-            List<string> magazinesPublishers = Database.Magazines.GetAllPublishers();
-            magazinesPublishers.Add(FilterConfiguration._ALL_PUBLISHER);
+            List<string> magazinesPublishers = Database.Magazines.GetAllPublishers();         
             return magazinesPublishers;
         }
-
-
 
         public List<Newspaper> GetNewspapers()
         {
@@ -239,7 +236,7 @@ namespace BusinessLogicLayer.Services
         public List<Newspaper> CheckNewspaperPublisher(string publisherName)
         {
             List<Newspaper> newspaperList;
-            if (!String.IsNullOrEmpty(publisherName) && !publisherName.Equals(FilterConfiguration._ALL_PUBLISHER))
+            if (!String.IsNullOrEmpty(publisherName))
             {
                 newspaperList = Database.Newspapers.FilterByPublisher(publisherName);
             }
@@ -253,7 +250,6 @@ namespace BusinessLogicLayer.Services
         public List<string> GetNewspapersPublishers()
         {
             List<string> newspapersPublishers = Database.Newspapers.GetAllPublishers();
-            newspapersPublishers.Add(FilterConfiguration._ALL_PUBLISHER);
             return newspapersPublishers;
         }
     }

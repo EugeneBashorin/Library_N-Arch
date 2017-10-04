@@ -4,8 +4,9 @@
     {
         public const string _ADMIN_ROLE = "admin";
         public const string _USER_ROLE = "user";
-        public const string _ADMIN_EMAIL = "qwe@qwe.qwe";
-        public const string _ADMIN_PASSWORD = "1_Qwerty";        
+        public const string _ADMIN_EMAIL = "somemail@mail.ru";
+        public const string _ADMIN_PASSWORD = "ad46D_ewr3";
+        public const string _ADMIN_NAME = "Semen";
     }
 
 }

@@ -1,6 +1,7 @@
 ﻿using BusinessLogicLayer.DTO;
 using BusinessLogicLayer.Infrastructure;
 using BusinessLogicLayer.Interfaces;
+using ConfigurationData.Configurations;
 using LibraryProject.Models;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -98,7 +99,6 @@ namespace LibraryProject.Controllers
                 OperationDetails operationDetails = await UserService.Create(userDto);
                 if (operationDetails.Succedeed)
                     return RedirectToAction("Books", "Home");
-                //return View("SuccessRegister");
                 else
                     ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
@@ -107,12 +107,12 @@ namespace LibraryProject.Controllers
 
         private async Task SetInitialDataAsync()
         {
-            await UserService.SetInitialData(new UserDTO { Email = "somemail@mail.ru", UserName = "somemail@mail.ru", Password = "ad46D_ewr3", Name = "Semen", Role = "admin", IsBanned = "false" },
-                                             new List<string> { "user", "admin" });
+            await UserService.SetInitialData(new UserDTO { Email = IdentityConfiguration._ADMIN_EMAIL, UserName = IdentityConfiguration._ADMIN_EMAIL, Password = IdentityConfiguration._ADMIN_PASSWORD, Name = IdentityConfiguration._ADMIN_NAME, Role = IdentityConfiguration._ADMIN_ROLE, IsBanned = "false" },
+                                             new List<string> { IdentityConfiguration._USER_ROLE, IdentityConfiguration._ADMIN_ROLE });
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         public ActionResult Index()
         {
             List<UserDTO> usersList = UserService.GetUsers();

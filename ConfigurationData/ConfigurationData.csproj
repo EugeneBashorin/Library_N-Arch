@@ -78,7 +78,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configurations\FilterConfiguration.cs" />
     <Compile Include="Configurations\IdentityConfiguration.cs" />
     <Compile Include="Configurations\WritePathConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
