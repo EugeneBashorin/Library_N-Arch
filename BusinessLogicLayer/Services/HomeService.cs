@@ -33,7 +33,10 @@ namespace BusinessLogicLayer.Services
         public Book GetBook(int? id)
         {
             if (id == null)
+            {
                 throw new ValidationException("Book Id not found", "");
+            }
+                
             var book = Database.Books.GetItemById(id.Value);
             if (book == null)
                 throw new ValidationException("The Book not found", "");
