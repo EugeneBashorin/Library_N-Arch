@@ -15,8 +15,9 @@
         var userRole = @Html.Raw(Json.Encode(User.IsInRole("admin")));
         NewspaperAction(newspaperList, newspapersPublishers, userRole);
     </script>
-
-    <script type="text/x-kendo-template" id="newspaper-template">
+    <div id="newspapersViewDetails">
+    </div>
+    <script type="text/x-kendo-template" id="template">
         <div id="details-container">
             <dl>
                 <dt>Name:</dt>

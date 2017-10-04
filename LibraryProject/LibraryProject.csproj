@@ -1932,7 +1932,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Models\BooksFilterModel.cs" />
-    <Compile Include="Models\BookViewModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\ManageUsersModel.cs" />
     <Compile Include="Models\NewspaperFilterModel.cs" />
@@ -1941,7 +1940,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\MagazineFilterModel.cs" />
     <Compile Include="Util\NinjectDependencyResolver.cs" />
@@ -1953,19 +1951,6 @@
     <Content Include="packages.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\CreateBook.cshtml" />
-    <Content Include="Views\Home\ShowBook.cshtml" />
-    <Content Include="Views\Home\EditBook.cshtml" />
-    <Content Include="Views\Home\DeleteBook.cshtml" />
-    <Content Include="Views\Home\CreateNewspaper.cshtml" />
-    <Content Include="Views\Home\ShowNewspaper.cshtml" />
-    <Content Include="Views\Home\EditNewspaper.cshtml" />
-    <Content Include="Views\Home\DeleteNewspaper.cshtml" />
-    <Content Include="Views\Home\CreateMagazine.cshtml" />
-    <Content Include="Views\Home\ShowMagazine.cshtml" />
-    <Content Include="Views\Home\EditMagazine.cshtml" />
-    <Content Include="Views\Home\DeleteMagazine.cshtml" />
     <Content Include="Scripts\jquery-1.12.4.min.map" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />

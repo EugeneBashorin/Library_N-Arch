@@ -38,7 +38,6 @@ namespace DataAccessLayer.Repositories
                         }
                     }
                 }
-
             }
             return newspapersList;
         }

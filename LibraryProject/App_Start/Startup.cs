@@ -25,34 +25,6 @@ namespace LibraryProject.App_Start
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
             });
-
-
-
-
-            //app.CreatePerOwinContext<ApplicationContext>(ApplicationContext.Create);
-            //app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
-            //app.UseCookieAuthentication(new CookieAuthenticationOptions
-            //{
-            //    AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-            //    LoginPath = new PathString("/Account/Login"),
-            //});
-            //app.CreatePerOwinContext<ApplicationContext>(ApplicationContext.Create);
-            //app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
-
-            //app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
-
-            //app.UseCookieAuthentication(new CookieAuthenticationOptions
-            //{
-            //    AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-            //   LoginPath = new PathString("/Account/Login"),
-            //});
-            
-            //Add OWIN
-            //app.UseCookieAuthentication(new CookieAuthenticationOptions
-            //{
-            //    AuthenticationType = "ApplicationCookie",
-            //    LoginPath = new PathString("/Account/Login"),
-            //});
         }
         private IUserService CreateUserService()
         {

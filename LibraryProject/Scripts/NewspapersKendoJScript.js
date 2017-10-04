@@ -8,9 +8,9 @@
             return true;
         }
     }
-
     var popupwindow;
     var detailsTemplate;
+
     $(document).ready(function () {
         var flag = Allow();
 
@@ -158,7 +158,7 @@
                 width: 300
             }).data("kendoWindow");
 
-        detailsTemplate = kendo.template($("#magazine-template").html());
+        detailsTemplate = kendo.template($("#template").html());
         hideAddButton(flag);
     });
 

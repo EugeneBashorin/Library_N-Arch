@@ -21,8 +21,6 @@ namespace DataAccessLayer.Repositories
             Database.SaveChanges();
         }
 
-
-
         public List<ClientProfile> GetUsersList()
         {
             List<ClientProfile> clientList = new List<ClientProfile>();
@@ -33,8 +31,6 @@ namespace DataAccessLayer.Repositories
             }
             return clientList;
         }
-
-
 
         public void UpdateBannState(string userId, string bannedState)
         {
