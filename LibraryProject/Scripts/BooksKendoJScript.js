@@ -1,5 +1,4 @@
 ﻿function BookAction(bookList, booksPublishers, userRole) //userRole ==>> Bool
-
 {
     var Allow = function () {
         if (userRole) {
@@ -158,12 +157,8 @@
                 resizable: false,
                 width: 300
             }).data("kendoWindow");
+        
         detailsTemplate = kendo.template($("#template").html());
-        //detailsTemplate = kendo.template($("#template").html(function () {
-        //    '<div id="details-container">'+ '<dl>'+'<dt>Name:</dt>' +'<dd>#= Name #</dd>'+
-        //            '<dt>Author:</dt>'+'<dd>#= Author #</dd>'+'<dt>Publisher:</dt>'+'<dd>#= Publisher #</dd>'+'<dt>Price:</dt>'+
-        //            '<dd>#= Price#</dd>'+'</dl>'+'</div>'
-    //}));
         hideAddButton(flag);
     });
 

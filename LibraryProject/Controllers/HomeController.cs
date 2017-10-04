@@ -18,84 +18,165 @@ namespace LibraryProject.Controllers
             homeService = homeservice;
         }
 
-        [HttpGet]
-        public ActionResult Index(string bookPublisher = FilterConfiguration._ALL_PUBLISHER, string magazinePublisher = FilterConfiguration._ALL_PUBLISHER, string newspaperPublisher = FilterConfiguration._ALL_PUBLISHER)
-        {
-            IndexModel indexModel = new IndexModel();
-            Initialize(indexModel);
-            indexModel = CheckPublisher(indexModel, bookPublisher, magazinePublisher, newspaperPublisher);
+        //[HttpGet]
+        //public ActionResult Index(string bookPublisher = FilterConfiguration._ALL_PUBLISHER, string magazinePublisher = FilterConfiguration._ALL_PUBLISHER, string newspaperPublisher = FilterConfiguration._ALL_PUBLISHER)
+        //{
+        //    IndexModel indexModel = new IndexModel();
+        //    Initialize(indexModel);
+        //    indexModel = CheckPublisher(indexModel, bookPublisher, magazinePublisher, newspaperPublisher);
 
-            return View(indexModel);
+        //    return View(indexModel);
+        //}
+
+        [HttpGet]
+        public ActionResult Books(string bookPublisher = FilterConfiguration._ALL_PUBLISHER)
+        {
+            BooksFilterModel bookModel = new BooksFilterModel();
+            InitializeBooks(bookModel);
+            bookModel = CheckBooksPublisher(bookModel, bookPublisher);
+
+            return View(bookModel);
         }
 
-        private IndexModel Initialize(IndexModel model)
+        [HttpGet]
+        public ActionResult Magazines( string magazinePublisher = FilterConfiguration._ALL_PUBLISHER)
+        {
+            MagazineFilterModel magazineModel = new MagazineFilterModel();
+            InitializeMagazines(magazineModel);
+            magazineModel = CheckMagazinesPublisher(magazineModel, magazinePublisher);
+
+            return View(magazineModel);
+        }
+
+        [HttpGet]
+        public ActionResult Newspapers(string newspaperPublisher = FilterConfiguration._ALL_PUBLISHER)
+        {
+            NewspaperFilterModel newspaperModel = new NewspaperFilterModel();
+            InitializeNewspapers(newspaperModel);
+            newspaperModel = CheckNewspapersPublisher(newspaperModel,newspaperPublisher);
+
+            return View(newspaperModel);
+        }
+
+        //private IndexModel Initialize(IndexModel model)
+        //{
+        //    List<string> bookPublisherList = homeService.GetBooksPublishers();
+        //    List<string> magazinePublisherList = homeService.GetMagazinesPublishers();
+        //    List<string> newspaperPublisherList = homeService.GetNewspapersPublishers();
+
+        //    model.BooksFilterModel = new BooksFilterModel();
+        //    model.BooksFilterModel.BooksPublisher = new SelectList(bookPublisherList, FilterConfiguration._ALL_PUBLISHER);
+        //    model.BooksFilterModel.Books = new List<Book>();
+
+        //    model.MagazineFilterModel = new MagazineFilterModel();
+        //    model.MagazineFilterModel.MagazinesPublisher = new SelectList(magazinePublisherList, FilterConfiguration._ALL_PUBLISHER);
+        //    model.MagazineFilterModel.Magazines = new List<Magazine>();
+
+        //    model.NewspaperFilterModel = new NewspaperFilterModel();
+        //    model.NewspaperFilterModel.NewspapersPublisher = new SelectList(newspaperPublisherList, FilterConfiguration._ALL_PUBLISHER);
+        //    model.NewspaperFilterModel.Newspapers = new List<Newspaper>();
+
+        //    return model;
+        //}
+
+        private BooksFilterModel InitializeBooks(BooksFilterModel model)
         {
             List<string> bookPublisherList = homeService.GetBooksPublishers();
-            List<string> magazinePublisherList = homeService.GetMagazinesPublishers();
-            List<string> newspaperPublisherList = homeService.GetNewspapersPublishers();
 
-            model.BooksFilterModel = new BooksFilterModel();
-            model.BooksFilterModel.BooksPublisher = new SelectList(bookPublisherList, FilterConfiguration._ALL_PUBLISHER);
-            model.BooksFilterModel.Books = new List<Book>();
-
-            model.MagazineFilterModel = new MagazineFilterModel();
-            model.MagazineFilterModel.MagazinesPublisher = new SelectList(magazinePublisherList, FilterConfiguration._ALL_PUBLISHER);
-            model.MagazineFilterModel.Magazines = new List<Magazine>();
-
-            model.NewspaperFilterModel = new NewspaperFilterModel();
-            model.NewspaperFilterModel.NewspapersPublisher = new SelectList(newspaperPublisherList, FilterConfiguration._ALL_PUBLISHER);
-            model.NewspaperFilterModel.Newspapers = new List<Newspaper>();
+            model.BooksPublisher = new SelectList(bookPublisherList, FilterConfiguration._ALL_PUBLISHER);
+            model.Books = new List<Book>();
 
             return model;
         }
 
-        public IndexModel CheckPublisher(IndexModel model, string bookPublisher = FilterConfiguration._ALL_PUBLISHER, string magazinePublisher = FilterConfiguration._ALL_PUBLISHER, string newspaperPublisher = FilterConfiguration._ALL_PUBLISHER)
+        private MagazineFilterModel InitializeMagazines(MagazineFilterModel model)
+        {
+            List<string> magazinePublisherList = homeService.GetMagazinesPublishers();
+
+            model.MagazinesPublisher = new SelectList(magazinePublisherList, FilterConfiguration._ALL_PUBLISHER);
+            model.Magazines = new List<Magazine>();
+
+            return model;
+        }
+
+        private NewspaperFilterModel InitializeNewspapers(NewspaperFilterModel model)
+        {
+            List<string> newspaperPublisherList = homeService.GetMagazinesPublishers();
+
+            model.NewspapersPublisher = new SelectList(newspaperPublisherList, FilterConfiguration._ALL_PUBLISHER);
+            model.Newspapers = new List<Newspaper>();
+
+            return model;
+        }
+
+        //public IndexModel CheckPublisher(IndexModel model, string bookPublisher = FilterConfiguration._ALL_PUBLISHER, string magazinePublisher = FilterConfiguration._ALL_PUBLISHER, string newspaperPublisher = FilterConfiguration._ALL_PUBLISHER)
+        //{
+        //    List<Book> bookList = homeService.CheckBookPublisher(bookPublisher);
+        //    List<Magazine> magazineList = homeService.CheckMagazinePublisher(magazinePublisher);
+        //    List<Newspaper> newspaperList = homeService.CheckNewspaperPublisher(newspaperPublisher);
+
+        //    model.BooksFilterModel.Books = bookList;
+        //    model.MagazineFilterModel.Magazines = magazineList;
+        //    model.NewspaperFilterModel.Newspapers = newspaperList;
+
+        //    return model;
+        //}
+
+        public BooksFilterModel CheckBooksPublisher(BooksFilterModel model, string bookPublisher = FilterConfiguration._ALL_PUBLISHER)
         {
             List<Book> bookList = homeService.CheckBookPublisher(bookPublisher);
+            model.Books = bookList;
+            return model;
+        }
+
+        public MagazineFilterModel CheckMagazinesPublisher(MagazineFilterModel model, string magazinePublisher = FilterConfiguration._ALL_PUBLISHER)
+        {
             List<Magazine> magazineList = homeService.CheckMagazinePublisher(magazinePublisher);
+            model.Magazines = magazineList;
+            return model;
+        }
+
+        public NewspaperFilterModel CheckNewspapersPublisher(NewspaperFilterModel model, string newspaperPublisher = FilterConfiguration._ALL_PUBLISHER)
+        {
             List<Newspaper> newspaperList = homeService.CheckNewspaperPublisher(newspaperPublisher);
-
-            model.BooksFilterModel.Books = bookList;
-            model.MagazineFilterModel.Magazines = magazineList;
-            model.NewspaperFilterModel.Newspapers = newspaperList;
-
+            model.Newspapers= newspaperList;
             return model;
         }
 
         public ActionResult GetBooksList()
         {
             homeService.GetBooksTxtList();
-            return RedirectToAction("Index");
+            return RedirectToAction("Books");
         }
 
         public ActionResult GetBooksXmlList()
         {
             homeService.GetBooksXmlList();
-            return RedirectToAction("Index");
+            return RedirectToAction("Books");
         }
 
         public ActionResult GetNewspapersList()
         {
             homeService.GetNewspapersTxtList();
-            return RedirectToAction("Index");
+            return RedirectToAction("Books");
         }
 
         public ActionResult GetNewspapersXmlList()
         {
             homeService.GetNewspapersXmlList();
-            return RedirectToAction("Index");
+            return RedirectToAction("Newspapers");
         }
 
         public ActionResult GetMagazinesList()
         {
             homeService.GetMagazinesTxtList();
-            return RedirectToAction("Index");
+            return RedirectToAction("Magazines");
         }
 
         public ActionResult GetMagazinesXmlList()
         {
             homeService.GetMagazinesXmlList();
-            return RedirectToAction("Index");
+            return RedirectToAction("Magazines");
         }
 
         //[Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]

@@ -59,7 +59,7 @@ namespace LibraryProject.Controllers
                     {
                         IsPersistent = true
                     }, claim);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Books", "Home");
                 }
             }
             return View(model);
@@ -69,7 +69,7 @@ namespace LibraryProject.Controllers
         public ActionResult Logout()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Books", "Home");
         }
 
         [AllowAnonymous]
@@ -97,7 +97,7 @@ namespace LibraryProject.Controllers
                 };
                 OperationDetails operationDetails = await UserService.Create(userDto);
                 if (operationDetails.Succedeed)
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Books", "Home");
                 //return View("SuccessRegister");
                 else
                     ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
@@ -126,8 +126,7 @@ namespace LibraryProject.Controllers
 
         [HttpPost]
         public ActionResult SetBannUser(string id, string banned)
-        {
-            
+        {            
             UserService.UpdateBannState(id, banned);
             return RedirectToAction("Index");
         }
