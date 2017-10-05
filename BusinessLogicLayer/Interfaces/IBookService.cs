@@ -8,8 +8,8 @@ namespace BusinessLogicLayer.Interfaces
         Book GetBook(int? id);
         List<Book> GetBooks();
         void AddBook(Book book);
-        void UpdateBook(int id, Book book);
-        void DeleteBook(int id);
+        void UpdateBook(int? id, Book book);
+        void DeleteBook(int? id);
         void GetBooksTxtList();
         void GetBooksXmlList();
         List<Book> CheckBookPublisher(string publisherName);

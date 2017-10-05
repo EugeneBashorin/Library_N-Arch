@@ -95,7 +95,10 @@
     <Compile Include="EntityFrameworkContext\ApplicationContext.cs" />
     <Compile Include="Identity\ApplicationRoleManager.cs" />
     <Compile Include="Identity\ApplicationUserManager.cs" />
+    <Compile Include="Interfaces\IBookRepository.cs" />
     <Compile Include="Interfaces\IClientManager.cs" />
+    <Compile Include="Interfaces\IMagazineRepository.cs" />
+    <Compile Include="Interfaces\INewspaperRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Interfaces\IUnitOfWorkIdentity.cs" />

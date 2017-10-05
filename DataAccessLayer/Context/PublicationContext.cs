@@ -3,13 +3,13 @@ namespace DataAccessLayer.Context
 {
     public class PublicationContext 
     {
-        public Book Books { get; set; }
-        public Magazine Magazines { get; set; }
-        public Newspaper Newspapers { get; set; }
-        public string ConnectionString { get; set; }
-        public PublicationContext(string connectionString)
-        {
-            ConnectionString = connectionString;
-        }
+        //public Book Books { get; set; }
+        //public Magazine Magazines { get; set; }
+        //public Newspaper Newspapers { get; set; }
+        //public string ConnectionString { get; set; }
+        //public PublicationContext(string connectionString)
+        //{
+        //    ConnectionString = connectionString;
+        //}
     }
 }

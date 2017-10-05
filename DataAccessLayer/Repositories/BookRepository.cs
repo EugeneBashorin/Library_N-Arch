@@ -9,14 +9,13 @@ using System.Linq;
 
 namespace DataAccessLayer.Repositories
 {
-    public class BookRepository : IRepository<Book>
+    public class BookRepository : IBookRepository
     {
-        string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-        private PublicationContext DbConnection;
+        string _connectionString;
 
-        public BookRepository(PublicationContext context)
+        public BookRepository(string connectionString)
         {
-           DbConnection = context;
+            _connectionString = connectionString;
         }
 
         public List<Book> GetAll()

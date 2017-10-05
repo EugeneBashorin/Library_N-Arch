@@ -3,8 +3,6 @@ using BusinessLogicLayer.Services;
 using Ninject;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace LibraryProject.Util
@@ -27,7 +25,9 @@ namespace LibraryProject.Util
         }
         private void AddBindings()
         {
-            kernel.Bind<IHomeService>().To<HomeService>();
+            kernel.Bind<IBookService>().To<HomeService>();
+            kernel.Bind<IMagazineService>().To<HomeService>();
+            kernel.Bind<INewspaperService>().To<HomeService>();
         }
     }
 }

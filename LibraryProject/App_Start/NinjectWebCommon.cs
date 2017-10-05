@@ -12,6 +12,7 @@ namespace LibraryProject.App_Start
     using Ninject.Web.Common;
     using Ninject.Modules;
     using BusinessLogicLayer.Infrastructure;
+    using System.Configuration;
 
     public static class NinjectWebCommon 
     {
@@ -41,7 +42,7 @@ namespace LibraryProject.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var modules = new INinjectModule[] { new ServiceModule("DefaultConnection") };
+            var modules = new INinjectModule[] { new ServiceModule(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString) };
             var kernel = new StandardKernel(modules);
             try
             {

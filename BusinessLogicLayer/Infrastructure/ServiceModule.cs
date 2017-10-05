@@ -1,4 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
+using DataAccessLayer.Repositories;
+using Entities.Entities;
 using Ninject.Modules;
 
 namespace BusinessLogicLayer.Infrastructure
@@ -12,7 +14,10 @@ namespace BusinessLogicLayer.Infrastructure
         }
         public override void Load()
         {
-            Bind<IUnitOfWork>().To<UnitOfWork>().WithConstructorArgument(connectionString);
+           //Bind<IUnitOfWork>().To<UnitOfWork>().WithConstructorArgument(connectionString);        
+           Bind<IBookRepository>().To<BookRepository>().WithConstructorArgument(connectionString);
+            Bind<IMagazineRepository>().To<MagazineRepository>().WithConstructorArgument(connectionString);
+            Bind<INewspaperRepository>().To<NewspaperRepository>().WithConstructorArgument(connectionString);
         }
     }
 }

@@ -8,14 +8,13 @@ using System.Data.SqlClient;
 
 namespace DataAccessLayer.Repositories
 {
-    public class MagazineRepository : IRepository<Magazine>
+    public class MagazineRepository :/* IRepository<Magazine>*/ IMagazineRepository
     {
-        string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-        private PublicationContext DbConnection;
-
-        public MagazineRepository(PublicationContext context)
+        string _connectionString;
+        public MagazineRepository(/*PublicationContext context*/string connectionString)
         {
-            DbConnection = context;
+            _connectionString = connectionString;
+            //DbConnection = context;
         }
 
         public List<Magazine> GetAll()

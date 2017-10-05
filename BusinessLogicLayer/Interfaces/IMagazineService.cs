@@ -8,8 +8,8 @@ namespace BusinessLogicLayer.Interfaces
         Magazine GetMagazine(int? id);
         List<Magazine> GetMagazines();
         void AddMagazine(Magazine magazine);
-        void UpdateMagazine(int id, Magazine magazine);
-        void DeleteMagazine(int id);
+        void UpdateMagazine(int? id, Magazine magazine);
+        void DeleteMagazine(int? id);
         void GetMagazinesTxtList();
         void GetMagazinesXmlList();
         List<Magazine> CheckMagazinePublisher(string publisherName);

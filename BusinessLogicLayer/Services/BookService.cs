@@ -13,6 +13,9 @@ namespace BusinessLogicLayer.Services
 {
     public class BookService : IBookService
     {
+        //*********************
+        
+        //*********************
         IUnitOfWork Database { get; set; }
 
         public BookService(IUnitOfWork database)

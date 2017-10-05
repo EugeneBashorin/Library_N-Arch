@@ -1,4 +1,5 @@
 ﻿using BusinessLogicLayer.Interfaces;
+using BusinessLogicLayer.Services;
 using ConfigurationData.Configurations;
 using Entities.Entities;
 using LibraryProject.Models;
@@ -12,8 +13,8 @@ namespace LibraryProject.Controllers
     public class HomeController : Controller
     {
         IHomeService homeService;
-
-        public HomeController(IHomeService homeservice)
+        
+        public HomeController( HomeService homeservice)
         {
             homeService = homeservice;
         }

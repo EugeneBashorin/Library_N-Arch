@@ -8,14 +8,14 @@ using System.Data.SqlClient;
 
 namespace DataAccessLayer.Repositories
 {
-    public class NewspaperRepository : IRepository<Newspaper>
+    public class NewspaperRepository : INewspaperRepository
     {
-        string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-        private PublicationContext DbConnection;
+        string _connectionString;
 
-        public NewspaperRepository(PublicationContext context)
+        public NewspaperRepository(string connectionString)
         {
-            DbConnection = context;
+            _connectionString = connectionString;
+            //DbConnection = context;
         }
 
         public List<Newspaper> GetAll()
