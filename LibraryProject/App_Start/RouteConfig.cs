@@ -12,7 +12,7 @@ namespace LibraryProject
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Books", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "_books", id = UrlParameter.Optional }
             );
         }
     }

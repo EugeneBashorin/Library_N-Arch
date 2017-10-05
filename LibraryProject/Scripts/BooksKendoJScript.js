@@ -21,7 +21,7 @@
                     },
                     destroy: function (options) {
                         $.ajax({
-                            url: "/Home/ConfirmedDeleteBook/" + options.data.Id,
+                            url: "/Home/DeleteBook/" + options.data.Id,
                             dataType: 'json',
                             type: 'POST',
                         });
@@ -42,7 +42,7 @@
                     create: function (options) {
                         $.ajax({
                             type: 'POST',
-                            url: "/Home/CreateNewBook",
+                            url: "/Home/CreateBook",
                             contentType: "application/json; charset=utf-8",
                             data: JSON.stringify(options.data),
                             dataType: 'json',

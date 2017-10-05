@@ -1,7 +1,7 @@
 ﻿@model LibraryProject.Models.MagazineFilterModel
 
 @{
-    ViewBag.Title = "magazines";
+    ViewBag.Title = "Magazines";
 }
 <h4>Magazines</h4>
 <div id="example">
@@ -29,6 +29,6 @@
             </dl>
         </div>
     </script>
-    @Html.ActionLink("Save txt list", "GetMagazinesList", new { }, new { @class = "btn btn-sm btn-primary db-saver " })
-    @Html.ActionLink("Save xml list", "GetMagazinesXmlList", new { }, new { @class = "btn btn-sm btn-primary db-saver " })
+    @Html.ActionLink("Save txt list", "SaveMagazinesTxtList", new { }, new { @class = "btn btn-sm btn-primary db-saver " })
+    @Html.ActionLink("Save xml list", "SaveMagazinesXmlList", new { }, new { @class = "btn btn-sm btn-primary db-saver " })
 </div>

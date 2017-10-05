@@ -23,7 +23,7 @@
 
                     destroy: function (options) {
                         $.ajax({
-                            url: "/Home/ConfirmedDeleteMagazine/" + options.data.Id,
+                            url: "/Home/DeleteMagazine/" + options.data.Id,
                             dataType: 'json',
                             type: 'POST',
                         });
@@ -45,7 +45,7 @@
                     create: function (options) {
                         $.ajax({
                             type: 'POST',
-                            url: "/Home/CreateNewMagazine",
+                            url: "/Home/CreateMagazine",
                             contentType: "application/json; charset=utf-8",
                             data: JSON.stringify(options.data),
                             dataType: 'json',

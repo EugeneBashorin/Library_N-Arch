@@ -60,7 +60,7 @@ namespace LibraryProject.Controllers
                     {
                         IsPersistent = true
                     }, claim);
-                    return RedirectToAction("Books", "Home");
+                    return RedirectToAction("_books", "Home");
                 }
             }
             return View(model);
@@ -70,7 +70,7 @@ namespace LibraryProject.Controllers
         public ActionResult Logout()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Books", "Home");
+            return RedirectToAction("_books", "Home");
         }
 
         [AllowAnonymous]
@@ -98,7 +98,7 @@ namespace LibraryProject.Controllers
                 };
                 OperationDetails operationDetails = await UserService.Create(userDto);
                 if (operationDetails.Succedeed)
-                    return RedirectToAction("Books", "Home");
+                    return RedirectToAction("_books", "Home");
                 else
                     ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }

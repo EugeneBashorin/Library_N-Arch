@@ -2975,9 +2975,9 @@
     <Content Include="Scripts\kendo\messages\kendo.messages.zh-CN.min.js.map" />
     <Content Include="Scripts\kendo\messages\kendo.messages.zh-HK.min.js.map" />
     <Content Include="Scripts\kendo\messages\kendo.messages.zh-TW.min.js.map" />
-    <Content Include="Views\Home\books.cshtml" />
-    <Content Include="Views\Home\magazines.cshtml" />
-    <Content Include="Views\Home\newspapers.cshtml" />
+    <Content Include="Views\Home\_books.cshtml" />
+    <Content Include="Views\Home\_magazines.cshtml" />
+    <Content Include="Views\Home\_newspapers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

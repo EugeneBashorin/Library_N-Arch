@@ -1,7 +1,7 @@
 ﻿@model LibraryProject.Models.NewspaperFilterModel
 
 @{
-    ViewBag.Title = "newspapers";
+    ViewBag.Title = "Newspapers";
 }
 
 <h4>Newspapers</h4>
@@ -31,7 +31,7 @@
             </dl>
         </div>
     </script>
-
-    @Html.ActionLink("Save txt list", "GetNewspapersList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
-    @Html.ActionLink("Save xml list", "GetNewspapersXmlList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
+    
+    @Html.ActionLink("Save txt list", "SaveNewspapersTxtList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
+    @Html.ActionLink("Save xml list", "SaveNewspapersXmlList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
 </div>

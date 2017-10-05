@@ -19,7 +19,7 @@ namespace LibraryProject.Controllers
         }
 
         [HttpGet]
-        public ActionResult Books(string bookPublisher)
+        public ActionResult _books(string bookPublisher)
         {
             BooksFilterModel bookModel = new BooksFilterModel();
             InitializeBooks(bookModel);
@@ -29,7 +29,7 @@ namespace LibraryProject.Controllers
         }
 
         [HttpGet]
-        public ActionResult Magazines( string magazinePublisher )
+        public ActionResult _magazines( string magazinePublisher )
         {
             MagazineFilterModel magazineModel = new MagazineFilterModel();
             InitializeMagazines(magazineModel);
@@ -39,7 +39,7 @@ namespace LibraryProject.Controllers
         }
 
         [HttpGet]
-        public ActionResult Newspapers(string newspaperPublisher)
+        public ActionResult _newspapers(string newspaperPublisher)
         {
             NewspaperFilterModel newspaperModel = new NewspaperFilterModel();
             InitializeNewspapers(newspaperModel);
@@ -70,7 +70,7 @@ namespace LibraryProject.Controllers
 
         private NewspaperFilterModel InitializeNewspapers(NewspaperFilterModel model)
         {
-            List<string> newspaperPublisherList = homeService.GetMagazinesPublishers();
+            List<string> newspaperPublisherList = homeService.GetNewspapersPublishers();
 
             model.NewspapersPublisher = new SelectList(newspaperPublisherList);
             model.Newspapers = new List<Newspaper>();
@@ -99,45 +99,45 @@ namespace LibraryProject.Controllers
             return model;
         }
 
-        public ActionResult GetBooksList()
+        public ActionResult SaveBooksTxtList()
         {
             homeService.GetBooksTxtList();
-            return RedirectToAction("Books");
+            return RedirectToAction("_books");
         }
 
-        public ActionResult GetBooksXmlList()
+        public ActionResult SaveBooksXmlList()
         {
             homeService.GetBooksXmlList();
-            return RedirectToAction("Books");
+            return RedirectToAction("_books");
         }
 
-        public ActionResult GetNewspapersList()
+        public ActionResult SaveNewspapersTxtList()
         {
             homeService.GetNewspapersTxtList();
-            return RedirectToAction("Books");
+            return RedirectToAction("_newspapers");
         }
 
-        public ActionResult GetNewspapersXmlList()
+        public ActionResult SaveNewspapersXmlList()
         {
             homeService.GetNewspapersXmlList();
-            return RedirectToAction("Newspapers");
+            return RedirectToAction("_newspapers");
         }
 
-        public ActionResult GetMagazinesList()
+        public ActionResult SaveMagazinesTxtList()
         {
             homeService.GetMagazinesTxtList();
-            return RedirectToAction("Magazines");
+            return RedirectToAction("_magazines");
         }
 
-        public ActionResult GetMagazinesXmlList()
+        public ActionResult SaveMagazinesXmlList()
         {
             homeService.GetMagazinesXmlList();
-            return RedirectToAction("Magazines");
+            return RedirectToAction("_magazines");
         }
              
         [HttpPost]
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
-        public ActionResult CreateNewBook(Book book)
+        public ActionResult CreateBook(Book book)
         {
             if (book.Price < 0)
             {
@@ -174,7 +174,7 @@ namespace LibraryProject.Controllers
 
         [HttpPost]
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
-        public ActionResult ConfirmedDeleteBook(int? id)
+        public ActionResult DeleteBook(int? id)
         {
             if (id == null)
             {
@@ -186,7 +186,7 @@ namespace LibraryProject.Controllers
         
         [HttpPost]
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
-        public ActionResult CreateNewMagazine(Magazine magazine)
+        public ActionResult CreateMagazine(Magazine magazine)
         {
             if (magazine.Price < 0)
             {
@@ -195,7 +195,6 @@ namespace LibraryProject.Controllers
             if (ModelState.IsValid)
             {
                 homeService.AddMagazine(magazine);
-
                 return Json(magazine);
             }
             return Json(HttpStatusCode.NotModified);
@@ -223,7 +222,7 @@ namespace LibraryProject.Controllers
 
         [HttpPost]
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
-        public ActionResult ConfirmedDeleteMagazine(int? id)
+        public ActionResult DeleteMagazine(int? id)
         {
             if (id == null)
             {
@@ -235,7 +234,7 @@ namespace LibraryProject.Controllers
 
         [HttpPost]
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
-        public ActionResult CreateNewNewspaper(Newspaper newspaper)
+        public ActionResult CreateNewspaper(Newspaper newspaper)
         {
             if (newspaper.Price < 0)
             {
@@ -244,7 +243,6 @@ namespace LibraryProject.Controllers
             if (ModelState.IsValid)
             {
                 homeService.AddNewspaper(newspaper);
-
                 return Json(newspaper);
             }
             return Json(HttpStatusCode.NotModified);
@@ -272,7 +270,7 @@ namespace LibraryProject.Controllers
 
         [HttpPost]
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
-        public ActionResult ConfirmedDeleteNewspaper(int? id)
+        public ActionResult DeleteNewspaper(int? id)
         {
             if (id == null)
             {

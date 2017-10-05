@@ -1,7 +1,6 @@
 ﻿@model LibraryProject.Models.BooksFilterModel
-
 @{
-    ViewBag.Title = "books";
+    ViewBag.Title = "Books";
 }
 <h4>Books</h4>
 
@@ -33,6 +32,6 @@
         </div>
     </script>
 
-    @Html.ActionLink("Save txt list", "GetBooksList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
-    @Html.ActionLink("Save xml list", "GetBooksXmlList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
+    @Html.ActionLink("Save txt list", "SaveBooksTxtList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
+    @Html.ActionLink("Save xml list", "SaveBooksXmlList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
 </div>
