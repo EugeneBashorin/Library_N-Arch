@@ -14,10 +14,9 @@ namespace BusinessLogicLayer.Infrastructure
         }
         public override void Load()
         {
-           //Bind<IUnitOfWork>().To<UnitOfWork>().WithConstructorArgument(connectionString);        
            Bind<IBookRepository>().To<BookRepository>().WithConstructorArgument(connectionString);
-            Bind<IMagazineRepository>().To<MagazineRepository>().WithConstructorArgument(connectionString);
-            Bind<INewspaperRepository>().To<NewspaperRepository>().WithConstructorArgument(connectionString);
+           Bind<IMagazineRepository>().To<MagazineRepository>().WithConstructorArgument(connectionString);
+           Bind<INewspaperRepository>().To<NewspaperRepository>().WithConstructorArgument(connectionString);
         }
     }
 }

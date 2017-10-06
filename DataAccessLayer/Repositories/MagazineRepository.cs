@@ -1,43 +1,47 @@
-﻿using DataAccessLayer.Context;
-using DataAccessLayer.Interfaces;
+﻿using DataAccessLayer.Interfaces;
 using Entities.Entities;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
 
 namespace DataAccessLayer.Repositories
 {
-    public class MagazineRepository :/* IRepository<Magazine>*/ IMagazineRepository
+    public class MagazineRepository : IMagazineRepository
     {
         string _connectionString;
-        public MagazineRepository(/*PublicationContext context*/string connectionString)
+        public MagazineRepository(string connectionString)
         {
             _connectionString = connectionString;
-            //DbConnection = context;
         }
 
         public List<Magazine> GetAll()
         {
             List<Magazine> magazinesList;
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
-                connection.Open();
-                magazinesList = new List<Magazine>();
-                if (connection != null)
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    string magazinesSelectAllExpression = "SELECT * FROM Magazines";
-                    SqlCommand command = new SqlCommand(magazinesSelectAllExpression, connection);
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
+                    connection.Open();
+                    magazinesList = new List<Magazine>();
+                    if (connection != null)
                     {
-                        while (reader.Read())
+                        string magazinesSelectAllExpression = "SELECT * FROM Magazines";
+                        SqlCommand command = new SqlCommand(magazinesSelectAllExpression, connection);
+                        SqlDataReader reader = command.ExecuteReader();
+                        if (reader.HasRows)
                         {
-                            magazinesList.Add(new Magazine { Id = (int)reader.GetValue(0), Name = (string)reader.GetValue(1),   Category = (string)reader.GetValue(2), Publisher = (string)reader.GetValue(3), Price = (int)reader.GetValue(4) });
+                            while (reader.Read())
+                            {
+                                magazinesList.Add(new Magazine { Id = (int)reader.GetValue(0), Name = (string)reader.GetValue(1), Category = (string)reader.GetValue(2), Publisher = (string)reader.GetValue(3), Price = (int)reader.GetValue(4) });
+                            }
                         }
                     }
-                }
 
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("problem with sql: " + ex);
             }
             return magazinesList;
         }
@@ -45,26 +49,33 @@ namespace DataAccessLayer.Repositories
         public Magazine GetItemById(int? id)
         {
             Magazine magazine = new Magazine();
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
-                connection.Open();
-                if (connection != null)
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    string searchMagazineByIdExpression = $"SELECT * FROM Magazines WHERE Id = '{id}'";
-                    SqlCommand command = new SqlCommand(searchMagazineByIdExpression, connection);
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
+                    connection.Open();
+                    if (connection != null)
                     {
-                        while (reader.Read())
+                        string searchMagazineByIdExpression = $"SELECT * FROM Magazines WHERE Id = '{id}'";
+                        SqlCommand command = new SqlCommand(searchMagazineByIdExpression, connection);
+                        SqlDataReader reader = command.ExecuteReader();
+                        if (reader.HasRows)
                         {
-                            magazine.Id = (int)reader.GetValue(0);
-                            magazine.Name = (string)reader.GetValue(1);
-                            magazine.Category = (string)reader.GetValue(2);
-                            magazine.Publisher = (string)reader.GetValue(3);
-                            magazine.Price = (int)reader.GetValue(4);
+                            while (reader.Read())
+                            {
+                                magazine.Id = (int)reader.GetValue(0);
+                                magazine.Name = (string)reader.GetValue(1);
+                                magazine.Category = (string)reader.GetValue(2);
+                                magazine.Publisher = (string)reader.GetValue(3);
+                                magazine.Price = (int)reader.GetValue(4);
+                            }
                         }
                     }
                 }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("problem with sql: " + ex);
             }
             return magazine;
         }
@@ -72,80 +83,108 @@ namespace DataAccessLayer.Repositories
         public void Create(Magazine magazine)
         {
             string createMagazineExpression = $"INSERT INTO Magazines([Name], [Category], [Publisher],[Price]) VALUES('{magazine.Name}','{magazine.Category}','{magazine.Publisher}','{magazine.Price}')";
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
-                connection.Open();
-                SqlCommand command = new SqlCommand(createMagazineExpression, connection);
-                try
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    command.ExecuteNonQuery();
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(createMagazineExpression, connection);
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
-                catch (Exception)
-                {
-                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("problem with sql: " + ex);
             }
         }
 
         public void Update(int? Id, Magazine magazine)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
-                connection.Open();
-                if (connection != null)
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    string editMagazineExpression = $"UPDATE Magazines SET Name = '{magazine.Name}', Category = '{magazine.Category}', Publisher = '{magazine.Publisher}', Price = '{magazine.Price}' WHERE Id = '{Id}'";
-                    SqlCommand command = new SqlCommand(editMagazineExpression, connection);
-                    try
+                    connection.Open();
+                    if (connection != null)
                     {
-                        command.ExecuteNonQuery();
-                    }
-                    catch (Exception)
-                    {
+                        string editMagazineExpression = $"UPDATE Magazines SET Name = '{magazine.Name}', Category = '{magazine.Category}', Publisher = '{magazine.Publisher}', Price = '{magazine.Price}' WHERE Id = '{Id}'";
+                        SqlCommand command = new SqlCommand(editMagazineExpression, connection);
+                        try
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
                 }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("problem with sql: " + ex);
             }
         }
 
         public void Delete(int? id)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
-                connection.Open();
-                if (connection != null)
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    string deleteMagazineExpression = $"DELETE FROM Magazines WHERE Id = '{id}'";
-                    SqlCommand command = new SqlCommand(deleteMagazineExpression, connection);
-                    try
+                    connection.Open();
+                    if (connection != null)
                     {
-                        command.ExecuteNonQuery();
-                    }
-                    catch (Exception)
-                    {
+                        string deleteMagazineExpression = $"DELETE FROM Magazines WHERE Id = '{id}'";
+                        SqlCommand command = new SqlCommand(deleteMagazineExpression, connection);
+                        try
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
                 }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("problem with sql: " + ex);
             }
         }
 
         public List<Magazine> FilterByPublisher(string publisherName)
         {
             List<Magazine> magazineList;
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
-                connection.Open();
-                magazineList = new List<Magazine>();
-                if (connection != null)
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    string selectAllExpression = $"SELECT * FROM Magazines WHERE Publisher = '{publisherName}'";
-                    SqlCommand command = new SqlCommand(selectAllExpression, connection);
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
+                    connection.Open();
+                    magazineList = new List<Magazine>();
+                    if (connection != null)
                     {
-                        while (reader.Read())
+                        string selectAllExpression = $"SELECT * FROM Magazines WHERE Publisher = '{publisherName}'";
+                        SqlCommand command = new SqlCommand(selectAllExpression, connection);
+                        SqlDataReader reader = command.ExecuteReader();
+                        if (reader.HasRows)
                         {
-                            magazineList.Add(new Magazine { Id = (int)reader.GetValue(0), Name = (string)reader.GetValue(1),  Category = (string)reader.GetValue(2), Publisher = (string)reader.GetValue(3), Price = (int)reader.GetValue(4) });
+                            while (reader.Read())
+                            {
+                                magazineList.Add(new Magazine { Id = (int)reader.GetValue(0), Name = (string)reader.GetValue(1), Category = (string)reader.GetValue(2), Publisher = (string)reader.GetValue(3), Price = (int)reader.GetValue(4) });
+                            }
                         }
                     }
                 }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("problem with sql: " + ex);
             }
             return magazineList;
         }
@@ -153,23 +192,30 @@ namespace DataAccessLayer.Repositories
         public List<string> GetAllPublishers()
         {
             List<string> publishersList;
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
-                connection.Open();
-                publishersList = new List<string>();
-                if (connection != null)
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    string selectAllExpression = $"SELECT DISTINCT Publisher FROM Magazines";
-                    SqlCommand command = new SqlCommand(selectAllExpression, connection);
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
+                    connection.Open();
+                    publishersList = new List<string>();
+                    if (connection != null)
                     {
-                        while (reader.Read())
+                        string selectAllExpression = $"SELECT DISTINCT Publisher FROM Magazines";
+                        SqlCommand command = new SqlCommand(selectAllExpression, connection);
+                        SqlDataReader reader = command.ExecuteReader();
+                        if (reader.HasRows)
                         {
-                            publishersList.Add(reader.GetString(0));
+                            while (reader.Read())
+                            {
+                                publishersList.Add(reader.GetString(0));
+                            }
                         }
                     }
                 }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("problem with sql: " + ex);
             }
             return publishersList;
         }

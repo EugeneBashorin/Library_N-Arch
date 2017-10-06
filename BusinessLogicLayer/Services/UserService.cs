@@ -29,9 +29,7 @@ namespace BusinessLogicLayer.Services
                 var result = await Database.UserManager.CreateAsync(user, userDto.Password);
                 if (result.Errors.Count() > 0)
                     return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
-                // add role
                 await Database.UserManager.AddToRoleAsync(user.Id, userDto.Role);
-                // create profile
                 ClientProfile clientProfile = new ClientProfile { Id = user.Id, Name = userDto.Name };
                 Database.ClientManager.Create(clientProfile);
                 await Database.SaveAsync();
