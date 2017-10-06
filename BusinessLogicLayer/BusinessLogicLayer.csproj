@@ -103,10 +103,7 @@
     <Compile Include="Infrastructure\OperationDetails.cs" />
     <Compile Include="Infrastructure\ServiceModule.cs" />
     <Compile Include="Infrastructure\ValidationException.cs" />
-    <Compile Include="Interfaces\IBookService.cs" />
     <Compile Include="Interfaces\IHomeService.cs" />
-    <Compile Include="Interfaces\IMagazineService.cs" />
-    <Compile Include="Interfaces\INewspaperService.cs" />
     <Compile Include="Interfaces\IServiceCreator.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,6 +1,5 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
-using Entities.Entities;
 using Ninject.Modules;
 
 namespace BusinessLogicLayer.Infrastructure

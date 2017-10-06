@@ -95,6 +95,7 @@
     <Compile Include="Entities\ApplicationRole.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="Entities\Book.cs" />
+    <Compile Include="Entities\Buklet.cs" />
     <Compile Include="Entities\ClientProfile.cs" />
     <Compile Include="Entities\Magazine.cs" />
     <Compile Include="Entities\Newspaper.cs" />

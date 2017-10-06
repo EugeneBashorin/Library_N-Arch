@@ -11,27 +11,28 @@ using System.Xml.Serialization;
 
 namespace BusinessLogicLayer.Services
 {
-    public class HomeService : IHomeService//     IBookService, IMagazineService, INewspaperService
+    public class HomeService : IHomeService
     {
-        IBookRepository BookDatabase { get; set; }
-        IMagazineRepository MagazineDatabase { get; set; }
-        INewspaperRepository NewspaperDatabase { get; set; }
 
-        public HomeService(IBookRepository bookDatabase, IMagazineRepository magazineDatabase, INewspaperRepository newspaperDatabase)
+        IBookRepository BookRepository { get; set; }
+        IMagazineRepository MagazineRepository { get; set; }
+        INewspaperRepository NewspaperRepository { get; set; }
+
+        public HomeService(IBookRepository bookRepository, IMagazineRepository magazineRepository, INewspaperRepository newspaperRepository)
         {
-            BookDatabase = bookDatabase;
-            MagazineDatabase = magazineDatabase;
-            NewspaperDatabase = newspaperDatabase;
+            BookRepository = bookRepository;
+            MagazineRepository = magazineRepository;
+            NewspaperRepository = newspaperRepository;
         }
 
         public List<Book> GetBooks()
         {
-            return BookDatabase.GetAll();
+            return BookRepository.GetAll();
         }
 
         public void AddBook(Book book)
         {
-            BookDatabase.Create(book);
+            BookRepository.Create(book);
         }
 
         public Book GetBook(int? id)
@@ -40,26 +41,27 @@ namespace BusinessLogicLayer.Services
             {
                 throw new ValidationException("Book Id not found", "");
             }
-            var book = BookDatabase.GetItemById(id.Value);
+            var book = BookRepository.GetItemById(id.Value);
             if (book == null)
+            {
                 throw new ValidationException("The Book not found", "");
-
+            }
             return book;
         }
 
         public void UpdateBook(int? id, Book book)
         {
-            BookDatabase.Update(id, book);
+            BookRepository.Update(id, book);
         }
 
         public void DeleteBook(int? id)
         {
-            BookDatabase.Delete(id);
+            BookRepository.Delete(id);
         }
 
         public void GetBooksTxtList()
         {
-            List<Book> list = BookDatabase.GetAll();
+            List<Book> list = BookRepository.GetAll();
             StringBuilder result = new StringBuilder(130);
             if (list.Count > 0)
             {
@@ -77,7 +79,7 @@ namespace BusinessLogicLayer.Services
 
         public void GetBooksXmlList()
         {
-            List<Book> xmlList = BookDatabase.GetAll();
+            List<Book> xmlList = BookRepository.GetAll();
             XmlSerializer xs = new XmlSerializer(typeof(List<Book>));
             using (FileStream fs = new FileStream(WritePathConfiguration.booksWriteXmlPath, FileMode.Create))
             {
@@ -90,55 +92,58 @@ namespace BusinessLogicLayer.Services
             List<Book> bookList;
             if (!String.IsNullOrEmpty(publisherName))
             {
-                bookList = BookDatabase.FilterByPublisher(publisherName);
+                bookList = BookRepository.FilterByPublisher(publisherName);
             }
             else
             {
-                bookList = BookDatabase.GetAll();
+                bookList = BookRepository.GetAll();
             }
             return bookList;
         }
 
         public List<string> GetBooksPublishers()
         {
-            List<string> booksPublishers = BookDatabase.GetAllPublishers();
+            List<string> booksPublishers = BookRepository.GetAllPublishers();
             return booksPublishers;
         }
 
         public List<Magazine> GetMagazines()
         {
-            return MagazineDatabase.GetAll();
+            return MagazineRepository.GetAll();
         }
 
         public void AddMagazine(Magazine magazine)
         {
-            MagazineDatabase.Create(magazine);
+            MagazineRepository.Create(magazine);
         }
 
         public Magazine GetMagazine(int? id)
         {
             if (id == null)
+            {
                 throw new ValidationException("Magazine Id not found", "");
-
-            var magazine = MagazineDatabase.GetItemById(id.Value);
+            }
+            var magazine = MagazineRepository.GetItemById(id.Value);
             if (magazine == null)
+            {
                 throw new ValidationException("The Magazine not found", "");
+            }
             return magazine;
         }
 
         public void UpdateMagazine(int? id, Magazine magazine)
         {
-            MagazineDatabase.Update(id, magazine);
+            MagazineRepository.Update(id, magazine);
         }
 
         public void DeleteMagazine(int? id)
         {
-            MagazineDatabase.Delete(id);
+            MagazineRepository.Delete(id);
         }
 
         public void GetMagazinesTxtList()
         {
-            List<Magazine> list = MagazineDatabase.GetAll();
+            List<Magazine> list = MagazineRepository.GetAll();
             StringBuilder result = new StringBuilder(130);
             if (list.Count > 0)
             {
@@ -155,7 +160,7 @@ namespace BusinessLogicLayer.Services
 
         public void GetMagazinesXmlList()
         {
-            List<Magazine> xmlList = MagazineDatabase.GetAll();
+            List<Magazine> xmlList = MagazineRepository.GetAll();
             XmlSerializer xs = new XmlSerializer(typeof(List<Magazine>));
             using (FileStream fs = new FileStream(WritePathConfiguration.magazinesWriteXmlPath, FileMode.Create))
             {
@@ -168,54 +173,58 @@ namespace BusinessLogicLayer.Services
             List<Magazine> magazineList;
             if (!String.IsNullOrEmpty(publisherName))
             {
-                magazineList = MagazineDatabase.FilterByPublisher(publisherName);
+                magazineList = MagazineRepository.FilterByPublisher(publisherName);
             }
             else
             {
-                magazineList = MagazineDatabase.GetAll();
+                magazineList = MagazineRepository.GetAll();
             }
             return magazineList;
         }
 
         public List<string> GetMagazinesPublishers()
         {
-            List<string> magazinesPublishers = MagazineDatabase.GetAllPublishers();
+            List<string> magazinesPublishers = MagazineRepository.GetAllPublishers();
             return magazinesPublishers;
         }
 
         public List<Newspaper> GetNewspapers()
         {
-            return NewspaperDatabase.GetAll();
+            return NewspaperRepository.GetAll();
         }
 
         public void AddNewspaper(Newspaper newspaper)
         {
-            NewspaperDatabase.Create(newspaper);
+            NewspaperRepository.Create(newspaper);
         }
 
         public Newspaper GetNewspaper(int? id)
         {
             if (id == null)
+            {
                 throw new ValidationException("Newspaper Id not found", "");
-            var newspaper = NewspaperDatabase.GetItemById(id.Value); 
+            }
+            var newspaper = NewspaperRepository.GetItemById(id.Value);
             if (newspaper == null)
+            {
                 throw new ValidationException("The Newspaper not found", "");
+            }
             return newspaper;
         }
 
         public void UpdateNewspaper(int? id, Newspaper newspaper)
         {
-            NewspaperDatabase.Update(id, newspaper);
+            NewspaperRepository.Update(id, newspaper);
        }
 
         public void DeleteNewspaper(int? id)
         {
-            NewspaperDatabase.Delete(id);
+            NewspaperRepository.Delete(id);
         }
 
         public void GetNewspapersTxtList()
         {
-            List<Newspaper> list = NewspaperDatabase.GetAll();
+            List<Newspaper> list = NewspaperRepository.GetAll();
             StringBuilder result = new StringBuilder(130);
             if (list.Count > 0)
             {
@@ -232,7 +241,7 @@ namespace BusinessLogicLayer.Services
 
         public void GetNewspapersXmlList()
         {
-            List<Newspaper> xmlList = NewspaperDatabase.GetAll();
+            List<Newspaper> xmlList = NewspaperRepository.GetAll();
             XmlSerializer xs = new XmlSerializer(typeof(List<Newspaper>));
             using (FileStream fs = new FileStream(WritePathConfiguration.newspapersWriteXmlPath, FileMode.Create))
             {
@@ -245,29 +254,19 @@ namespace BusinessLogicLayer.Services
             List<Newspaper> newspaperList;
             if (!String.IsNullOrEmpty(publisherName))
             {
-                newspaperList = NewspaperDatabase.FilterByPublisher(publisherName);
+                newspaperList = NewspaperRepository.FilterByPublisher(publisherName);
             }
             else
             {
-                newspaperList = NewspaperDatabase.GetAll();
+                newspaperList = NewspaperRepository.GetAll();
             }
             return newspaperList;
         }
 
         public List<string> GetNewspapersPublishers()
         {         
-            List<string> newspapersPublishers = NewspaperDatabase.GetAllPublishers();
+            List<string> newspapersPublishers = NewspaperRepository.GetAllPublishers();
             return newspapersPublishers;
-        }
-
-        public void UpdateBook(int id, Book book)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteBook(int id)
-        {
-            throw new NotImplementedException();
-        }
+        }    
     }
 }

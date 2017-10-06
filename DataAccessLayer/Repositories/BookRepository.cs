@@ -94,8 +94,9 @@ namespace DataAccessLayer.Repositories
                     {
                         command.ExecuteNonQuery();
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
+                        throw new Exception(e.Message);
                     }
                 }
             }
@@ -120,8 +121,9 @@ namespace DataAccessLayer.Repositories
                         {
                             command.ExecuteNonQuery();
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
+                            throw new Exception(e.Message);
                         }
                     }
                 }
@@ -147,8 +149,9 @@ namespace DataAccessLayer.Repositories
                         {
                             command.ExecuteNonQuery();
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
+                            throw new Exception(e.Message);
                         }
                     }
                 }

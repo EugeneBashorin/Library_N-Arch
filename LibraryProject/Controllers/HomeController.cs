@@ -13,10 +13,10 @@ namespace LibraryProject.Controllers
     public class HomeController : Controller
     {
         IHomeService homeService;
-        
-        public HomeController( HomeService homeservice)
+
+        public HomeController(HomeService _homeService/*, HomeService _homeBookService, HomeService _homeMagazineService, HomeService _homeNewspaperService*/)
         {
-            homeService = homeservice;
+            homeService = _homeService;
         }
 
         [HttpGet]
@@ -30,7 +30,7 @@ namespace LibraryProject.Controllers
         }
 
         [HttpGet]
-        public ActionResult _magazines( string magazinePublisher )
+        public ActionResult _magazines(string magazinePublisher)
         {
             MagazineFilterModel magazineModel = new MagazineFilterModel();
             InitializeMagazines(magazineModel);
@@ -44,11 +44,11 @@ namespace LibraryProject.Controllers
         {
             NewspaperFilterModel newspaperModel = new NewspaperFilterModel();
             InitializeNewspapers(newspaperModel);
-            newspaperModel = CheckNewspapersPublisher(newspaperModel,newspaperPublisher);
+            newspaperModel = CheckNewspapersPublisher(newspaperModel, newspaperPublisher);
 
             return View(newspaperModel);
         }
-      
+
         private BooksFilterModel InitializeBooks(BooksFilterModel model)
         {
             List<string> bookPublisherList = homeService.GetBooksPublishers();
@@ -79,24 +79,24 @@ namespace LibraryProject.Controllers
             return model;
         }
 
-        public BooksFilterModel CheckBooksPublisher(BooksFilterModel model, string bookPublisher )
+        public BooksFilterModel CheckBooksPublisher(BooksFilterModel model, string bookPublisher)
         {
             List<Book> bookList = homeService.CheckBookPublisher(bookPublisher);
             model.Books = bookList;
             return model;
         }
 
-        public MagazineFilterModel CheckMagazinesPublisher(MagazineFilterModel model, string magazinePublisher )
+        public MagazineFilterModel CheckMagazinesPublisher(MagazineFilterModel model, string magazinePublisher)
         {
             List<Magazine> magazineList = homeService.CheckMagazinePublisher(magazinePublisher);
             model.Magazines = magazineList;
             return model;
         }
 
-        public NewspaperFilterModel CheckNewspapersPublisher(NewspaperFilterModel model, string newspaperPublisher )
+        public NewspaperFilterModel CheckNewspapersPublisher(NewspaperFilterModel model, string newspaperPublisher)
         {
             List<Newspaper> newspaperList = homeService.CheckNewspaperPublisher(newspaperPublisher);
-            model.Newspapers= newspaperList;
+            model.Newspapers = newspaperList;
             return model;
         }
 
@@ -135,7 +135,7 @@ namespace LibraryProject.Controllers
             homeService.GetMagazinesXmlList();
             return RedirectToAction("_magazines");
         }
-             
+
         [HttpPost]
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         public ActionResult CreateBook(Book book)
@@ -152,7 +152,7 @@ namespace LibraryProject.Controllers
             }
             return Json(HttpStatusCode.NotModified);
         }
-      
+
         [HttpPost]
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         public ActionResult EditBook(int? Id, Book newBook)
@@ -184,7 +184,7 @@ namespace LibraryProject.Controllers
             homeService.DeleteBook(id);
             return Json(HttpStatusCode.OK);
         }
-        
+
         [HttpPost]
         [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
         public ActionResult CreateMagazine(Magazine magazine)
@@ -279,6 +279,6 @@ namespace LibraryProject.Controllers
             }
             homeService.DeleteNewspaper(id);
             return Json(HttpStatusCode.OK);
-        }      
+        }
     }
 }
