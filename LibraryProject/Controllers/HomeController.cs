@@ -14,7 +14,7 @@ namespace LibraryProject.Controllers
     {
         IHomeService homeService;
 
-        public HomeController(HomeService _homeService/*, HomeService _homeBookService, HomeService _homeMagazineService, HomeService _homeNewspaperService*/)
+        public HomeController(HomeService _homeService)
         {
             homeService = _homeService;
         }
@@ -27,6 +27,16 @@ namespace LibraryProject.Controllers
             bookModel = CheckBooksPublisher(bookModel, bookPublisher);
 
             return View(bookModel);
+        }
+
+        [HttpGet]
+        public ActionResult _buklets(string bukletsPublisher)
+        {
+            BukletsFilterModel bukletModel = new BukletsFilterModel();
+            InitializeBuklets(bukletModel);
+            bukletModel = CheckBukletsPublisher(bukletModel, bukletsPublisher);
+
+            return View(bukletModel);
         }
 
         [HttpGet]
@@ -59,6 +69,16 @@ namespace LibraryProject.Controllers
             return model;
         }
 
+        private BukletsFilterModel InitializeBuklets(BukletsFilterModel model)
+        {
+            List<string> bukletPublisherList = homeService.GetBukletsPublishers();
+
+            model.BukletsPublisher = new SelectList(bukletPublisherList);
+            model.Buklets = new List<Buklet>();
+
+            return model;
+        }
+
         private MagazineFilterModel InitializeMagazines(MagazineFilterModel model)
         {
             List<string> magazinePublisherList = homeService.GetMagazinesPublishers();
@@ -86,6 +106,13 @@ namespace LibraryProject.Controllers
             return model;
         }
 
+        public BukletsFilterModel CheckBukletsPublisher(BukletsFilterModel model, string bukletPublisher)
+        {
+            List<Buklet> bukletList = homeService.CheckBukletPublisher(bukletPublisher);
+            model.Buklets = bukletList;
+            return model;
+        }
+
         public MagazineFilterModel CheckMagazinesPublisher(MagazineFilterModel model, string magazinePublisher)
         {
             List<Magazine> magazineList = homeService.CheckMagazinePublisher(magazinePublisher);
@@ -110,6 +137,18 @@ namespace LibraryProject.Controllers
         {
             homeService.GetBooksXmlList();
             return RedirectToAction("_books");
+        }
+
+        public ActionResult SaveBukletsTxtList()
+        {
+            homeService.GetBukletsTxtList();
+            return RedirectToAction("_buklets");
+        }
+
+        public ActionResult SaveBukletsXmlList()
+        {
+            homeService.GetBukletsXmlList();
+            return RedirectToAction("_buklets");
         }
 
         public ActionResult SaveNewspapersTxtList()
@@ -182,6 +221,55 @@ namespace LibraryProject.Controllers
                 return HttpNotFound();
             }
             homeService.DeleteBook(id);
+            return Json(HttpStatusCode.OK);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
+        public ActionResult CreateBuklet(Buklet buklet)
+        {
+            if (buklet.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.AddBuklet(buklet);
+
+                return Json(buklet);
+            }
+            return Json(HttpStatusCode.NotModified);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
+        public ActionResult EditBuklet(int? Id, Buklet newBuklet)
+        {
+            if (Id == null)
+            {
+                return HttpNotFound();
+            }
+            if (newBuklet.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price should be positive");
+            }
+            if (ModelState.IsValid)
+            {
+                homeService.UpdateBuklet(Id, newBuklet);
+                return Json(newBuklet);
+            }
+            return Json(HttpStatusCode.NotModified);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = IdentityConfiguration._ADMIN_ROLE)]
+        public ActionResult DeleteBuklet(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+            homeService.DeleteBuklet(id);
             return Json(HttpStatusCode.OK);
         }
 

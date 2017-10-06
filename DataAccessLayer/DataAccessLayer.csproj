@@ -95,14 +95,15 @@
     <Compile Include="Identity\ApplicationRoleManager.cs" />
     <Compile Include="Identity\ApplicationUserManager.cs" />
     <Compile Include="Interfaces\IBookRepository.cs" />
+    <Compile Include="Interfaces\IBukletRepository.cs" />
     <Compile Include="Interfaces\IClientManager.cs" />
     <Compile Include="Interfaces\IMagazineRepository.cs" />
     <Compile Include="Interfaces\INewspaperRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWorkIdentity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BookRepository.cs" />
+    <Compile Include="Repositories\BukletRepository.cs" />
     <Compile Include="Repositories\ClientManager.cs" />
-    <Compile Include="Repositories\HomeRepository.cs" />
     <Compile Include="Repositories\IdentityUnitOfWork.cs" />
     <Compile Include="Repositories\MagazineRepository.cs" />
     <Compile Include="Repositories\NewspaperRepository.cs" />

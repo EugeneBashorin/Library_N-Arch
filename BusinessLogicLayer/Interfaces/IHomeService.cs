@@ -34,5 +34,15 @@ namespace BusinessLogicLayer.Interfaces
         void GetNewspapersXmlList();
         List<Newspaper> CheckNewspaperPublisher(string publisherName);
         List<string> GetNewspapersPublishers();
+
+        Buklet GetBuklet(int? id);
+        List<Buklet> GetBuklets();
+        void AddBuklet(Buklet buklet);
+        void UpdateBuklet(int? id, Buklet buklet);
+        void DeleteBuklet(int? id);
+        void GetBukletsTxtList();
+        void GetBukletsXmlList();
+        List<Buklet> CheckBukletPublisher(string publisherName);
+        List<string> GetBukletsPublishers();
     }
 }

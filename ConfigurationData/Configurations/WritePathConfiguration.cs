@@ -12,5 +12,8 @@ namespace ConfigurationData.Configurations
 
         public static string newspapersWriteTxtPath = AppDomain.CurrentDomain.BaseDirectory + @"App_Data/newspapers.txt";
         public static string newspapersWriteXmlPath = AppDomain.CurrentDomain.BaseDirectory + @"App_Data/newspapers.xml";
+
+        public static string bukletsWriteTxtPath = AppDomain.CurrentDomain.BaseDirectory + @"App_Data/buklets.txt";
+        public static string bukletsWriteXmlPath = AppDomain.CurrentDomain.BaseDirectory + @"App_Data/buklets.xml";
     }
 }

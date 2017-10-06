@@ -1,0 +1,36 @@
+﻿@model LibraryProject.Models.BukletsFilterModel
+@{
+    ViewBag.Title = "Buklets";
+}
+<h4>Buklets</h4>
+
+<div id="example">
+    <div id="grid-buklet"></div>
+    <div id="details"></div>
+    @Scripts.Render("~/bundles/BukletsKendoJScript")
+    <script>
+        var bukletList = @Html.Raw(Json.Encode(Model.Buklets));
+        var publisherList = @Html.Raw(Json.Encode(Model.BukletsPublisher.Items));
+        var userRole = @Html.Raw(Json.Encode(User.IsInRole("admin")));
+        BukletAction(bukletList, publisherList, userRole);
+    </script>
+
+    <div id="bukletsViewDetails">
+    </div>
+    <script type="text/x-kendo-template" id="template">
+        <div id="details-container">
+            <dl>
+                <dt>Name:</dt>
+                <dd>#= Name #</dd>
+                <dt>Author:</dt>
+                <dd>#= Author #</dd>
+                <dt>Publisher:</dt>
+                <dd>#= Publisher #</dd>
+                <dt>Price:</dt>
+                <dd>#= Price#</dd>
+            </dl>
+        </div>
+    </script>
+    @Html.ActionLink("Save txt list", "SaveBukletsTxtList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
+    @Html.ActionLink("Save xml list", "SaveBukletsXmlList", new { }, new { @class = "btn btn-sm btn-primary button-saver" })
+</div>

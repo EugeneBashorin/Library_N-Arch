@@ -17,12 +17,14 @@ namespace BusinessLogicLayer.Services
         IBookRepository BookRepository { get; set; }
         IMagazineRepository MagazineRepository { get; set; }
         INewspaperRepository NewspaperRepository { get; set; }
+        IBukletRepository BukletRepository { get; set; }
 
-        public HomeService(IBookRepository bookRepository, IMagazineRepository magazineRepository, INewspaperRepository newspaperRepository)
+        public HomeService(IBookRepository bookRepository, IMagazineRepository magazineRepository, INewspaperRepository newspaperRepository, IBukletRepository bukletRepository)
         {
             BookRepository = bookRepository;
             MagazineRepository = magazineRepository;
             NewspaperRepository = newspaperRepository;
+            BukletRepository = bukletRepository;
         }
 
         public List<Book> GetBooks()
@@ -267,6 +269,91 @@ namespace BusinessLogicLayer.Services
         {         
             List<string> newspapersPublishers = NewspaperRepository.GetAllPublishers();
             return newspapersPublishers;
-        }    
+        }
+
+        //**************
+        public List<Buklet> GetBuklets()
+        {
+            return BukletRepository.GetAll();
+        }
+
+        public void AddBuklet(Buklet buklet)
+        {
+            BukletRepository.Create(buklet);
+        }
+
+        public Buklet GetBuklet(int? id)
+        {
+            if (id == null)
+            {
+                throw new ValidationException("Buklet Id not found", "");
+            }
+            var buklet = BukletRepository.GetItemById(id.Value);
+            if (buklet == null)
+            {
+                throw new ValidationException("The Buklet not found", "");
+            }
+            return buklet;
+        }
+
+        public void UpdateBuklet(int? id, Buklet buklet)
+        {
+            BukletRepository.Update(id, buklet);
+        }
+
+        public void DeleteBuklet(int? id)
+        {
+            BukletRepository.Delete(id);
+        }
+
+        public void GetBukletsTxtList()
+        {
+            List<Buklet> list = BukletRepository.GetAll();
+            StringBuilder result = new StringBuilder(130);
+            if (list.Count > 0)
+            {
+                foreach (Buklet item in list)
+                {
+                    result.AppendLine($"Name: {item.Name} Author: {item.Author} Publisher: {item.Publisher} Price: {item.Price.ToString()}");
+                }
+            }
+
+            using (StreamWriter sw = new StreamWriter(WritePathConfiguration.bukletsWriteTxtPath, false, System.Text.Encoding.Default))
+            {
+                sw.WriteLine(result);
+            }
+        }
+
+        public void GetBukletsXmlList()
+        {
+            List<Buklet> xmlList = BukletRepository.GetAll();
+            XmlSerializer xs = new XmlSerializer(typeof(List<Buklet>));
+            using (FileStream fs = new FileStream(WritePathConfiguration.bukletsWriteXmlPath, FileMode.Create))
+            {
+                xs.Serialize(fs, xmlList);
+            }
+        }
+
+        public List<Buklet> CheckBukletPublisher(string publisherName)
+        {
+            List<Buklet> bukletList;
+            if (!String.IsNullOrEmpty(publisherName))
+            {
+                bukletList = BukletRepository.FilterByPublisher(publisherName);
+            }
+            else
+            {
+                bukletList = BukletRepository.GetAll();
+            }
+            return bukletList;
+        }
+
+        public List<string> GetBukletsPublishers()
+        {
+            List<string> bukletsPublishers = BukletRepository.GetAllPublishers();
+            return bukletsPublishers;
+        }
+
+
     }
 }

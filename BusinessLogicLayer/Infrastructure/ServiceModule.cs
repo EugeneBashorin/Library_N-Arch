@@ -16,6 +16,7 @@ namespace BusinessLogicLayer.Infrastructure
            Bind<IBookRepository>().To<BookRepository>().WithConstructorArgument(connectionString);
            Bind<IMagazineRepository>().To<MagazineRepository>().WithConstructorArgument(connectionString);
            Bind<INewspaperRepository>().To<NewspaperRepository>().WithConstructorArgument(connectionString);
+           Bind<IBukletRepository>().To<BukletRepository>().WithConstructorArgument(connectionString);
         }
     }
 }

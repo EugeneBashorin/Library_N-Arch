@@ -1,0 +1,12 @@
+﻿using Entities.Entities;
+using System.Collections.Generic;
+using System.Web.Mvc;
+
+namespace LibraryProject.Models
+{
+    public class BukletsFilterModel
+    {
+        public List<Buklet> Buklets { get; set; }
+        public SelectList BukletsPublisher { get; set; }
+    }
+}

@@ -7,18 +7,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
-   
-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />  
+
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="~/Content/kendo/kendo.common.min.css">
     <link rel="stylesheet" href="~/Content/kendo/kendo.rtl.min.css">
     <link rel="stylesheet" href="~/Content/kendo/kendo.default.min.css">
-   
+
     @Scripts.Render("~/bundles/jquery")
     <script src="~/Scripts/kendo/jszip.min.js"></script>
     <script src="~/Scripts/kendo/kendo.all.min.js"></script>
 </head>
 <body>
-   <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -33,28 +33,29 @@
                         <a class="dropdown-toggle" data-toggle="dropdown">Home<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Home", "_books", "Home") </li>
-                             @if (User.IsInRole("admin"))
-                             {
-                            <li>@Html.ActionLink("Admin", "Index", "Account")</li>
-                             }
+                            @if (User.IsInRole("admin"))
+                            {
+                                <li>@Html.ActionLink("Admin", "Index", "Account")</li>
+                            }
                         </ul>
                     <li class="active">
                         <a class="dropdown-toggle" data-toggle="dropdown">Login<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <li>@Html.ActionLink("Log Out", "Logout", "Account")</li> 
+                                <li>@Html.ActionLink("Log Out", "Logout", "Account")</li>
                             }
                             @if (!User.Identity.IsAuthenticated)
                             {
                                 <li>@Html.ActionLink("Registrate", "Register", "Account")</li>
                                 <li>@Html.ActionLink("Log In", "Login", "Account") </li>
-                            }                 
-                        </ul>                     
+                            }
+                        </ul>
                     </li>
-                        <li class="active">@Html.ActionLink("Books", "_books", "Home")</li>
-                        <li class="active">@Html.ActionLink("Magazines", "_magazines", "Home")</li>
-                        <li class="active">@Html.ActionLink("Newspapers", "_newspapers", "Home")</li>
+                    <li class="active">@Html.ActionLink("Books", "_books", "Home")</li>
+                    <li class="active">@Html.ActionLink("Magazines", "_magazines", "Home")</li>
+                    <li class="active">@Html.ActionLink("Newspapers", "_newspapers", "Home")</li>
+                    <li class="active">@Html.ActionLink("Buklets", "_buklets", "Home")</li>
                 </ul>
             </div>
         </div>
@@ -62,8 +63,7 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-                   </footer>
+        <footer></footer>
     </div>
 
     <script src='@Url.Content("~/Scripts/jquery-ui-1.12.1.min.js")' type="text/javascript"></script>
