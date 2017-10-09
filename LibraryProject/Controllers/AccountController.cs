@@ -2,7 +2,7 @@
 using BusinessLogicLayer.Infrastructure;
 using BusinessLogicLayer.Interfaces;
 using ConfigurationData.Configurations;
-using LibraryProject.Models;
+using LibraryProject.ViewModels;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Collections.Generic;
@@ -60,7 +60,7 @@ namespace LibraryProject.Controllers
                     {
                         IsPersistent = true
                     }, claim);
-                    return RedirectToAction("_books", "Home");
+                    return RedirectToAction("Books", "Home");
                 }
             }
             return View(model);
@@ -70,7 +70,7 @@ namespace LibraryProject.Controllers
         public ActionResult Logout()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("_books", "Home");
+            return RedirectToAction("Books", "Home");
         }
 
         [AllowAnonymous]
@@ -98,7 +98,7 @@ namespace LibraryProject.Controllers
                 };
                 OperationDetails operationDetails = await UserService.Create(userDto);
                 if (operationDetails.Succedeed)
-                    return RedirectToAction("_books", "Home");
+                    return RedirectToAction("Books", "Home");
                 else
                     ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }

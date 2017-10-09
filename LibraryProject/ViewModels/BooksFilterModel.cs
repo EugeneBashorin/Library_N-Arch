@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 
-namespace LibraryProject.Models
+namespace LibraryProject.ViewModels
 {
     public class BooksFilterModel
     {

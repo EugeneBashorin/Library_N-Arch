@@ -2,7 +2,7 @@
 using BusinessLogicLayer.Services;
 using ConfigurationData.Configurations;
 using Entities.Entities;
-using LibraryProject.Models;
+using LibraryProject.ViewModels;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
@@ -20,7 +20,7 @@ namespace LibraryProject.Controllers
         }
 
         [HttpGet]
-        public ActionResult _books(string bookPublisher)
+        public ActionResult Books(string bookPublisher)
         {
             BooksFilterModel bookModel = new BooksFilterModel();
             InitializeBooks(bookModel);
@@ -30,7 +30,7 @@ namespace LibraryProject.Controllers
         }
 
         [HttpGet]
-        public ActionResult _buklets(string bukletsPublisher)
+        public ActionResult Buklets(string bukletsPublisher)
         {
             BukletsFilterModel bukletModel = new BukletsFilterModel();
             InitializeBuklets(bukletModel);
@@ -40,7 +40,7 @@ namespace LibraryProject.Controllers
         }
 
         [HttpGet]
-        public ActionResult _magazines(string magazinePublisher)
+        public ActionResult Magazines(string magazinePublisher)
         {
             MagazineFilterModel magazineModel = new MagazineFilterModel();
             InitializeMagazines(magazineModel);
@@ -50,7 +50,7 @@ namespace LibraryProject.Controllers
         }
 
         [HttpGet]
-        public ActionResult _newspapers(string newspaperPublisher)
+        public ActionResult Newspapers(string newspaperPublisher)
         {
             NewspaperFilterModel newspaperModel = new NewspaperFilterModel();
             InitializeNewspapers(newspaperModel);
@@ -130,49 +130,49 @@ namespace LibraryProject.Controllers
         public ActionResult SaveBooksTxtList()
         {
             homeService.GetBooksTxtList();
-            return RedirectToAction("_books");
+            return RedirectToAction("Books");
         }
 
         public ActionResult SaveBooksXmlList()
         {
             homeService.GetBooksXmlList();
-            return RedirectToAction("_books");
+            return RedirectToAction("Books");
         }
 
         public ActionResult SaveBukletsTxtList()
         {
             homeService.GetBukletsTxtList();
-            return RedirectToAction("_buklets");
+            return RedirectToAction("Buklets");
         }
 
         public ActionResult SaveBukletsXmlList()
         {
             homeService.GetBukletsXmlList();
-            return RedirectToAction("_buklets");
+            return RedirectToAction("Buklets");
         }
 
         public ActionResult SaveNewspapersTxtList()
         {
             homeService.GetNewspapersTxtList();
-            return RedirectToAction("_newspapers");
+            return RedirectToAction("Newspapers");
         }
 
         public ActionResult SaveNewspapersXmlList()
         {
             homeService.GetNewspapersXmlList();
-            return RedirectToAction("_newspapers");
+            return RedirectToAction("Newspapers");
         }
 
         public ActionResult SaveMagazinesTxtList()
         {
             homeService.GetMagazinesTxtList();
-            return RedirectToAction("_magazines");
+            return RedirectToAction("Magazines");
         }
 
         public ActionResult SaveMagazinesXmlList()
         {
             homeService.GetMagazinesXmlList();
-            return RedirectToAction("_magazines");
+            return RedirectToAction("Magazines");
         }
 
         [HttpPost]

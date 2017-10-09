@@ -32,7 +32,7 @@
                     <li class="active">
                         <a class="dropdown-toggle" data-toggle="dropdown">Home<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Home", "_books", "Home") </li>
+                            <li>@Html.ActionLink("Home", "Books", "Home") </li>
                             @if (User.IsInRole("admin"))
                             {
                                 <li>@Html.ActionLink("Admin", "Index", "Account")</li>
@@ -52,10 +52,10 @@
                             }
                         </ul>
                     </li>
-                    <li class="active">@Html.ActionLink("Books", "_books", "Home")</li>
-                    <li class="active">@Html.ActionLink("Magazines", "_magazines", "Home")</li>
-                    <li class="active">@Html.ActionLink("Newspapers", "_newspapers", "Home")</li>
-                    <li class="active">@Html.ActionLink("Buklets", "_buklets", "Home")</li>
+                    <li class="active">@Html.ActionLink("Books", "Books", "Home")</li>
+                    <li class="active">@Html.ActionLink("Magazines", "Magazines", "Home")</li>
+                    <li class="active">@Html.ActionLink("Newspapers", "Newspapers", "Home")</li>
+                    <li class="active">@Html.ActionLink("Buklets", "Buklets", "Home")</li>
                 </ul>
             </div>
         </div>
